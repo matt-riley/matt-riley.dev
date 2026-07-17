@@ -1,0 +1,37 @@
+---
+const fragments = [
+  { key: "place", tag: "01 / LOCATION", value: "Yorkshire, England" },
+  { key: "comedy", tag: "02 / LIVE TEST", value: "Stand-up comedy training" },
+  { key: "art", tag: "03 / VISUAL NOISE", value: "Modern art / Dada" },
+  { key: "music", tag: "04 / LISTENING", value: "80s / 90s hip-hop" },
+];
+---
+
+<section
+  class="personal-interruptions press-section"
+  aria-labelledby="personal-interruptions-title"
+>
+  <header class="personal-interruptions-heading">
+    <p>PERSONAL INTERRUPTION / 005</p>
+    <h2 id="personal-interruptions-title">UNFILED<br />MATERIAL</h2>
+  </header>
+  <div class="interruption-rail">
+    {fragments.map((fragment) => (
+      <p class={`interruption-fragment interruption-fragment--${fragment.key}`}>
+        <span aria-hidden="true">{fragment.tag}</span>
+        <strong>{fragment.value}</strong>
+      </p>
+    ))}
+    <figure class="interruption-waffle">
+      <div class="interruption-waffle-frame">
+        <img
+          src="/images/waffle/waffle-portrait-photo.jpg"
+          alt="Waffle, Matt's orange tabby kitten, peeking out from a blanket"
+        />
+      </div>
+      <figcaption>
+        Waffle, Matt's orange tabby kitten, peeking out from a blanket.
+      </figcaption>
+    </figure>
+  </div>
+</section>

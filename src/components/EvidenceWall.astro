@@ -1,0 +1,56 @@
+---
+import type { DossierRepository } from "../data/types";
+import { stampDate } from "../data/format";
+
+interface Props {
+  repositories: DossierRepository[];
+}
+
+const { repositories } = Astro.props;
+const exhibitNumber = (index: number) => String(index + 1).padStart(2, "0");
+---
+
+<section
+  class="repository-evidence press-section"
+  aria-labelledby="evidence-title"
+>
+  <div class="section-kicker">
+    <p>CASE FILE 003 / SELECTED REPOSITORIES</p>
+    <p>DETERMINISTIC ASSEMBLY / NO TWO CUTS ALIKE</p>
+  </div>
+  <h2 id="evidence-title">EVIDENCE<br />WALL</h2>
+  <div class="evidence-wall">
+    {repositories.map((repo, index) => (
+      <article
+        class={`repository-evidence-piece evidence--${repo.variant}`}
+        data-evidence-number={exhibitNumber(index)}
+      >
+        <span class="evidence-number" aria-hidden="true">
+          EX.{exhibitNumber(index)}
+        </span>
+        <h3>
+          <a href={repo.url}>{repo.name}</a>
+        </h3>
+        <p class="evidence-description">{repo.description}</p>
+        <dl class="evidence-meta">
+          <div>
+            <dt>LANGUAGE</dt>
+            <dd>{repo.language}</dd>
+          </div>
+          <div>
+            <dt>STARS</dt>
+            <dd>{repo.stars}</dd>
+          </div>
+          <div>
+            <dt>FORKS</dt>
+            <dd>{repo.forks}</dd>
+          </div>
+        </dl>
+        <time datetime={repo.updatedAt}>
+          UPDATED&ensp;{stampDate(repo.updatedAt)}
+        </time>
+        <span class="evidence-arrow" aria-hidden="true">↗</span>
+      </article>
+    ))}
+  </div>
+</section>

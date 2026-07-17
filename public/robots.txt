@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://matt-riley.dev/sitemap-index.xml

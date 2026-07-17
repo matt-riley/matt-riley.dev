@@ -1,0 +1,143 @@
+---
+import type { GitHubDossier } from "../data/types";
+
+interface Props {
+  dossier: GitHubDossier;
+}
+
+const { dossier } = Astro.props;
+const { profile, totals, languages, activity } = dossier;
+const sourceMark = dossier.source === "live" ? "LIVE PRESS" : "ARCHIVE PRINT";
+const maxLanguage = Math.max(...languages.map((language) => language.count), 1);
+
+const PAD_COUNT = 16;
+const pads = Array.from({ length: PAD_COUNT }, (_, index) => {
+  const event = activity[index];
+  if (!event) return { index, level: 0, count: 0, message: "NO PUBLIC SIGNAL" };
+  return {
+    index,
+    level: 1,
+    count: 1,
+    id: event.id,
+    message: `1 SIGNAL / ${event.repo.toUpperCase()} / ${event.summary}`,
+    label: `1 signal in ${event.repo}: ${event.summary}`,
+  };
+});
+const padNumber = (index: number) => String(index + 1).padStart(2, "0");
+const firstMessage = pads[0]?.message ?? "NO PUBLIC SIGNAL";
+---
+
+<section
+  class="github-dossier press-section"
+  id="work"
+  aria-labelledby="dossier-title"
+>
+  <div class="section-kicker dossier-kicker">
+    <p>GITHUB-DATA 002 / PUBLIC EVIDENCE</p>
+    <p
+      class="source-mark"
+      aria-label={`GitHub data source: ${dossier.source}`}
+    >
+      {sourceMark}
+    </p>
+  </div>
+  <div class="dossier-heading">
+    <h2 id="dossier-title">GITHUB<br />DOSSIER</h2>
+    <p aria-hidden="true">COPY / CROP / CLASSIFY / REPEAT</p>
+  </div>
+  <div class="dossier-strips">
+    <figure class="dossier-piece dossier-portrait">
+      <div class="portrait-halftone">
+        <div class="portrait-fallback" data-dossier-avatar-fallback aria-hidden="true">
+          <span>MR</span>
+          <small>PORTRAIT SIGNAL LOST</small>
+        </div>
+        <img
+          src={profile.avatarUrl}
+          alt={`GitHub avatar for ${profile.name}`}
+          width="240"
+          height="240"
+          loading="lazy"
+          decoding="async"
+          referrerpolicy="no-referrer"
+          data-dossier-avatar
+        />
+      </div>
+      <figcaption>SUBJECT / {profile.login}</figcaption>
+    </figure>
+    <div class="dossier-piece dossier-profile">
+      <p class="proof-label">IDENTITY STRIP / VERIFIED BY PUBLIC OUTPUT</p>
+      <a href={profile.profileUrl}>{profile.name}</a>
+      <p>{profile.bio}</p>
+      <p class="profile-location">{profile.location}</p>
+    </div>
+    <div class="dossier-piece dossier-account">
+      <p class="proof-label">ACCOUNT IMPRESSIONS</p>
+      <dl>
+        <div>
+          <dt>ACCOUNT AGE</dt><dd>{profile.accountAgeYears}Y</dd>
+        </div>
+        <div><dt>FOLLOWERS</dt><dd>{profile.followers}</dd></div>
+        <div><dt>PUBLIC REPOS</dt><dd>{profile.publicRepos}</dd></div>
+      </dl>
+    </div>
+    <div class="dossier-piece dossier-totals">
+      <p class="proof-label">REPOSITORY COUNT / UNCENSORED</p>
+      <p class="huge-number">{totals.originalRepositories}</p>
+      <p>ORIGINAL REPOSITORIES</p>
+      <div class="totals-line">
+        <span>{totals.stars} STARS</span>
+        <span>{totals.forks} FORKS</span>
+      </div>
+    </div>
+    <div class="dossier-piece dossier-languages">
+      <p class="proof-label">
+        LANGUAGE IMPRESSIONS / SAMPLE {String(languages.length).padStart(2, "0")}
+      </p>
+      <ol>
+        {languages.map((language) => (
+          <li>
+            <span>{language.name}</span>
+            <span
+              class="language-bar"
+              style={`--bar:${(language.count / maxLanguage) * 100}%`}
+              aria-hidden="true"
+            ></span>
+            <b>{language.count}</b>
+          </li>
+        ))}
+      </ol>
+    </div>
+    <article class="activity-instrument" aria-labelledby="activity-title">
+      <div class="activity-instrument-head">
+        <div>
+          <p class="proof-label">REGISTRATION TEST / {PAD_COUNT} EVIDENCE BINS</p>
+          <h3 id="activity-title">ACTIVITY OVERPRINT</h3>
+        </div>
+        <span>PRESS A NUMBERED BLOCK</span>
+      </div>
+      <div class="print-blocks">
+        {pads.map((pad) => (
+          <button
+            type="button"
+            class="activity-pad print-block"
+            data-activity-pad
+            data-level={pad.level}
+            data-count={pad.count}
+            data-index={pad.index}
+            data-activity-id={pad.id}
+            data-message={pad.message}
+            aria-label={`${padNumber(pad.index)}: ${pad.label ?? pad.message}`}
+            aria-pressed={pad.index === 0 ? "true" : "false"}
+          >
+            <span aria-hidden="true">{padNumber(pad.index)}</span>
+            {pad.level === 0 && <small>NO PUBLIC SIGNAL</small>}
+          </button>
+        ))}
+      </div>
+      <p class="activity-readout" id="activity-readout" aria-live="polite">
+        {firstMessage}
+      </p>
+    </article>
+  </div>
+</section>

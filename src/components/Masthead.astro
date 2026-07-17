@@ -1,0 +1,20 @@
+---
+const links = [
+  { href: "#work", label: "Work", shout: "WORK" },
+  { href: "#noise", label: "Noise", shout: "NOISE" },
+  { href: "#cat", label: "Cat", shout: "CAT" },
+  { href: "#exit", label: "Exit", shout: "EXIT" },
+];
+---
+
+<header class="masthead" data-visual-key="navigation">
+  <nav class="anti-nav" aria-label="Primary">
+    {links.map((link) => (
+      <a href={link.href} aria-label={link.shout}>{link.label}</a>
+    ))}
+  </nav>
+  <div class="edition-switch" role="group" aria-label="Choose print edition">
+    <button type="button" data-theme-choice="day" aria-pressed="true">Day</button>
+    <button type="button" data-theme-choice="night" aria-pressed="false">Night</button>
+  </div>
+</header>

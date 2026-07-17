@@ -1,0 +1,61 @@
+---
+import "@fontsource/anton";
+import "@fontsource/abril-fatface";
+import "../styles/global.css";
+import "../styles/cover.css";
+import "../styles/sections.css";
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL("/og-image.png", Astro.site);
+---
+
+<!doctype html>
+<html lang="en" data-theme="day">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#eee9dc" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Matt Riley — This Is Not a Portfolio" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content="Matt Riley — This Is Not a Portfolio" />
+    <script is:inline>
+      (() => {
+        const saved = localStorage.getItem("mr-edition");
+        const theme =
+          saved === "day" || saved === "night"
+            ? saved
+            : matchMedia("(prefers-color-scheme: dark)").matches
+              ? "night"
+              : "day";
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
+    <title>{title}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to the publication</a>
+    <slot />
+  </body>
+</html>

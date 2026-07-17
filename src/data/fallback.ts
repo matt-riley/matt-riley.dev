@@ -1,0 +1,137 @@
+import type { GitHubDossier } from "./types";
+
+/**
+ * Last-known-good snapshot of the public GitHub record. Used whenever the
+ * live build-time fetch is unavailable, rate-limited, or malformed so the
+ * printed page never ships half a dossier.
+ */
+export const fallbackDossier: GitHubDossier = {
+  source: "fallback",
+  snapshotDate: "2026-07-16",
+  profile: {
+    login: "matt-riley",
+    name: "Matt Riley",
+    bio: "self-aware smol grug brained developer",
+    location: "Yorkshire, England",
+    avatarUrl: "https://avatars.githubusercontent.com/u/76070?v=4",
+    profileUrl: "https://github.com/matt-riley",
+    accountAgeYears: 13,
+    followers: 15,
+    publicRepos: 37,
+  },
+  totals: {
+    originalRepositories: 34,
+    stars: 10,
+    forks: 0,
+  },
+  languages: [
+    { name: "Go", count: 7 },
+    { name: "TypeScript", count: 6 },
+    { name: "JavaScript", count: 5 },
+    { name: "Astro", count: 4 },
+    { name: "Lua", count: 4 },
+    { name: "Ruby", count: 3 },
+  ],
+  activity: [
+    {
+      id: "fallback-1",
+      kind: "push",
+      repo: "agent-skills",
+      repoUrl: "https://github.com/matt-riley/agent-skills",
+      summary: "Tighten the catalogue and its checks",
+      occurredAt: "2026-07-16T12:15:00Z",
+    },
+    {
+      id: "fallback-2",
+      kind: "push",
+      repo: "mattriley.tools",
+      repoUrl: "https://github.com/matt-riley/mattriley.tools",
+      summary: "Polish the useful edges",
+      occurredAt: "2026-07-16T09:22:00Z",
+    },
+    {
+      id: "fallback-3",
+      kind: "release",
+      repo: "flagz",
+      repoUrl: "https://github.com/matt-riley/flagz",
+      summary: "Cut a new release",
+      occurredAt: "2026-07-15T17:05:00Z",
+    },
+    {
+      id: "fallback-4",
+      kind: "push",
+      repo: "waystone.nvim",
+      repoUrl: "https://github.com/matt-riley/waystone.nvim",
+      summary: "Refine navigation behaviour",
+      occurredAt: "2026-07-14T13:30:00Z",
+    },
+    {
+      id: "fallback-5",
+      kind: "create",
+      repo: "skill-evaluator",
+      repoUrl: "https://github.com/matt-riley/skill-evaluator",
+      summary: "Created a fresh evaluation rig",
+      occurredAt: "2026-07-13T11:10:00Z",
+    },
+  ],
+  repositories: [
+    {
+      name: "mattriley.tools",
+      url: "https://github.com/matt-riley/mattriley.tools",
+      description: "Small, focused web tools made to get out of the way.",
+      language: "Astro",
+      stars: 2,
+      forks: 0,
+      updatedAt: "2026-07-16T10:30:00Z",
+      variant: "wide",
+    },
+    {
+      name: "flagz",
+      url: "https://github.com/matt-riley/flagz",
+      description: "Feature flags with a deliberately small surface area.",
+      language: "Go",
+      stars: 3,
+      forks: 0,
+      updatedAt: "2026-07-14T17:00:00Z",
+      variant: "tall",
+    },
+    {
+      name: "waffle",
+      url: "https://github.com/matt-riley/waffle",
+      description: "A capable coding agent built to get real work done.",
+      language: "Go",
+      stars: 1,
+      forks: 0,
+      updatedAt: "2026-07-13T13:00:00Z",
+      variant: "censored",
+    },
+    {
+      name: "agent-skills",
+      url: "https://github.com/matt-riley/agent-skills",
+      description: "Practical skills for capable, repeatable agent work.",
+      language: "TypeScript",
+      stars: 2,
+      forks: 0,
+      updatedAt: "2026-07-12T12:00:00Z",
+      variant: "wide",
+    },
+    {
+      name: "waystone.nvim",
+      url: "https://github.com/matt-riley/waystone.nvim",
+      description: "Leave a marker. Find your way back.",
+      language: "Lua",
+      stars: 2,
+      forks: 0,
+      updatedAt: "2026-07-08T14:00:00Z",
+      variant: "tall",
+    },
+  ],
+  releases: [
+    {
+      repo: "flagz",
+      repoUrl: "https://github.com/matt-riley/flagz",
+      summary: "Cut a new release",
+      publishedAt: "2026-07-15T17:05:00Z",
+    },
+  ],
+};

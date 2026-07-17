@@ -1,0 +1,26 @@
+# build output
+dist/
+
+# generated types
+.astro/
+
+# dependencies
+node_modules/
+.pnpm-store/
+
+# logs
+npm-debug.log*
+pnpm-debug.log*
+
+# environment
+.env
+.env.*
+
+# os
+.DS_Store
+
+# local working files
+.superpowers/
+candidates/
+test-results/
+.pnpm-store/

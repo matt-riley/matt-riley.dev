@@ -1,0 +1,41 @@
+---
+const notices = [
+  {
+    href: "https://mattriley.work",
+    label: "Read Matt Riley's longer work notes at mattriley.work",
+    small: "WANTED: READERS OF LONGER SIGNALS",
+    strong: "mattriley.work",
+    line: "WORK NOTES / OPEN DAILY",
+  },
+  {
+    href: "https://mattriley.tools",
+    label: "Use Matt Riley's web tools at mattriley.tools",
+    small: "FOR HIRE: USEFUL THINGS",
+    strong: "mattriley.tools",
+    line: "SHARP EDGES / NO APPOINTMENT",
+  },
+  {
+    href: "https://github.com/matt-riley",
+    label: "Inspect Matt Riley's public source on GitHub",
+    small: "PUBLIC NOTICE: SOURCE MATERIAL",
+    strong: "github.com/matt-riley",
+    line: "REPOSITORIES / EVIDENCE / RECEIPTS",
+  },
+];
+---
+
+<section class="classified-wall press-section" aria-labelledby="classifieds-title">
+  <header class="classified-heading">
+    <p>SMALL ADS / LARGE CONSEQUENCES / 006</p>
+    <h2 id="classifieds-title">ABSURD<br />CLASSIFIEDS</h2>
+  </header>
+  <div class="classified-notices">
+    {notices.map((notice) => (
+      <a href={notice.href} aria-label={notice.label}>
+        <small>{notice.small}</small>
+        <strong>{notice.strong}</strong>
+        <span>{notice.line} <b aria-hidden="true">↗</b></span>
+      </a>
+    ))}
+  </div>
+</section>

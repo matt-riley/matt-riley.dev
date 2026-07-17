@@ -1,0 +1,112 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 1200 630"
+  role="img"
+  aria-labelledby="title desc"
+>
+  <title id="title">MATT RILEY — THIS IS NOT A PORTFOLIO</title>
+  <desc id="desc">
+    A carbon, cobalt, ultraviolet, cyan, and acid-yellow torn-paper collage.
+  </desc>
+  <defs>
+    <pattern id="grain" width="13" height="13" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="3" r="0.8" fill="#10100f" opacity="0.18" />
+      <circle cx="9" cy="7" r="0.55" fill="#10100f" opacity="0.13" />
+      <path d="M0 12h13" stroke="#10100f" stroke-width="0.6" opacity="0.1" />
+    </pattern>
+    <pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse">
+      <circle cx="5" cy="5" r="2.4" fill="#10100f" opacity="0.36" />
+      <circle cx="14" cy="14" r="1.7" fill="#10100f" opacity="0.3" />
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="630" fill="#eee9dc" />
+  <rect width="1200" height="630" fill="url(#grain)" />
+  <path
+    d="m798-18 402 4v598l-48 21-68-12-75 26-86-17-58 22-91-16 38-79-22-66 28-61-18-69 35-80-32-72 32-66-20-63Z"
+    fill="#143ddd"
+  />
+  <path
+    d="m874-8 326 2v310l-46 15-55-19-45 21-67-18-55 17-62-19 16-62-17-54 25-55-18-58Z"
+    fill="url(#dots)"
+  />
+  <path d="M0 75 658 39l17 75L7 146Z" fill="#e3ff21" />
+  <path
+    d="m770 439 430-43v164l-79 20-81-11-74 30-94-16-94 28Z"
+    fill="#3826d9"
+  />
+  <path d="m1006 55 194 25v45l-204-17Z" fill="#12c7d9" />
+
+  <g
+    font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif"
+    font-weight="900"
+  >
+    <text
+      x="48"
+      y="239"
+      fill="#3826d9"
+      font-size="194"
+      letter-spacing="-7"
+      transform="rotate(-1 48 239)"
+      textLength="1048"
+      lengthAdjust="spacingAndGlyphs"
+    >
+      MATT RILEY
+    </text>
+    <text
+      x="36"
+      y="223"
+      fill="#10100f"
+      font-size="194"
+      letter-spacing="-7"
+      transform="rotate(-1 36 223)"
+      textLength="1048"
+      lengthAdjust="spacingAndGlyphs"
+    >
+      MATT RILEY
+    </text>
+
+    <g aria-label="THIS IS NOT A PORTFOLIO">
+      <g transform="translate(58 278) rotate(-2)">
+        <path d="M0 10 285 0l9 105-286 8Z" fill="#e3ff21" />
+        <text x="18" y="91" fill="#10100f" font-size="94">THIS</text>
+      </g>
+      <g transform="translate(333 292) rotate(1.5)">
+        <path d="m0 4 384-4-8 112L9 102Z" fill="#3826d9" />
+        <text x="18" y="89" fill="#eee9dc" font-size="86">IS NOT</text>
+      </g>
+      <g transform="translate(726 282) rotate(-4)">
+        <path d="m0 7 118-7 4 112L8 105Z" fill="#eee9dc" />
+        <text x="30" y="87" fill="#10100f" font-size="82">A</text>
+      </g>
+      <g transform="translate(107 423) rotate(-1)">
+        <path d="m0 14 820-14-7 140L15 151Z" fill="#10100f" />
+        <text
+          x="24"
+          y="124"
+          fill="#eee9dc"
+          font-size="118"
+          textLength="756"
+          lengthAdjust="spacingAndGlyphs"
+        >
+          PORTFOLIO
+        </text>
+      </g>
+    </g>
+  </g>
+
+  <g fill="#10100f" font-family="monospace" font-size="18" font-weight="700">
+    <text x="28" y="39">001</text>
+    <text x="1115" y="105">002</text>
+    <text x="1095" y="585" fill="#eee9dc">003</text>
+    <text x="24" y="608">1200×630</text>
+  </g>
+  <g fill="#10100f">
+    <path
+      d="M1031 340h13v74h-13Zm20 0h5v74h-5Zm12 0h22v74h-22Zm31 0h8v74h-8Zm15 0h17v74h-17Zm25 0h4v74h-4Zm12 0h25v74h-25Z"
+    />
+    <path
+      d="M14 16h54v5H20v45h-6Zm1118 0h54v50h-6V21h-48ZM14 564h6v45h48v5H14Zm1166 0h6v50h-54v-5h48Z"
+    />
+  </g>
+</svg>
