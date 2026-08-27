@@ -11,6 +11,9 @@ dist/
 node_modules/
 .pnpm-store/
 
+# Wrangler local state
+.wrangler/
+
 # logs
 npm-debug.log*
 pnpm-debug.log*

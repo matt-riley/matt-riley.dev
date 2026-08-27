@@ -8,6 +8,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "deploy": "pnpm run build && wrangler deploy",
     "check": "astro check"
   },
   "dependencies": {
@@ -22,6 +23,7 @@
     "@astrojs/check": "^0.9.4",
     "@playwright/test": "^1.61.1",
     "playwright": "^1.61.1",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "wrangler": "4.127.0"
   }
 }

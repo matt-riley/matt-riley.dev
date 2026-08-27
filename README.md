@@ -55,15 +55,22 @@ before first paint.
 - `src/styles/` — the Afterimage visual system and responsive rules.
 - `public/images/` — the local hero and Waffle editorial assets.
 
-## Cloudflare Pages
+## Cloudflare Workers
 
-This is configured for a static Cloudflare Pages deployment:
+This is configured as a static Astro build deployed to Cloudflare Workers
+Assets:
 
 - Build command: `pnpm run build`
+- Deploy command: `npx wrangler deploy` (or `pnpm run deploy` locally)
 - Build output directory: `dist`
+- Wrangler config: `wrangler.jsonc`
 - Astro mode: `output: "static"`
-- Cloudflare adapter: none required; `@astrojs/cloudflare` is for SSR/Workers
-  runtime features and would be unnecessary here.
+- Cloudflare adapter: none required; `@astrojs/cloudflare` is for SSR runtime
+  features and would be unnecessary for this pre-rendered site.
+
+The Wrangler configuration intentionally has no `main` entry point. It uploads
+Astro's generated `dist/` directory as static assets and uses the generated
+`404.html` for missing routes.
 
 ## Reuse
 
