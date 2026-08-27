@@ -50,6 +50,7 @@ export interface DossierRepository {
 export interface DossierRelease {
   repo: string;
   repoUrl: string;
+  releaseUrl: string;
   summary: string;
   publishedAt: string;
 }

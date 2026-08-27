@@ -55,7 +55,7 @@ const { activity, releases } = Astro.props;
                 <time datetime={release.publishedAt}>{registerDate(release.publishedAt)}</time>
                 <span class="activity-kind">release</span>
                 <span class="dispatch-summary"><b>{release.repo}</b><span>{release.summary}</span></span>
-                <a href={release.repoUrl} aria-label={`Open the ${release.repo} release on GitHub`}>Open <span aria-hidden="true">↗</span></a>
+                <a href={release.releaseUrl} aria-label={`Open the ${release.repo} release on GitHub`}>Open <span aria-hidden="true">↗</span></a>
               </li>
             ))}
           </ol>

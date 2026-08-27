@@ -130,8 +130,9 @@ export const fallbackDossier: GitHubDossier = {
     {
       repo: "flagz",
       repoUrl: "https://github.com/matt-riley/flagz",
-      summary: "Cut a new release",
-      publishedAt: "2026-07-15T17:05:00Z",
+      releaseUrl: "https://github.com/matt-riley/flagz/releases/tag/v1.13.3",
+      summary: "v1.13.3",
+      publishedAt: "2026-04-08T16:07:14Z",
     },
   ],
 };

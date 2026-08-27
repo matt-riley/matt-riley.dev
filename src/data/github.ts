@@ -43,6 +43,20 @@ interface RawRepo {
   archived: boolean;
 }
 
+interface RawRelease {
+  name: string | null;
+  tag_name: string;
+  html_url: string;
+  published_at: string | null;
+  draft: boolean;
+  prerelease: boolean;
+}
+
+interface ReleaseBatch {
+  repo: RawRepo;
+  releases: RawRelease[];
+}
+
 interface RawEvent {
   id: string;
   type: string;
@@ -110,10 +124,22 @@ function summarise(event: RawEvent): string {
   }
 }
 
+function selectRepositories(repos: RawRepo[]): RawRepo[] {
+  return repos
+    .filter((repo) => !repo.fork && !repo.archived)
+    .sort(
+      (a, b) =>
+        b.stargazers_count - a.stargazers_count ||
+        Date.parse(b.pushed_at) - Date.parse(a.pushed_at),
+    )
+    .slice(0, 5);
+}
+
 function normalize(
   profile: RawProfile,
   repos: RawRepo[],
   events: RawEvent[],
+  releaseBatches: ReleaseBatch[],
 ): GitHubDossier {
   const original = repos.filter((repo) => !repo.fork);
   const languageCounts = new Map<string, number>();
@@ -142,15 +168,8 @@ function normalize(
     .filter((entry): entry is DossierActivity => entry !== null)
     .slice(0, 5);
 
-  const repositories: DossierRepository[] = original
-    .filter((repo) => !repo.archived)
-    .sort(
-      (a, b) =>
-        b.stargazers_count - a.stargazers_count ||
-        Date.parse(b.pushed_at) - Date.parse(a.pushed_at),
-    )
-    .slice(0, 5)
-    .map((repo, index) => ({
+  const repositories: DossierRepository[] = selectRepositories(repos).map(
+    (repo, index) => ({
       name: repo.name,
       url: repo.html_url,
       description: repo.description ?? "Undocumented machinery.",
@@ -159,16 +178,27 @@ function normalize(
       forks: repo.forks_count,
       updatedAt: repo.pushed_at,
       variant: EVIDENCE_VARIANTS[index % EVIDENCE_VARIANTS.length],
-    }));
+    }),
+  );
 
-  const releases: DossierRelease[] = events
-    .filter((event) => event.type === "ReleaseEvent")
-    .map((event) => ({
-      repo: event.repo.name.split("/")[1] ?? event.repo.name,
-      repoUrl: `https://github.com/${event.repo.name}`,
-      summary: summarise(event),
-      publishedAt: event.payload.release?.published_at ?? event.created_at,
-    }));
+  const releases: DossierRelease[] = releaseBatches
+    .flatMap(({ repo, releases: repoReleases }) =>
+      repoReleases.map((release): DossierRelease | null => {
+        if (release.draft || release.prerelease || !release.published_at) {
+          return null;
+        }
+        return {
+          repo: repo.name,
+          repoUrl: repo.html_url,
+          releaseUrl: release.html_url,
+          summary: release.name?.trim() || release.tag_name,
+          publishedAt: release.published_at,
+        };
+      }),
+    )
+    .filter((release): release is DossierRelease => release !== null)
+    .sort((a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt))
+    .slice(0, 5);
 
   return {
     source: "live",
@@ -206,9 +236,10 @@ function normalize(
 }
 
 /**
- * Core data selection is atomic: if any of the three requests fails or the
- * payload cannot be normalized, the whole dossier falls back to the checked-in
- * snapshot so the page never mixes live and stale fragments.
+ * Core data selection is atomic: if a profile, repository, event, or selected
+ * release request fails or the payload cannot be normalized, the whole dossier
+ * falls back to the checked-in snapshot so the page never mixes live and stale
+ * fragments.
  */
 export async function loadDossier(): Promise<GitHubDossier> {
   if (import.meta.env.GITHUB_DATA === "fallback") return fallbackDossier;
@@ -218,7 +249,15 @@ export async function loadDossier(): Promise<GitHubDossier> {
       fetchJson<RawRepo[]>(`/users/${LOGIN}/repos?per_page=100&sort=pushed`),
       fetchJson<RawEvent[]>(`/users/${LOGIN}/events/public?per_page=30`),
     ]);
-    const dossier = normalize(profile, repos, events);
+    const releaseBatches = await Promise.all(
+      selectRepositories(repos).map(async (repo) => ({
+        repo,
+        releases: await fetchJson<RawRelease[]>(
+          `/repos/${LOGIN}/${encodeURIComponent(repo.name)}/releases?per_page=5`,
+        ),
+      })),
+    );
+    const dossier = normalize(profile, repos, events, releaseBatches);
     if (dossier.repositories.length === 0 || dossier.activity.length === 0) {
       throw new Error("Live dossier came back suspiciously empty");
     }

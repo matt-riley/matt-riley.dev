@@ -21,12 +21,13 @@ pnpm check      # astro check (types + diagnostics)
 
 ## GitHub data
 
-The build fetches the public GitHub profile, repositories, and events for
-`matt-riley` at build time and normalizes them into one typed dossier
-(`src/data/github.ts`). Data selection is atomic: if any request fails, times
-out, or looks malformed, the whole page falls back to the checked-in
-last-known-good snapshot in `src/data/fallback.ts` and the dossier is stamped
-`ARCHIVE PRINT` instead of `LIVE PRESS`.
+The build fetches the public GitHub profile, repositories, public events, and
+releases from the five selected repositories for `matt-riley` at build time,
+then normalizes them into one typed dossier (`src/data/github.ts`). Data
+selection is atomic: if any request fails, times out, or looks malformed, the
+whole page falls back to the checked-in last-known-good snapshot in
+`src/data/fallback.ts` and the dossier is stamped `ARCHIVE PRINT` instead of
+`LIVE PRESS`.
 
 - `GITHUB_TOKEN` (optional) raises the API rate limit; it never reaches the client.
 - `GITHUB_DATA=fallback` skips the live fetch entirely for deterministic builds.
