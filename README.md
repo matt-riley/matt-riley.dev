@@ -55,6 +55,16 @@ before first paint.
 - `src/styles/` — the Afterimage visual system and responsive rules.
 - `public/images/` — the local hero and Waffle editorial assets.
 
+## Cloudflare Pages
+
+This is configured for a static Cloudflare Pages deployment:
+
+- Build command: `pnpm run build`
+- Build output directory: `dist`
+- Astro mode: `output: "static"`
+- Cloudflare adapter: none required; `@astrojs/cloudflare` is for SSR/Workers
+  runtime features and would be unnecessary here.
+
 ## Reuse
 
 This repository currently has no license. Public visibility does not grant
