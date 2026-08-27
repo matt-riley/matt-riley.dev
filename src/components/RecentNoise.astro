@@ -11,93 +11,58 @@ const { activity, releases } = Astro.props;
 ---
 
 <section
-  class="recent-dispatches press-section"
+  class="noise-section press-section"
   id="noise"
   aria-labelledby="recent-title"
+  data-story-section
 >
-  <div class="dispatch-title-block">
-    <p>DISPATCH FILE 004</p>
-    <h2 id="recent-title">RECENT<br />NOISE</h2>
-    <p>
-      Commits, releases and occasional interesting things pasted over the wire.
-    </p>
+  <div class="section-kicker" data-reveal>
+    <span>05 / RECENT NOISE</span>
+    <span>PUBLIC SIGNALS, RECENTLY</span>
   </div>
-  <div class="dispatch-board" data-recent-tabs>
-    <div
-      class="dispatch-tabs"
-      role="tablist"
-      aria-label="Recent GitHub activity"
-      hidden
-    >
-      <button
-        type="button"
-        role="tab"
-        id="tab-signals"
-        aria-controls="panel-signals"
-        aria-selected="true"
-      >Signals</button>
-      <button
-        type="button"
-        role="tab"
-        id="tab-releases"
-        aria-controls="panel-releases"
-        aria-selected="false"
-        tabindex="-1"
-      >Releases</button>
+  <div class="noise-layout">
+    <div class="noise-intro" data-reveal>
+      <p class="eyebrow">The wire is never completely quiet</p>
+      <h2 id="recent-title">Recent<br />{" "}<span>noise.</span></h2>
+      <p>Commits, releases, and the occasional interesting thing pasted over the wire.</p>
     </div>
-    <div
-      class="dispatch-panel"
-      role="tabpanel"
-      id="panel-signals"
-      aria-labelledby="tab-signals"
-    >
-      {activity.length > 0 ? (
-        <ol class="dispatch-list">
-          {activity.map((event) => (
-            <li>
-              <time datetime={event.occurredAt}>{galleyDate(event.occurredAt)}</time>
-              <span class="activity-kind">{event.kind}</span>
-              <span>
-                <b>{event.repo}</b> — {event.summary}
-              </span>
-              <a
-                href={event.repoUrl}
-                aria-label={`Open ${event.kind} activity in ${event.repo}`}
-              >
-                OPEN ↗
-              </a>
-            </li>
-          ))}
-        </ol>
-      ) : (
-        <p class="dispatch-empty">
-          NO PUBLIC SIGNALS ON THE WIRE. THE PRESS IS QUIET.
-        </p>
-      )}
-    </div>
-    <div
-      role="tabpanel"
-      class="dispatch-panel"
-      id="panel-releases"
-      aria-labelledby="tab-releases"
-    >
-      {releases.length > 0 ? (
-        <ol class="dispatch-list">
-          {releases.map((release) => (
-            <li>
-              <time datetime={release.publishedAt}>
-                {registerDate(release.publishedAt)}
-              </time>
-              <span>
-                <b>{release.repo}</b> — {release.summary}
-              </span>
-              <a href={release.repoUrl}>OPEN ↗</a>
-            </li>
-          ))}
-        </ol>
-      ) : (
-        <p class="dispatch-empty">NO RELEASES IN THE REGISTER THIS ISSUE.</p>
-      )}
+    <div class="dispatch-board" data-recent-tabs data-reveal>
+      <div class="dispatch-tabs" role="tablist" aria-label="Recent GitHub activity" hidden>
+        <button type="button" role="tab" id="tab-signals" aria-controls="panel-signals" aria-selected="true">Signals</button>
+        <button type="button" role="tab" id="tab-releases" aria-controls="panel-releases" aria-selected="false" tabindex="-1">Releases</button>
+      </div>
+      <div class="dispatch-panel" role="tabpanel" id="panel-signals" aria-labelledby="tab-signals">
+        {activity.length > 0 ? (
+          <ol class="dispatch-list">
+            {activity.map((event) => (
+              <li>
+                <time datetime={event.occurredAt}>{galleyDate(event.occurredAt)}</time>
+                <span class="activity-kind">{event.kind}</span>
+                <span class="dispatch-summary"><b>{event.repo}</b><span>{event.summary}</span></span>
+                <a href={event.repoUrl} aria-label={`Open ${event.kind} activity in ${event.repo}`}>Open <span aria-hidden="true">↗</span></a>
+              </li>
+            ))}
+          </ol>
+        ) : (
+          <p class="dispatch-empty">No public signals on the wire. The press is quiet.</p>
+        )}
+      </div>
+      <div class="dispatch-panel" role="tabpanel" id="panel-releases" aria-labelledby="tab-releases">
+        {releases.length > 0 ? (
+          <ol class="dispatch-list">
+            {releases.map((release) => (
+              <li>
+                <time datetime={release.publishedAt}>{registerDate(release.publishedAt)}</time>
+                <span class="activity-kind">release</span>
+                <span class="dispatch-summary"><b>{release.repo}</b><span>{release.summary}</span></span>
+                <a href={release.repoUrl} aria-label={`Open the ${release.repo} release on GitHub`}>Open <span aria-hidden="true">↗</span></a>
+              </li>
+            ))}
+          </ol>
+        ) : (
+          <p class="dispatch-empty">No releases in the register this issue.</p>
+        )}
+      </div>
     </div>
   </div>
 </section>

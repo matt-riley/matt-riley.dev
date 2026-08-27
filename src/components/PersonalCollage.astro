@@ -1,37 +1,47 @@
 ---
 const fragments = [
   { key: "place", tag: "01 / LOCATION", value: "Yorkshire, England" },
-  { key: "comedy", tag: "02 / LIVE TEST", value: "Stand-up comedy training" },
-  { key: "art", tag: "03 / VISUAL NOISE", value: "Modern art / Dada" },
-  { key: "music", tag: "04 / LISTENING", value: "80s / 90s hip-hop" },
+  { key: "comedy", tag: "02 / LIVE TEST", value: "Stand up comedy training" },
+  { key: "art", tag: "03 / VISUAL NOISE", value: "Modern art and Dada" },
+  { key: "music", tag: "04 / LISTENING", value: "80s and 90s hip hop" },
 ];
 ---
 
-<section
-  class="personal-interruptions press-section"
-  aria-labelledby="personal-interruptions-title"
->
-  <header class="personal-interruptions-heading">
-    <p>PERSONAL INTERRUPTION / 005</p>
-    <h2 id="personal-interruptions-title">UNFILED<br />MATERIAL</h2>
-  </header>
-  <div class="interruption-rail">
-    {fragments.map((fragment) => (
-      <p class={`interruption-fragment interruption-fragment--${fragment.key}`}>
-        <span aria-hidden="true">{fragment.tag}</span>
-        <strong>{fragment.value}</strong>
+<section class="offclock-section press-section" aria-labelledby="offclock-title" data-story-section>
+  <div class="section-kicker" data-reveal>
+    <span>06 / OFF THE CLOCK</span>
+    <span>THE HUMAN INTERRUPTION</span>
+  </div>
+  <div class="offclock-layout">
+    <div class="offclock-intro" data-reveal>
+      <p class="eyebrow">A little context, for the curious</p>
+      <h2 id="offclock-title">The human<br />{" "}<span>error.</span></h2>
+      <p>
+        Software is only one of the things I pay attention to. The rest leaks in around the edges.
       </p>
-    ))}
-    <figure class="interruption-waffle">
-      <div class="interruption-waffle-frame">
+    </div>
+    <figure class="waffle-card" id="cat" data-image-reveal data-reveal>
+      <div class="waffle-card__image">
         <img
-          src="/images/waffle/waffle-portrait-photo.jpg"
+          src="/images/waffle/waffle-detail.jpg"
           alt="Waffle, Matt's orange tabby kitten, peeking out from a blanket"
+          width="320"
+          height="330"
+          loading="lazy"
+          decoding="async"
         />
+        <span class="waffle-card__stamp">CAT / 033⅓</span>
       </div>
-      <figcaption>
-        Waffle, Matt's orange tabby kitten, peeking out from a blanket.
-      </figcaption>
+      <figcaption>Waffle, Matt's orange tabby kitten. A reliable interruption.</figcaption>
     </figure>
   </div>
+  <ul class="interest-register" data-reveal-group>
+    {fragments.map((fragment, index) => (
+      <li class={`interest-row interest-row--${fragment.key}`} data-reveal-item>
+        <span>{fragment.tag}</span>
+        <strong>{fragment.value}</strong>
+        <span class="interest-row__index">{String(index + 1).padStart(2, "0")}</span>
+      </li>
+    ))}
+  </ul>
 </section>

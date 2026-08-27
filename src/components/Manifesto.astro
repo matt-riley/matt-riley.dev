@@ -1,197 +1,69 @@
----
-/**
- * The detonated cover manifesto, recreated from the approved Photocopier Riot
- * cover artwork. Every scrap, stamp and letter offset is deterministic build
- * output; the accessible text reads in plain order underneath the collage.
- */
-
-interface Letter {
-  glyph: string;
-  rotate: number;
-  rise: number;
-  scale: number;
-  blueCounter?: boolean;
-}
-
-const letter = (
-  glyph: string,
-  rotate: number,
-  rise: number,
-  scale = 1,
-  blueCounter = false,
-): Letter => ({ glyph, rotate, rise, scale, blueCounter });
-
-const matt = [
-  letter("M", -2.5, 0.02, 1.02),
-  letter("A", 1.8, -0.015, 0.99),
-  letter("T", -1.2, 0.03, 1.04),
-  letter("T", 2.6, -0.02, 0.97),
-];
-
-const riley = [
-  letter("R", -2, 0.01, 1.03),
-  letter("I", 3, -0.04, 0.94),
-  letter("L", -1.5, 0.05, 1.06),
-  letter("E", 1.2, -0.01, 0.98),
-  letter("Y", -3.2, 0.06, 1.08),
-];
-
-const portfolio = [
-  letter("P", -1.4, 0, 1.01),
-  letter("O", 2.2, -0.03, 0.97),
-  letter("R", -0.8, 0.02, 1.03),
-  letter("T", 1.6, -0.04, 0.99),
-  letter("F", -2.4, 0.03, 1.02),
-  letter("O", 1.1, -0.02, 1.0, true),
-  letter("L", -1.8, 0.04, 1.05),
-  letter("I", 2.8, -0.05, 0.93),
-  letter("O", -1.2, 0.01, 1.01),
-];
-
-const renderRow = (letters: Letter[]) =>
-  letters.map((entry) => ({
-    ...entry,
-    style: `--rot:${entry.rotate}deg;--rise:${entry.rise}em;--squeeze:${entry.scale}`,
-  }));
----
-
-<section class="cover" id="top" aria-labelledby="hero-name">
-  <svg class="cover-defs" aria-hidden="true" focusable="false" width="0" height="0">
-    <defs>
-      <filter id="mr-rough" x="-5%" y="-5%" width="110%" height="110%">
-        <feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="2" seed="7" result="noise"></feTurbulence>
-        <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.8"></feDisplacementMap>
-      </filter>
-      <filter id="mr-rough-heavy" x="-8%" y="-8%" width="116%" height="116%">
-        <feTurbulence type="fractalNoise" baseFrequency="0.11 0.17" numOctaves="3" seed="13" result="noise"></feTurbulence>
-        <feDisplacementMap in="SourceGraphic" in2="noise" scale="5"></feDisplacementMap>
-      </filter>
-      <filter id="mr-toner" x="-4%" y="-4%" width="108%" height="108%">
-        <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="21" result="noise"></feTurbulence>
-        <feColorMatrix in="noise" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0.62 0.62 0.62 0 -1.18" result="spots"></feColorMatrix>
-        <feComposite in="SourceGraphic" in2="spots" operator="out" result="worn"></feComposite>
-        <feTurbulence type="fractalNoise" baseFrequency="0.16 0.09" numOctaves="2" seed="3" result="wobble"></feTurbulence>
-        <feDisplacementMap in="worn" in2="wobble" scale="2.4"></feDisplacementMap>
-      </filter>
-    </defs>
-  </svg>
-
-  <div class="cover-field">
-    <div class="cover-debris" aria-hidden="true">
-      <span class="rail-barcode rail-barcode--top"></span>
-      <span class="rail-chip">MR</span>
-      <span class="rail-price">£7.79 · 11069 · E1860</span>
-      <span class="rail-barcode rail-barcode--side"></span>
-      <span class="rail-digits">613 90011 7</span>
-      <span class="rail-cc41">CC41</span>
-      <span class="rail-pull">▸ PULL HERE</span>
-      <span class="rail-staple rail-staple--upper"></span>
-      <span class="rail-staple rail-staple--lower"></span>
-      <span class="cover-crosshair cover-crosshair--left"></span>
-      <span class="cover-crosshair cover-crosshair--mid"></span>
-
-      <div class="blue-sheet blue-sheet--back"></div>
-      <div class="blue-sheet blue-sheet--mid"></div>
-      <div class="blue-corner">
-        <b class="blue-corner-glyph">S</b>
-      </div>
-      <span class="mirror-type mirror-type--one">URBAN</span>
-      <span class="mirror-type mirror-type--two">SYSTEMS</span>
-      <span class="blue-scratch blue-scratch--one"></span>
-      <span class="blue-scratch blue-scratch--two"></span>
-      <span class="cover-grid-stamp"></span>
-      <svg class="cover-globe" viewBox="0 0 100 100">
-        <g fill="none" stroke="currentColor" stroke-width="2.4">
-          <circle cx="50" cy="50" r="44"></circle>
-          <ellipse cx="50" cy="50" rx="44" ry="18"></ellipse>
-          <ellipse cx="50" cy="50" rx="30" ry="44"></ellipse>
-          <ellipse cx="50" cy="50" rx="12" ry="44"></ellipse>
-          <path d="M6 50h88M14 28h72M14 72h72"></path>
-        </g>
-      </svg>
-
-      <span class="tag-742617">742617</span>
-      <span class="cyan-label">SYS:RM7<br />ZONE:UK-YRK<br />LEVEL:OBSCURE</span>
-      <span class="corner-scrap corner-scrap--yellow"></span>
-      <span class="corner-scrap corner-scrap--tape"></span>
-      <span class="cover-clip"></span>
-      <span class="cover-pencil"></span>
-      <span class="issue-tag">001</span>
-    </div>
-
-    <h1 id="hero-name" class="cover-name">
-      <span class="sr-only">Matt Riley</span>
-      <span class="cover-name-visual" aria-hidden="true">
-        <span class="cover-row cover-row--matt">
-          {renderRow(matt).map((entry) => (
-            <b class="cover-letter" style={entry.style}>{entry.glyph}</b>
-          ))}
-        </span>
-        <span class="cover-row cover-row--riley">
-          {renderRow(riley).map((entry) => (
-            <b class="cover-letter" style={entry.style}>{entry.glyph}</b>
-          ))}
-        </span>
-      </span>
-    </h1>
-
-    <p class="cover-anti" data-visual-key="anti-portfolio">
-      <span class="sr-only">This is not a portfolio</span>
-      <span class="cover-anti-visual" aria-hidden="true">
-        <span class="anti-line anti-line--one">
-          <b class="anti-scrap anti-scrap--this">THIS</b>
-          <b class="anti-scrap anti-scrap--is">IS</b>
-        </span>
-        <span class="anti-line anti-line--two">
-          <b class="anti-scrap anti-scrap--not">NOT</b>
-          <b class="anti-scrap anti-scrap--a">A</b>
-        </span>
-        <span class="anti-line anti-line--three">
-          {renderRow(portfolio).map((entry) => (
-            <b
-              class:list={[
-                "cover-letter",
-                "portfolio-letter",
-                entry.blueCounter && "portfolio-letter--blue",
-              ]}
-              style={entry.style}
-            >{entry.glyph}</b>
-          ))}
-        </span>
-      </span>
-    </p>
-
-    <p class="cover-statement" data-visual-key="statement">
-      SOFTWARE /<br />YORKSHIRE /<br />USEFUL ACCIDENTS
-    </p>
-
-    <p class="cover-refusal" data-visual-key="refusal">
-      REFUSING<br />SENSIBLE<br />ALIGNMENT<br />SINCE 2007
-    </p>
-
-    <figure class="cover-waffle" id="cat" data-visual-key="waffle">
-      <span class="waffle-backing" aria-hidden="true"></span>
-      <span class="waffle-cutout">
-        <img
-          src="/images/waffle/waffle-portrait-photo.jpg"
-          alt="Waffle, Matt's orange tabby kitten, peeking out from behind torn blue paper"
-        />
-        <span class="waffle-dots" aria-hidden="true"></span>
-      </span>
-    </figure>
-    <div class="blue-sheet blue-sheet--front" aria-hidden="true"></div>
+<section class="hero" id="top" aria-labelledby="hero-title" data-parallax-section>
+  <div class="hero-rails" aria-hidden="true">
+    <span class="hero-rail hero-rail--one"></span>
+    <span class="hero-rail hero-rail--two"></span>
+    <span class="hero-rail hero-rail--three"></span>
+    <span class="hero-coordinate">53° 57′ N / 1° 04′ W</span>
+    <span class="hero-trace hero-trace--top">MATT RILEY / SOFTWARE / 001</span>
+    <span class="hero-trace hero-trace--side">AFTERIMAGE / USEFUL ACCIDENTS</span>
   </div>
 
-  <div class="cover-band" aria-hidden="true">
-    <span class="band-title">
-      <b class="cover-letter" style="--rot:-1.2deg;--rise:0em;--squeeze:1">G</b><b class="cover-letter" style="--rot:1.4deg;--rise:-0.02em;--squeeze:1.03">I</b><b class="cover-letter" style="--rot:-0.8deg;--rise:0.03em;--squeeze:0.98">T</b><b class="cover-letter" style="--rot:1.9deg;--rise:-0.01em;--squeeze:1.02">H</b><b class="cover-letter" style="--rot:-1.6deg;--rise:0.02em;--squeeze:1">U</b><b class="cover-letter" style="--rot:0.9deg;--rise:-0.03em;--squeeze:1.04">B</b><b class="band-dash">-</b><b class="cover-letter" style="--rot:1.1deg;--rise:0.01em;--squeeze:0.99">D</b><b class="cover-letter" style="--rot:-1.9deg;--rise:-0.02em;--squeeze:1.03">A</b><b class="cover-letter" style="--rot:1.3deg;--rise:0.03em;--squeeze:0.97">T</b><b class="cover-letter" style="--rot:-0.7deg;--rise:-0.01em;--squeeze:1.01">A</b>
-    </span>
-    <span class="band-issue">002</span>
-    <span class="band-terminal">
-      $ whoami<br />matt-riley<br /><i>- - - - - - - - - - - -</i>
-    </span>
-    <span class="band-smear band-smear--one"></span>
-    <span class="band-smear band-smear--two"></span>
-    <span class="band-vertical">3A6 2702</span>
+  <div class="hero-copy">
+    <p class="eyebrow" data-hero-item>Matt Riley / software / Yorkshire</p>
+    <h1 id="hero-title" data-masked-reveal data-hero-item>
+      I make useful things for curious people.
+    </h1>
+    <p class="hero-lede" id="hero-description" data-hero-item>
+      Software, small tools, and the occasional beautiful detour. Built in Yorkshire, shipped on the internet.
+    </p>
+    <div class="hero-actions" data-hero-item>
+      <a class="button button--signal" href="#projects" data-magnetic data-cursor-label="Follow">
+        See the work <span aria-hidden="true">↘</span>
+      </a>
+      <a class="text-link" href="https://github.com/matt-riley" data-cursor-label="Open">
+        Open GitHub <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+    <div class="hero-proof" data-hero-item>
+      <span class="signal-dot" aria-hidden="true"></span>
+      <span>Public code. No theatre.</span>
+    </div>
+  </div>
+
+  <figure class="hero-media" data-image-reveal data-hero-item>
+    <div class="hero-media__frame">
+      <img
+        src="/images/afterimage/hero-workbench.webp"
+        alt="A monochrome workbench with a CRT monitor, keyboard, notes, tools, and a cyan signal line"
+        width="1024"
+        height="576"
+        fetchpriority="high"
+        decoding="async"
+        data-parallax-image
+      />
+      <span class="hero-media__index">01 / 04</span>
+      <span class="hero-media__caption">WORKBENCH / AFTERIMAGE / 2026</span>
+      <span class="hero-media__corner" aria-hidden="true"></span>
+    </div>
+  </figure>
+
+  <a class="scroll-cue" href="#principle" aria-label="Scroll to the principle">
+    <span class="scroll-cue__line" aria-hidden="true"></span>
+    <span>Scroll to inspect</span>
+  </a>
+</section>
+
+<section class="statement-section" id="principle" aria-labelledby="principle-title" data-story-section>
+  <div class="section-kicker">
+    <span>02 / THE PRINCIPLE</span>
+    <span>READ THE TRACE</span>
+  </div>
+  <div class="statement-section__body">
+    <h2 id="principle-title" data-scroll-word-reveal>
+      Good software leaves a trace you can follow.
+    </h2>
+    <p data-reveal>
+      The useful bit is rarely the loudest bit. I like tools that make the next move obvious, then get out of the way.
+    </p>
   </div>
 </section>

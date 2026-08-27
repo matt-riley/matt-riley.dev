@@ -4,6 +4,9 @@ dist/
 # generated types
 .astro/
 
+# local design process
+.tastemaker/
+
 # dependencies
 node_modules/
 .pnpm-store/

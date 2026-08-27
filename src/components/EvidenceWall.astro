@@ -11,45 +11,57 @@ const exhibitNumber = (index: number) => String(index + 1).padStart(2, "0");
 ---
 
 <section
-  class="repository-evidence press-section"
-  aria-labelledby="evidence-title"
+  class="work-section press-section"
+  id="projects"
+  aria-labelledby="projects-title"
+  data-story-section
 >
-  <div class="section-kicker">
-    <p>CASE FILE 003 / SELECTED REPOSITORIES</p>
-    <p>DETERMINISTIC ASSEMBLY / NO TWO CUTS ALIKE</p>
+  <div class="section-kicker" data-reveal>
+    <span>04 / SELECTED MACHINERY</span>
+    <span>THE WORK LEAVES RECEIPTS</span>
   </div>
-  <h2 id="evidence-title">EVIDENCE<br />WALL</h2>
-  <div class="evidence-wall">
+  <div class="section-heading work-heading" data-reveal>
+    <div>
+      <p class="eyebrow">Small surfaces, real consequences</p>
+      <h2 id="projects-title">Things I<br />{" "}<span>actually made.</span></h2>
+    </div>
+    <p class="section-heading__note">
+      The strongest public projects get a little room to breathe. Read the description, inspect the source, follow the trail.
+    </p>
+  </div>
+
+  <div class="work-stack" data-sticky-stack>
     {repositories.map((repo, index) => (
       <article
-        class={`repository-evidence-piece evidence--${repo.variant}`}
-        data-evidence-number={exhibitNumber(index)}
+        class={`project-card project-card--${repo.variant}`}
+        data-stack-card
+        data-project={repo.name}
       >
-        <span class="evidence-number" aria-hidden="true">
-          EX.{exhibitNumber(index)}
-        </span>
-        <h3>
-          <a href={repo.url}>{repo.name}</a>
-        </h3>
-        <p class="evidence-description">{repo.description}</p>
-        <dl class="evidence-meta">
-          <div>
-            <dt>LANGUAGE</dt>
-            <dd>{repo.language}</dd>
+        <div class="project-card__topline">
+          <span>{exhibitNumber(index)} / {repo.language}</span>
+          <span>UPDATED {stampDate(repo.updatedAt)}</span>
+        </div>
+        <div class="project-card__body">
+          <div class="project-card__trace" aria-hidden="true">
+            <span class="project-card__trace-dot"></span>
+            <span class="project-card__trace-line"></span>
+            <span class="project-card__trace-line project-card__trace-line--short"></span>
+            <span class="project-card__trace-code">{repo.language.toUpperCase()} / {exhibitNumber(index)}</span>
           </div>
-          <div>
-            <dt>STARS</dt>
-            <dd>{repo.stars}</dd>
+          <div class="project-card__copy">
+            <p class="record-label">REPOSITORY / {repo.name}</p>
+            <h3><a href={repo.url} aria-label={`Inspect ${repo.name} on GitHub`}>{repo.name}</a></h3>
+            <p>{repo.description}</p>
           </div>
-          <div>
-            <dt>FORKS</dt>
-            <dd>{repo.forks}</dd>
-          </div>
-        </dl>
-        <time datetime={repo.updatedAt}>
-          UPDATED&ensp;{stampDate(repo.updatedAt)}
-        </time>
-        <span class="evidence-arrow" aria-hidden="true">↗</span>
+          <dl class="project-card__meta">
+            <div><dt>STARS</dt><dd>{repo.stars}</dd></div>
+            <div><dt>FORKS</dt><dd>{repo.forks}</dd></div>
+            <div><dt>CHANNEL</dt><dd>{repo.language}</dd></div>
+          </dl>
+        </div>
+        <a class="project-card__open" href={repo.url} aria-label={`Open the ${repo.name} repository on GitHub`}>
+          <span>Inspect source</span><span aria-hidden="true">↗</span>
+        </a>
       </article>
     ))}
   </div>

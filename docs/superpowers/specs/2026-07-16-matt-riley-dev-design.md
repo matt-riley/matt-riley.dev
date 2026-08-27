@@ -2,7 +2,9 @@
 
 ## Status
 
-Approved visual direction: **Photocopier Riot**, a more forceful Dada zine evolution of Candidate A. Candidate A supplies the editorial structure, Candidate B supplies the turntable and MPC-style activity interaction, and Candidate C supplies the responsive, accessibility, and data-display discipline.
+Superseded exploratory spec. The approved direction is now **Afterimage**; see the current [brand spec](../../../brand-spec.md). The notes below are retained as the original 2026-07-16 design exploration.
+
+Original exploratory direction: **Photocopier Riot**, a more forceful Dada zine evolution of Candidate A. Candidate A supplies the editorial structure, Candidate B supplies the turntable and MPC-style activity interaction, and Candidate C supplies the responsive, accessibility, and data-display discipline.
 
 Hard visual constraints:
 

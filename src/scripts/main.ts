@@ -1,10 +1,15 @@
 import { initEditionSwitch } from "./theme";
-import { initRegistrationDrift } from "./drift";
-import { initActivityPads, initAvatarFallback } from "./activity";
+import { initSiteNavigation } from "./navigation";
 import { initRecentTabs } from "./tabs";
+import { initAvatarFallback } from "./activity";
+import { initAfterimageMotion } from "./motion";
+import { initSignalField } from "./signal-field";
+import { initPointerTrail } from "./pointer-trail";
 
 initEditionSwitch();
-initRegistrationDrift();
-initActivityPads();
-initAvatarFallback();
+initSiteNavigation();
 initRecentTabs();
+initAvatarFallback();
+initAfterimageMotion();
+initSignalField();
+initPointerTrail();

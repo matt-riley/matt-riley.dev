@@ -1,20 +1,42 @@
 ---
 const links = [
-  { href: "#work", label: "Work", shout: "WORK" },
-  { href: "#noise", label: "Noise", shout: "NOISE" },
-  { href: "#cat", label: "Cat", shout: "CAT" },
-  { href: "#exit", label: "Exit", shout: "EXIT" },
+  { href: "#work", label: "Work" },
+  { href: "#noise", label: "Noise" },
+  { href: "#cat", label: "Cat" },
+  { href: "#exit", label: "Exit" },
 ];
 ---
 
-<header class="masthead" data-visual-key="navigation">
-  <nav class="anti-nav" aria-label="Primary">
-    {links.map((link) => (
-      <a href={link.href} aria-label={link.shout}>{link.label}</a>
-    ))}
-  </nav>
-  <div class="edition-switch" role="group" aria-label="Choose print edition">
-    <button type="button" data-theme-choice="day" aria-pressed="true">Day</button>
-    <button type="button" data-theme-choice="night" aria-pressed="false">Night</button>
+<header class="masthead" data-site-header>
+  <div class="masthead__inner">
+    <a class="wordmark" href="#top" aria-label="Matt Riley home">
+      <span class="wordmark__mark" aria-hidden="true">
+        <img src="/favicon.svg" width="32" height="32" alt="" />
+      </span>
+      <span class="wordmark__name">Matt Riley</span>
+    </a>
+    <p class="masthead__index">FIELD NOTE / 001</p>
+    <button
+      class="nav-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="primary-navigation"
+      data-nav-toggle
+    >
+      <span class="nav-toggle__label">Menu</span>
+      <span class="nav-toggle__glyph" aria-hidden="true"><i></i><i></i></span>
+    </button>
+    <nav class="primary-navigation" id="primary-navigation" aria-label="Primary">
+      {links.map((link, index) => (
+        <a href={link.href} data-nav-link data-nav-index={index + 1}>
+          <span>{String(index + 1).padStart(2, "0")}</span>{link.label}
+        </a>
+      ))}
+    </nav>
+    <div class="edition-switch" role="group" aria-label="Choose print edition">
+      <span class="edition-switch__label">Edition</span>
+      <button type="button" data-theme-choice="day" aria-pressed="true">Day</button>
+      <button type="button" data-theme-choice="night" aria-pressed="false">Night</button>
+    </div>
   </div>
 </header>

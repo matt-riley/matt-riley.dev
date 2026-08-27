@@ -1,6 +1,6 @@
 ---
-import "@fontsource/anton";
-import "@fontsource/abril-fatface";
+import "@fontsource-variable/space-grotesk";
+import "@fontsource-variable/jetbrains-mono";
 import "../styles/global.css";
 import "../styles/cover.css";
 import "../styles/sections.css";
@@ -13,6 +13,18 @@ interface Props {
 const { title, description } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL("/og-image.png", Astro.site);
+const structuredData = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Matt Riley",
+  url: "https://matt-riley.dev",
+  jobTitle: "Software developer",
+  homeLocation: {
+    "@type": "Place",
+    name: "Yorkshire, England",
+  },
+  sameAs: ["https://github.com/matt-riley", "https://mattriley.work", "https://mattriley.tools"],
+});
 ---
 
 <!doctype html>
@@ -22,9 +34,11 @@ const ogImage = new URL("/og-image.png", Astro.site);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#eee9dc" />
+    <meta name="theme-color" content="#f1f0eb" />
+    <meta name="color-scheme" content="light dark" />
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    {Astro.url.pathname === "/" && <link rel="preload" as="image" href="/images/afterimage/hero-workbench.webp" />}
     <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
@@ -34,14 +48,15 @@ const ogImage = new URL("/og-image.png", Astro.site);
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Matt Riley — This Is Not a Portfolio" />
+    <meta property="og:image:alt" content="Matt Riley — software, small tools, useful accidents" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
-    <meta name="twitter:image:alt" content="Matt Riley — This Is Not a Portfolio" />
+    <meta name="twitter:image:alt" content="Matt Riley — software, small tools, useful accidents" />
     <script is:inline>
       (() => {
+        document.documentElement.classList.add("js");
         const saved = localStorage.getItem("mr-edition");
         const theme =
           saved === "day" || saved === "night"
@@ -52,10 +67,11 @@ const ogImage = new URL("/og-image.png", Astro.site);
         document.documentElement.dataset.theme = theme;
       })();
     </script>
+    <script type="application/ld+json" is:inline set:html={structuredData}></script>
     <title>{title}</title>
   </head>
   <body>
-    <a class="skip-link" href="#main">Skip to the publication</a>
+    <a class="skip-link" href="#main">Skip to the main content</a>
     <slot />
   </body>
 </html>

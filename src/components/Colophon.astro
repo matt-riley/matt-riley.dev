@@ -1,30 +1,38 @@
 ---
-const year = 2026;
+const year = new Date().getFullYear();
 ---
 
-<footer class="colophon" id="exit" aria-labelledby="exit-title">
-  <div class="colophon-register">
-    <p>FINAL CENSORSHIP BLOCK / 007</p>
-    <h2 id="exit-title">EXIT<br />THROUGH HERE</h2>
+<footer class="colophon" id="exit" aria-labelledby="exit-title" data-footer-parallax>
+  <div class="colophon__topline">
+    <span>08 / COLOPHON</span>
+    <span>END OF CURRENT ISSUE</span>
   </div>
-  <div class="colophon-facts">
-    <p>
-      <span>CONTACT</span>
-      <a
-        href="https://github.com/matt-riley"
-        aria-label="Contact Matt Riley on GitHub"
-      >
-        github.com/matt-riley
+  <div class="colophon__main">
+    <div class="colophon__headline" data-reveal>
+      <p class="eyebrow">Keep the useful bits</p>
+      <h2 id="exit-title">Exit through<br />{" "}<span>the source.</span></h2>
+    </div>
+    <div class="colophon__details" data-reveal>
+      <p>Built in Yorkshire. Published as static HTML. Fed by a typed GitHub record and the occasional cat interruption.</p>
+      <a class="button button--inverse" href="https://github.com/matt-riley" data-cursor-label="Open">
+        Contact via GitHub <span aria-hidden="true">↗</span>
       </a>
-    </p>
-    <p><span>SOURCE</span> ASTRO / TYPESCRIPT / STATIC HTML</p>
-    <p><span>DEPLOY TARGET</span> CLOUDFLARE PAGES</p>
-    <p><span>IMPRINT</span> © {year} MATT RILEY</p>
+    </div>
   </div>
-  <div class="censor-stack" aria-hidden="true">
-    <span class="censor-block"></span>
-    <span class="censor-block"></span>
-    <span class="censor-block"></span>
+  <div class="colophon__bottom">
+    <div class="colophon__facts">
+      <span>Astro / TypeScript / static HTML</span>
+      <span>© {year} Matt Riley</span>
+      <a href="/privacy">Privacy</a>
+      <a href="/terms">Terms</a>
+    </div>
+    <div class="colophon__controls">
+      <div class="edition-switch edition-switch--footer" role="group" aria-label="Choose print edition">
+        <span class="edition-switch__label">Edition</span>
+        <button type="button" data-theme-choice="day" aria-pressed="true">Day</button>
+        <button type="button" data-theme-choice="night" aria-pressed="false">Night</button>
+      </div>
+      <a class="back-to-top" href="#top">Back to top <span aria-hidden="true">↑</span></a>
+    </div>
   </div>
-  <a class="colophon-exit" href="#top">BACK TO COVER <span aria-hidden="true">↑</span></a>
 </footer>

@@ -3,39 +3,82 @@ const notices = [
   {
     href: "https://mattriley.work",
     label: "Read Matt Riley's longer work notes at mattriley.work",
-    small: "WANTED: READERS OF LONGER SIGNALS",
-    strong: "mattriley.work",
-    line: "WORK NOTES / OPEN DAILY",
+    title: "mattriley.work",
+    detail: "Longer notes / open daily",
   },
   {
     href: "https://mattriley.tools",
     label: "Use Matt Riley's web tools at mattriley.tools",
-    small: "FOR HIRE: USEFUL THINGS",
-    strong: "mattriley.tools",
-    line: "SHARP EDGES / NO APPOINTMENT",
+    title: "mattriley.tools",
+    detail: "Useful things / no appointment",
   },
   {
     href: "https://github.com/matt-riley",
     label: "Inspect Matt Riley's public source on GitHub",
-    small: "PUBLIC NOTICE: SOURCE MATERIAL",
-    strong: "github.com/matt-riley",
-    line: "REPOSITORIES / EVIDENCE / RECEIPTS",
+    title: "github.com/matt-riley",
+    detail: "Repositories / evidence / receipts",
+  },
+];
+
+const notes = [
+  {
+    question: "What does Matt build?",
+    answer: "Small software, developer tools, agent workflows, and web things that make a stubborn part of the day less stubborn.",
+  },
+  {
+    question: "Can we work together?",
+    answer: "Start with a useful problem and a link to the context. The work notes are the best first handoff.",
+  },
+  {
+    question: "Where is Matt based?",
+    answer: "Yorkshire, England. The internet does the rest of the geography.",
+  },
+  {
+    question: "What does small tools mean here?",
+    answer: "A narrow surface area, an opinionated job, and enough care that the tool does not become another problem to manage.",
+  },
+  {
+    question: "Is the code public?",
+    answer: "A lot of it is. The public GitHub record is the most honest index of what is active, archived, or still being figured out.",
+  },
+  {
+    question: "What is Waffle's role?",
+    answer: "Quality assurance, morale, and occasional obstruction. Results vary by snack availability.",
   },
 ];
 ---
 
-<section class="classified-wall press-section" aria-labelledby="classifieds-title">
-  <header class="classified-heading">
-    <p>SMALL ADS / LARGE CONSEQUENCES / 006</p>
-    <h2 id="classifieds-title">ABSURD<br />CLASSIFIEDS</h2>
-  </header>
-  <div class="classified-notices">
-    {notices.map((notice) => (
-      <a href={notice.href} aria-label={notice.label}>
-        <small>{notice.small}</small>
-        <strong>{notice.strong}</strong>
-        <span>{notice.line} <b aria-hidden="true">↗</b></span>
-      </a>
-    ))}
+<section class="fieldnotes-section press-section" id="field-notes" aria-labelledby="fieldnotes-title" data-story-section>
+  <div class="section-kicker" data-reveal>
+    <span>07 / FIELD NOTES</span>
+    <span>ASK A BETTER QUESTION</span>
+  </div>
+  <div class="fieldnotes-layout">
+    <div class="fieldnotes-intro" data-reveal>
+      <p class="eyebrow">The small print is the point</p>
+      <h2 id="fieldnotes-title">Start with<br />{" "}<span>the problem.</span></h2>
+      <p>If there is something worth making clearer, send the context. I will bring the sharp edges.</p>
+    </div>
+    <div class="notes-list" data-reveal-group>
+      {notes.map((note, index) => (
+        <details class="field-note" data-reveal-item open={index === 0}>
+          <summary><span>{String(index + 1).padStart(2, "0")}</span>{note.question}</summary>
+          <p>{note.answer}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+  <div class="escape-hatches" data-reveal-group>
+    <p class="record-label" data-reveal-item>FOLLOW A THREAD</p>
+    <div class="escape-links">
+      {notices.map((notice, index) => (
+        <a href={notice.href} aria-label={notice.label} data-reveal-item data-magnetic data-cursor-label="Open">
+          <span>{String(index + 1).padStart(2, "0")}</span>
+          <strong>{notice.title}</strong>
+          <small>{notice.detail}</small>
+          <b aria-hidden="true">↗</b>
+        </a>
+      ))}
+    </div>
   </div>
 </section>
