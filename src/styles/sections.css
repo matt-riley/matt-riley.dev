@@ -307,7 +307,7 @@
   border: 1px solid var(--card-line);
   background: var(--card-bg);
   color: var(--card-ink);
-  transform-origin: 50% 0;
+  z-index: 1;
 }
 
 .project-card:nth-child(2n) {
@@ -315,6 +315,22 @@
   --card-ink: var(--inverse-ink);
   --card-muted: color-mix(in srgb, var(--inverse-ink) 68%, transparent);
   --card-line: color-mix(in srgb, var(--inverse-ink) 48%, transparent);
+}
+
+.project-card:nth-child(2) {
+  z-index: 2;
+}
+
+.project-card:nth-child(3) {
+  z-index: 3;
+}
+
+.project-card:nth-child(4) {
+  z-index: 4;
+}
+
+.project-card:nth-child(5) {
+  z-index: 5;
 }
 
 .project-card:nth-child(3n) {

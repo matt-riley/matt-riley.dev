@@ -177,8 +177,7 @@ dd {
   inset: 0 0 auto;
   z-index: 60;
   border-bottom: 1px solid color-mix(in srgb, var(--ink) 22%, transparent);
-  background: color-mix(in srgb, var(--bg) 88%, transparent);
-  backdrop-filter: blur(18px);
+  background: var(--bg);
 }
 
 .masthead__inner {
@@ -527,7 +526,6 @@ html.has-motion [data-reveal],
 html.has-motion [data-reveal-item],
 html.has-motion [data-hero-item] {
   opacity: 0;
-  transform: translateY(1.75rem);
 }
 
 html.has-motion [data-image-reveal] {
@@ -550,8 +548,7 @@ html.has-motion [data-image-reveal] {
 .scroll-word {
   color: var(--ink);
   opacity: var(--word-opacity, 0.2);
-  transform: translateY(var(--word-rise, 0.12em));
-  transition: opacity 120ms linear, transform 120ms var(--ease-out);
+  transition: opacity 120ms linear;
 }
 
 .pointer-trail {
@@ -559,7 +556,6 @@ html.has-motion [data-image-reveal] {
   inset: 0;
   z-index: 55;
   pointer-events: none;
-  mix-blend-mode: screen;
 }
 
 @media (prefers-reduced-motion: reduce) {

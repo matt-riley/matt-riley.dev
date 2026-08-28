@@ -48,16 +48,16 @@ function initHero(): void {
     (element) => element !== title && element !== media,
   );
 
-  if (title) gsap.set(title, { autoAlpha: 1, y: 0 });
-  if (media) gsap.set(media, { autoAlpha: 1, y: 0 });
+  if (title) gsap.set(title, { autoAlpha: 1 });
+  if (media) gsap.set(media, { autoAlpha: 1 });
 
   const timeline = gsap.timeline({ defaults: { ease: "power4.out" } });
 
   if (media) {
     timeline.fromTo(
       media,
-      { clipPath: "inset(0 0 100% 0)", scale: 1.04, autoAlpha: 0.7 },
-      { clipPath: "inset(0 0 0% 0)", scale: 1, autoAlpha: 1, duration: 1.1 },
+      { clipPath: "inset(0 0 100% 0)", autoAlpha: 0.7 },
+      { clipPath: "inset(0 0 0% 0)", autoAlpha: 1, duration: 1.1 },
       0,
     );
   }
@@ -65,8 +65,8 @@ function initHero(): void {
   if (words.length > 0) {
     timeline.fromTo(
       words,
-      { yPercent: 110, autoAlpha: 0 },
-      { yPercent: 0, autoAlpha: 1, duration: 0.9, stagger: 0.045 },
+      { autoAlpha: 0 },
+      { autoAlpha: 1, duration: 0.9, stagger: 0.045 },
       0.12,
     );
   }
@@ -74,8 +74,8 @@ function initHero(): void {
   if (supporting.length > 0) {
     timeline.fromTo(
       supporting,
-      { y: 24, autoAlpha: 0 },
-      { y: 0, autoAlpha: 1, duration: 0.8, stagger: 0.08 },
+      { autoAlpha: 0 },
+      { autoAlpha: 1, duration: 0.8, stagger: 0.08 },
       0.58,
     );
   }
@@ -91,9 +91,8 @@ function initScrollReveals(): void {
     gsap.set(items, { autoAlpha: 1 });
     gsap.fromTo(
       items,
-      { y: 28, autoAlpha: 0 },
+      { autoAlpha: 0 },
       {
-        y: 0,
         autoAlpha: 1,
         duration: 0.85,
         ease: "power4.out",
@@ -117,9 +116,8 @@ function initScrollReveals(): void {
     gsap.set(element, { autoAlpha: 1 });
     gsap.fromTo(
       element,
-      { y: 28, autoAlpha: 0 },
+      { autoAlpha: 0 },
       {
-        y: 0,
         autoAlpha: 1,
         duration: 0.85,
         ease: "power4.out",
@@ -157,10 +155,9 @@ function initStatementWords(): void {
     gsap.set(element, { autoAlpha: 1 });
     gsap.fromTo(
       words,
-      { opacity: 0.2, y: "0.12em" },
+      { opacity: 0.2 },
       {
         opacity: 1,
-        y: 0,
         ease: "none",
         stagger: 0.08,
         scrollTrigger: {
@@ -194,38 +191,13 @@ function initParallax(): void {
   if (footer) {
     gsap.fromTo(
       footer,
-      { yPercent: -6, autoAlpha: 0.84 },
+      { autoAlpha: 0.84 },
       {
-        yPercent: 0,
         autoAlpha: 1,
         ease: "none",
         scrollTrigger: { trigger: footer, start: "top bottom", end: "top 48%", scrub: 0.4 }
       },
     );
-  }
-}
-
-function initStickyWork(): void {
-  if (!window.matchMedia("(min-width: 721px)").matches) return;
-
-  for (const stack of gsap.utils.toArray<HTMLElement>("[data-sticky-stack]")) {
-    const cards = [...stack.querySelectorAll<HTMLElement>("[data-stack-card]")];
-    cards.forEach((card, index) => {
-      const next = cards[index + 1];
-      if (!next) return;
-      gsap.to(card, {
-        scale: Math.max(0.92, 0.965 - index * 0.008),
-        y: -20,
-        ease: "none",
-        scrollTrigger: {
-          trigger: next,
-          start: "top 78%",
-          end: "top 25%",
-          scrub: 0.4,
-          invalidateOnRefresh: true,
-        },
-      });
-    });
   }
 }
 
@@ -259,7 +231,6 @@ export function initAfterimageMotion(): void {
   initScrollReveals();
   initImageReveals();
   initParallax();
-  initStickyWork();
   initMagnetic();
 
   const refresh = () => ScrollTrigger.refresh();
