@@ -1,5 +1,3 @@
-import Lenis from "lenis";
-import "lenis/dist/lenis.css";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -93,11 +91,10 @@ function initScrollReveals(): void {
     gsap.set(items, { autoAlpha: 1 });
     gsap.fromTo(
       items,
-      { y: 28, autoAlpha: 0, filter: "blur(5px)" },
+      { y: 28, autoAlpha: 0 },
       {
         y: 0,
         autoAlpha: 1,
-        filter: "blur(0px)",
         duration: 0.85,
         ease: "power4.out",
         stagger: 0.07,
@@ -120,11 +117,10 @@ function initScrollReveals(): void {
     gsap.set(element, { autoAlpha: 1 });
     gsap.fromTo(
       element,
-      { y: 28, autoAlpha: 0, filter: "blur(5px)" },
+      { y: 28, autoAlpha: 0 },
       {
         y: 0,
         autoAlpha: 1,
-        filter: "blur(0px)",
         duration: 0.85,
         ease: "power4.out",
         scrollTrigger: { trigger: element, start: "top 84%", once: true },
@@ -171,7 +167,7 @@ function initStatementWords(): void {
           trigger: element,
           start: "top 78%",
           end: "top 30%",
-          scrub: 1.1,
+          scrub: 0.4,
         },
       },
     );
@@ -188,7 +184,7 @@ function initParallax(): void {
         trigger: section,
         start: "top bottom",
         end: "bottom top",
-        scrub: 1.1,
+        scrub: 0.4,
         invalidateOnRefresh: true,
       },
     });
@@ -203,7 +199,7 @@ function initParallax(): void {
         yPercent: 0,
         autoAlpha: 1,
         ease: "none",
-        scrollTrigger: { trigger: footer, start: "top bottom", end: "top 48%", scrub: 1 },
+        scrollTrigger: { trigger: footer, start: "top bottom", end: "top 48%", scrub: 0.4 }
       },
     );
   }
@@ -219,14 +215,13 @@ function initStickyWork(): void {
       if (!next) return;
       gsap.to(card, {
         scale: Math.max(0.92, 0.965 - index * 0.008),
-        autoAlpha: 0.74,
         y: -20,
         ease: "none",
         scrollTrigger: {
           trigger: next,
           start: "top 78%",
           end: "top 25%",
-          scrub: 1,
+          scrub: 0.4,
           invalidateOnRefresh: true,
         },
       });
@@ -255,29 +250,10 @@ function initMagnetic(): void {
   }
 }
 
-function initLenis(): void {
-  const lenis = new Lenis({
-    lerp: 0.08,
-    smoothWheel: true,
-    wheelMultiplier: 0.9,
-    anchors: true,
-  });
-
-  lenis.on("scroll", ScrollTrigger.update);
-  gsap.ticker.add((time) => lenis.raf(time * 1000));
-  gsap.ticker.lagSmoothing(0);
-
-  document.addEventListener("visibilitychange", () => {
-    if (document.hidden) lenis.stop();
-    else lenis.start();
-  });
-}
-
 export function initAfterimageMotion(): void {
   if (prefersReducedMotion) return;
 
   document.documentElement.classList.add("has-motion");
-  initLenis();
   initHero();
   initStatementWords();
   initScrollReveals();

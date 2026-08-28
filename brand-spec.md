@@ -11,7 +11,7 @@
 - Afterimage: monochrome editorial photography, bone and ink surfaces, ghosted instrument traces, one cyan signal.
 - Typography: Space Grotesk for the voice; JetBrains Mono for data and code metadata.
 - Materials: film grain comes from the photograph and canvas linework; no CSS gradient wallpaper, no fake paper texture.
-- Interaction: smooth scroll, masked reveals, one sticky work sequence, distance based cyan pointer trail on fine pointers only.
+- Interaction: native scroll, masked reveals, one sticky work sequence, distance based cyan pointer trail on fine pointers only.
 
 ## Asset provenance
 

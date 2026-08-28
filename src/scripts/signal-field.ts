@@ -39,6 +39,9 @@ export function initSignalField(): void {
     const source = data.length > 0 ? data : [{ repo: "archive", kind: "quiet", occurredAt: "" }];
     let width = 0;
     let height = 0;
+    let signal = "#65f4df";
+    let inverseInk = "#f1f0eb";
+    let inverse = "#0b0d0e";
     let phase = 0;
     let frame = 0;
     let active = true;
@@ -60,8 +63,16 @@ export function initSignalField(): void {
       });
     };
 
+    const updateColors = () => {
+      const styles = getComputedStyle(field);
+      signal = styles.getPropertyValue("--signal").trim() || "#65f4df";
+      inverseInk = styles.getPropertyValue("--inverse-ink").trim() || "#f1f0eb";
+      inverse = styles.getPropertyValue("--inverse").trim() || "#0b0d0e";
+    };
+
     const resize = () => {
       const rect = field.getBoundingClientRect();
+      updateColors();
       width = rect.width;
       height = rect.height;
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -76,12 +87,9 @@ export function initSignalField(): void {
 
     const draw = () => {
       if (width === 0 || height === 0) return;
-      const styles = getComputedStyle(field);
-      const signal = styles.getPropertyValue("--signal").trim() || "#65f4df";
-      const inverseInk = styles.getPropertyValue("--inverse-ink").trim() || "#f1f0eb";
 
       context.clearRect(0, 0, width, height);
-      context.fillStyle = styles.getPropertyValue("--inverse").trim() || "#0b0d0e";
+      context.fillStyle = inverse;
       context.fillRect(0, 0, width, height);
 
       context.strokeStyle = inverseInk;
@@ -114,6 +122,7 @@ export function initSignalField(): void {
       });
       context.stroke();
 
+      context.font = "10px 'JetBrains Mono Variable', monospace";
       points.forEach((point, index) => {
         const y = point.y + animatedOffset * (index % 2 === 0 ? 1 : -1);
         context.globalAlpha = 0.2;
@@ -128,7 +137,6 @@ export function initSignalField(): void {
         context.fill();
         context.globalAlpha = 0.58;
         context.fillStyle = inverseInk;
-        context.font = "10px 'JetBrains Mono', monospace";
         context.fillText(point.label.slice(0, 16), point.x + 9, y - 9);
       });
       context.globalAlpha = 1;
@@ -174,7 +182,10 @@ export function initSignalField(): void {
       } else if (!hidden) start();
     });
 
-    const themeObserver = new MutationObserver(draw);
+    const themeObserver = new MutationObserver(() => {
+      updateColors();
+      draw();
+    });
     themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 
     resize();

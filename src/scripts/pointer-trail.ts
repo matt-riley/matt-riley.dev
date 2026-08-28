@@ -11,9 +11,10 @@ interface Mote {
   alive: boolean;
 }
 
-const COUNT = 160;
+const COUNT = 96;
 const STEP = 12;
 const IDLE_INTERVAL = 420;
+const IDLE_STOP_DELAY = 2600;
 
 const clamp = (value: number, min: number, max: number): number =>
   Math.max(min, Math.min(max, value));
@@ -44,6 +45,7 @@ export function initPointerTrail(): void {
 
   let width = window.innerWidth;
   let height = window.innerHeight;
+  let signal = "#65f4df";
   let dpr = 1;
   let emitterX = width * 0.5;
   let emitterY = height * 0.5;
@@ -54,6 +56,7 @@ export function initPointerTrail(): void {
   let accumulated = 0;
   let cursorIndex = 0;
   let idleClock = 0;
+  let lastPointerAt = 0;
   let pointerActive = false;
   let hidden = document.hidden;
   let frame = 0;
@@ -71,8 +74,9 @@ export function initPointerTrail(): void {
     drawStillIfReduced();
   };
 
-  const signalColor = () =>
-    getComputedStyle(document.documentElement).getPropertyValue("--signal").trim() || "#65f4df";
+  const updateSignal = () => {
+    signal = getComputedStyle(document.documentElement).getPropertyValue("--signal").trim() || "#65f4df";
+  };
 
   const spawn = (x: number, y: number, idle = false) => {
     const mote = motes[cursorIndex]!;
@@ -93,7 +97,7 @@ export function initPointerTrail(): void {
   const drawStillIfReduced = () => {
     if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     context.clearRect(0, 0, width, height);
-    context.fillStyle = signalColor();
+    context.fillStyle = signal;
     for (let index = 0; index < 26; index += 1) {
       const progress = index / 25;
       const x = width * (0.12 + progress * 0.48);
@@ -119,6 +123,11 @@ export function initPointerTrail(): void {
       drawStillIfReduced();
       frame = 0;
       return;
+    }
+
+    if (pointerActive && timestamp - lastPointerAt >= IDLE_STOP_DELAY) {
+      pointerActive = false;
+      accumulated = 0;
     }
 
     const seconds = dt / 1000;
@@ -151,7 +160,7 @@ export function initPointerTrail(): void {
     previousY = emitterY;
 
     context.clearRect(0, 0, width, height);
-    context.fillStyle = signalColor();
+    context.fillStyle = signal;
     context.globalCompositeOperation = "lighter";
 
     for (const mote of motes) {
@@ -183,19 +192,29 @@ export function initPointerTrail(): void {
 
     context.globalAlpha = 1;
     context.globalCompositeOperation = "source-over";
+    if (!pointerActive && !motes.some((mote) => mote.alive)) {
+      frame = 0;
+      return;
+    }
     frame = window.requestAnimationFrame(draw);
   };
 
   const reset = () => {
     accumulated = 0;
     idleClock = 0;
+    lastPointerAt = 0;
     pointerActive = false;
+    if (frame !== 0) {
+      window.cancelAnimationFrame(frame);
+      frame = 0;
+    }
     for (const mote of motes) mote.alive = false;
   };
 
   window.addEventListener("pointermove", (event) => {
     targetX = event.clientX;
     targetY = event.clientY;
+    lastPointerAt = performance.now();
     if (!pointerActive) {
       emitterX = targetX;
       emitterY = targetY;
@@ -203,6 +222,14 @@ export function initPointerTrail(): void {
       previousY = targetY;
       pointerActive = true;
     }
+    if (!hidden && frame === 0) {
+      lastTime = performance.now();
+      frame = window.requestAnimationFrame(draw);
+    }
+  }, { passive: true });
+  window.addEventListener("pointerleave", () => {
+    pointerActive = false;
+    accumulated = 0;
   }, { passive: true });
   window.addEventListener("resize", resize, { passive: true });
   window.addEventListener("blur", reset);
@@ -211,18 +238,19 @@ export function initPointerTrail(): void {
     if (hidden && frame !== 0) {
       window.cancelAnimationFrame(frame);
       frame = 0;
-    } else if (!hidden && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    } else if (pointerActive && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       lastTime = performance.now();
       frame = window.requestAnimationFrame(draw);
     }
   });
 
   const themeObserver = new MutationObserver(() => {
+    updateSignal();
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) drawStillIfReduced();
   });
   themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 
+  updateSignal();
   resize();
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) drawStillIfReduced();
-  else frame = window.requestAnimationFrame(draw);
 }

@@ -42,7 +42,7 @@ before first paint.
 ## Architecture
 
 - Astro static output with vanilla TypeScript; no React or Tailwind.
-- GSAP + ScrollTrigger and Lenis provide the guarded scroll narrative.
+- GSAP + ScrollTrigger provide the guarded scroll narrative while native scrolling stays in control.
 - A deterministic canvas renders the GitHub signal field; the pointer trail is
   limited to fine pointers and has reduced-motion fallbacks.
 - The browser has no data-fetching requirement. GitHub is read at build time;

@@ -123,7 +123,7 @@ A scheduled GitHub Actions build refreshes the static dossier daily. Pushes to t
 - One `h1`, ordered section headings, a skip link, descriptive link labels, and visible focus treatment.
 - All interaction works with keyboard and touch; no essential hover-only content.
 - WCAG 2.1 AA contrast is measured in both themes, including text placed on scraps and stamp surfaces.
-- `prefers-reduced-motion` removes drift, snapping, reveal, spin, and smooth scrolling while keeping every control usable.
+- `prefers-reduced-motion` removes drift, snapping, reveal, spin, and parallax motion while keeping every control usable.
 - Self-hosted subset fonts, minimal JavaScript, reserved layout space, optimized images, and lightweight SVG/CSS texture support Lighthouse mobile scores of at least 90 for Performance, Accessibility, Best Practices, and SEO.
 
 ## SEO, Testing, CI, and Deployment
