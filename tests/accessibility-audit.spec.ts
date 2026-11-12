@@ -177,12 +177,10 @@ test("standalone touch targets are at least 24px and primary controls are 44px",
       target.minimum,
     );
   }
-  await test
-    .info()
-    .attach("touch-targets", {
-      body: JSON.stringify(targets, null, 2),
-      contentType: "application/json",
-    });
+  await test.info().attach("touch-targets", {
+    body: JSON.stringify(targets, null, 2),
+    contentType: "application/json",
+  });
 });
 
 for (const view of ["catalogue", "gallery"] as const) {
