@@ -234,3 +234,10 @@ html[data-lights="after-hours"] .gallery-projection {
   border: 1px solid var(--rule);
   border-block-start-color: var(--glaze);
 }
+
+/* Keep the scroll invitation legible even when its torch pool crosses the floor. */
+html[data-lights="after-hours"] .entrance-cue {
+  background: var(--plinth);
+  border: 1px solid var(--rule);
+  padding: 0.4rem 0.6rem;
+}
