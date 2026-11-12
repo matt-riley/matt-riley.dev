@@ -57,6 +57,12 @@ Use the shared factories in `lib/materials.py`:
 Only the working part of an exhibit is glazed. Everything else is porcelain.
 Additional materials require a comment on the Notion brief before introduction.
 
+B-06's explicit cat-only exception makes Waffle entirely `glaze`, with four
+slightly darker tabby stripes using `glaze_dark` (`#C95F12`, the same 0.15
+roughness and clearcoat). The exception was recorded on the Notion brief before
+implementation. No other exhibit uses this material. See [the cat source and
+pose sheets](CAT.md) for the four-pose build and origin contract.
+
 ## Optimisation and budgets
 
 `pnpm assets` runs Blender into ignored `blender/out/`, then runs glTF Transform:
