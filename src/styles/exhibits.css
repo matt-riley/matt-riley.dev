@@ -254,6 +254,14 @@
     grid-column: 1 / -1;
   }
 
+  /* Reserve the hairline so changing lights cannot move the catalogue. */
+  .exhibit__label {
+    border-block-start: 1px solid transparent;
+  }
+  html[data-lights="after-hours"] .exhibit__label {
+    border-block-start-color: var(--glaze);
+  }
+
   .exhibit__label {
     align-self: center;
   }
