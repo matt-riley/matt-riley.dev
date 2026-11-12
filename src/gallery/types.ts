@@ -5,6 +5,7 @@ export type Cleanup = () => void;
 export type FrameListener = (
   deltaSeconds: number,
   timeSeconds: number,
+  continuous: boolean,
 ) => boolean;
 
 export interface GalleryApp {
