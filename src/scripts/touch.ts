@@ -8,7 +8,7 @@ for (const section of document.querySelectorAll<HTMLElement>(
       section.querySelector<HTMLElement>(
         ":scope > .exhibit__label > [data-touch-result]",
       );
-    if (result)
+    if (result && !section.hasAttribute("data-manual-touch"))
       result.textContent = open
         ? (control.dataset.touchMessage ?? section.dataset.touchMessage ?? "")
         : "The list is closed.";
