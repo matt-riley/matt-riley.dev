@@ -1,0 +1,49 @@
+{
+  "viewport": [960, 600],
+  "devicePixelRatio": 1,
+  "quality": "low",
+  "scope": "Five full live-gallery round trips after one warmup, forced GC after each",
+  "memory": [
+    {
+      "cycle": 1,
+      "usedSize": 6089308,
+      "tier": "low",
+      "geometries": 10,
+      "textures": 4,
+      "records": 4
+    },
+    {
+      "cycle": 2,
+      "usedSize": 6245100,
+      "tier": "low",
+      "geometries": 10,
+      "textures": 4,
+      "records": 4
+    },
+    {
+      "cycle": 3,
+      "usedSize": 6350484,
+      "tier": "low",
+      "geometries": 10,
+      "textures": 4,
+      "records": 4
+    },
+    {
+      "cycle": 4,
+      "usedSize": 6437176,
+      "tier": "low",
+      "geometries": 10,
+      "textures": 4,
+      "records": 4
+    },
+    {
+      "cycle": 5,
+      "usedSize": 6460904,
+      "tier": "low",
+      "geometries": 10,
+      "textures": 4,
+      "records": 4
+    }
+  ],
+  "errors": []
+}
