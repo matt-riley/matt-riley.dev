@@ -78,7 +78,6 @@ export function boot({ onFailure }: Options): GallerySession {
   const frames = new Set<FrameListener>();
   const resizes = new Set<(width: number, height: number) => void>();
   const roomMaterials = new Map<Material, MeshBasicMaterial>();
-  const glazed = new Set<MeshStandardMaterial>();
   const night = () => root.dataset.lights === "after-hours";
   let disposed = false;
   let enabled = false;
@@ -144,7 +143,6 @@ export function boot({ onFailure }: Options): GallerySession {
           }
           material.roughness = 0.15;
           material.metalness = 0;
-          glazed.add(material);
           material.emissive
             .copy(material.color)
             .multiplyScalar(night() ? 0.035 : 0);
@@ -211,10 +209,22 @@ export function boot({ onFailure }: Options): GallerySession {
     key.intensity = night() ? 0.1 : 3;
     for (const material of roomMaterials.values())
       material.color.set(night() ? 0x303030 : 0xffffff);
-    for (const material of glazed)
-      material.emissive
-        .copy(material.color)
-        .multiplyScalar(night() ? 0.035 : 0);
+    // Only currently attached materials participate; unloaded assets must not
+    // remain strongly held by a session-level material collection.
+    scene.traverse((object) => {
+      if (!(object instanceof Mesh)) return;
+      for (const material of Array.isArray(object.material)
+        ? object.material
+        : [object.material]) {
+        if (
+          material instanceof MeshStandardMaterial &&
+          material.name.startsWith("glaze")
+        )
+          material.emissive
+            .copy(material.color)
+            .multiplyScalar(night() ? 0.035 : 0);
+      }
+    });
     requestRender();
   }
   const setting = (event: Event) => {
@@ -266,7 +276,6 @@ export function boot({ onFailure }: Options): GallerySession {
     resizes.clear();
     assets.dispose();
     roomMaterials.clear();
-    glazed.clear();
     key.shadow.dispose();
     scene.clear();
     renderer.dispose();

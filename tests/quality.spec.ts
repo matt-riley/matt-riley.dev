@@ -28,6 +28,20 @@ test("idle gaps and short slow bursts cannot lower quality", () => {
   expect(new QualityMonitor(8, 4).tier).toBe("medium");
 });
 
+test("short authored camera dwells pause slow time instead of hiding sustained load", () => {
+  const monitor = new QualityMonitor(8, 8);
+  let time = 0;
+  for (let burst = 0; burst < 4; burst++) {
+    for (let frame = 0; frame < 20; frame++) {
+      time += 30;
+      monitor.sample(time, 30, true);
+    }
+    time += 200;
+    monitor.sample(time, 200, false);
+  }
+  expect(monitor.tier).toBe("medium");
+});
+
 test("batching preserves quantized coordinates, named bounds and touch pivots", async () => {
   const {
     BufferGeometry,
