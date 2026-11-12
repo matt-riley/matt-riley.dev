@@ -31,6 +31,7 @@ const exhibits = defineCollection({
     links: z.array(z.object({ label: text, href })),
     touchLabel: text,
     touchResult: text,
+    lines: z.array(text).min(1).optional(),
     items: z
       .array(
         z.object({ label: text, href: href.optional(), note: text.optional() }),
