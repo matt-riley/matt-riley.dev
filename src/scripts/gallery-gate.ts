@@ -19,7 +19,9 @@ function webgl2() {
   if (supported !== undefined) return supported;
   try {
     const probe = document.createElement("canvas");
-    const gl = probe.getContext("webgl2");
+    const gl = probe.getContext("webgl2", {
+      failIfMajorPerformanceCaveat: true,
+    });
     supported = Boolean(gl);
     gl?.getExtension("WEBGL_lose_context")?.loseContext();
     probe.width = probe.height = 0;

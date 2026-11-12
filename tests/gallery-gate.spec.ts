@@ -20,6 +20,7 @@ for (const gate of [
   "save-data",
   "catalogue",
   "no-webgl",
+  "major-performance-caveat",
 ] as const) {
   test(`${gate} requests neither the WebGL renderer nor gallery models`, async ({
     page,
@@ -43,7 +44,7 @@ for (const gate of [
           value: { saveData: true, addEventListener() {} },
           configurable: true,
         });
-      if (gate === "no-webgl") {
+      if (gate === "no-webgl" || gate === "major-performance-caveat") {
         const original = HTMLCanvasElement.prototype.getContext;
         Object.defineProperty(HTMLCanvasElement.prototype, "getContext", {
           value: function (
@@ -51,7 +52,13 @@ for (const gate of [
             kind: string,
             ...options: unknown[]
           ) {
-            if (kind === "webgl2") return null;
+            if (
+              kind === "webgl2" &&
+              (gate === "no-webgl" ||
+                (options[0] as WebGLContextAttributes | undefined)
+                  ?.failIfMajorPerformanceCaveat)
+            )
+              return null;
             return Reflect.apply(original, this, [kind, ...options]);
           },
         });
