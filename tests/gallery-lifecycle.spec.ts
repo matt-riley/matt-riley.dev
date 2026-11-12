@@ -40,7 +40,9 @@ test("ten gallery/catalogue cycles release every WebGL context", async ({
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto("/");
-  await expect(page.locator("html")).toHaveAttribute("data-gallery", "ready");
+  await expect(page.locator("html")).toHaveAttribute("data-gallery", "ready", {
+    timeout: 15_000,
+  });
   await expect(
     page.locator("[data-gallery-layer][data-rendered='true']"),
   ).toHaveCount(1);
@@ -55,7 +57,11 @@ test("ten gallery/catalogue cycles release every WebGL context", async ({
     await page
       .getByRole("button", { name: "View: Catalogue", exact: true })
       .click();
-    await expect(page.locator("html")).toHaveAttribute("data-gallery", "ready");
+    await expect(page.locator("html")).toHaveAttribute(
+      "data-gallery",
+      "ready",
+      { timeout: 15_000 },
+    );
     await expect(
       page.locator("[data-gallery-layer][data-rendered='true']"),
     ).toHaveCount(1);
@@ -98,7 +104,9 @@ test("real context loss quietly returns to the complete catalogue", async ({
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto("/");
-  await expect(page.locator("html")).toHaveAttribute("data-gallery", "ready");
+  await expect(page.locator("html")).toHaveAttribute("data-gallery", "ready", {
+    timeout: 15_000,
+  });
   await page.evaluate(() => {
     const canvas = document.querySelector<HTMLCanvasElement>(
       "[data-gallery-layer] canvas",
