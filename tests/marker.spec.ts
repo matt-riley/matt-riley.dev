@@ -1,4 +1,36 @@
+import { readFileSync } from "node:fs";
 import { expect, test } from "@playwright/test";
+import { Box3 } from "three";
+import { MeshoptDecoder } from "three/addons/libs/meshopt_decoder.module.js";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { createFloorMarker } from "../src/gallery/marker";
+
+test("the independent floor pebble matches the authored Waystone geometry", async ({
+  browserName,
+}, info) => {
+  test.skip(
+    browserName !== "chromium" || info.project.name !== "desktop-chromium",
+    "Shared authored dimensions.",
+  );
+  const bytes = readFileSync("public/models/waystone.glb");
+  const asset = await new GLTFLoader()
+    .setMeshoptDecoder(MeshoptDecoder)
+    .parseAsync(
+      bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength),
+      "",
+    );
+  const source = asset.scene.getObjectByName("touch_marker");
+  if (!source) throw new Error("Missing authored marker");
+  const floor = createFloorMarker();
+  const actual = new Box3().setFromObject(floor);
+  const expected = new Box3().setFromObject(source);
+  for (const axis of ["x", "y", "z"] as const)
+    expect(actual.max[axis] - actual.min[axis]).toBeCloseTo(
+      expected.max[axis] - expected.min[axis],
+      4,
+    );
+  expect(actual.min.y).toBeCloseTo(0, 6);
+});
 
 test("a local marker survives into a new session, returns to its stop and clears", async ({
   page,
