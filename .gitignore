@@ -41,3 +41,7 @@ test-results/
 # test reports
 playwright-report/
 .lighthouseci/
+
+# generated Blender intermediates
+blender/out/
+__pycache__/
