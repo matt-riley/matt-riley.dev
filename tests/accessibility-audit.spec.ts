@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { allowSoftwareWebGL } from "./gallery-capability";
 
 test.beforeEach(async ({ browserName }, info) => {
   test.skip(
@@ -131,3 +132,126 @@ test("forced colours retain control borders and a visible keyboard focus ring", 
   expect(borders.length).toBeGreaterThanOrEqual(3);
   expect(borders.every((border) => border === "solid")).toBe(true);
 });
+
+test("standalone touch targets are at least 24px and primary controls are 44px", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.addInitScript(() => localStorage.setItem("mr-view", "catalogue"));
+  await page.goto("/");
+  await page.locator("details").evaluateAll((elements) => {
+    for (const element of elements) (element as HTMLDetailsElement).open = true;
+  });
+  const targets = await page
+    .locator(
+      "button,summary,select,input,.placard__links a,.item-list a,.gift-shelf a,.gift-shop-contact a,.museum-footer a,.stop-menu a,.monogram",
+    )
+    .evaluateAll((elements) =>
+      elements.flatMap((element) => {
+        const rect = element.getBoundingClientRect();
+        if (
+          !rect.width ||
+          !rect.height ||
+          getComputedStyle(element).visibility === "hidden"
+        )
+          return [];
+        const primary = element.matches("button,summary,select");
+        return [
+          {
+            name:
+              element.getAttribute("aria-label") ??
+              element.textContent?.trim().slice(0, 80),
+            width: rect.width,
+            height: rect.height,
+            minimum: primary ? 44 : 24,
+          },
+        ];
+      }),
+    );
+  expect(targets.length).toBeGreaterThan(30);
+  for (const target of targets) {
+    expect(target.width, JSON.stringify(target)).toBeGreaterThanOrEqual(
+      target.minimum,
+    );
+    expect(target.height, JSON.stringify(target)).toBeGreaterThanOrEqual(
+      target.minimum,
+    );
+  }
+  await test
+    .info()
+    .attach("touch-targets", {
+      body: JSON.stringify(targets, null, 2),
+      contentType: "application/json",
+    });
+});
+
+for (const view of ["catalogue", "gallery"] as const) {
+  test(`${view}: a keyboard-only tour reaches and operates all nine stops`, async ({
+    page,
+  }) => {
+    test.setTimeout(120_000);
+    if (view === "gallery") await allowSoftwareWebGL(page);
+    await page.addInitScript(
+      (view) => localStorage.setItem("mr-view", view),
+      view,
+    );
+    await page.goto("/");
+    if (view === "gallery")
+      await expect(page.locator("html")).toHaveAttribute(
+        "data-gallery",
+        "ready",
+        { timeout: 30_000 },
+      );
+    const reached = new Set<string>();
+    const journey: Array<{ stop: string; name: string; tag: string }> = [];
+    let footer = false;
+    for (let step = 0; step < 350; step++) {
+      await page.keyboard.press("Tab");
+      const focus = await page.evaluate(() => {
+        const element = document.activeElement as HTMLElement | null;
+        const section = element?.closest<HTMLElement>("section[data-exhibit]");
+        return {
+          stop: section?.dataset.exhibit ?? "",
+          name:
+            element?.getAttribute("aria-label") ??
+            element?.textContent?.trim().slice(0, 100) ??
+            "",
+          tag: element?.tagName ?? "",
+          visible: element?.matches(":focus-visible") ?? false,
+          footer: Boolean(element?.closest(".museum-footer")),
+          outline: element ? getComputedStyle(element).outlineStyle : "none",
+        };
+      });
+      expect(focus.visible, `Tab ${step}: ${focus.name}`).toBe(true);
+      expect(focus.outline, `Tab ${step}: ${focus.name}`).not.toBe("none");
+      if (focus.stop) {
+        reached.add(focus.stop);
+        journey.push({ stop: focus.stop, name: focus.name, tag: focus.tag });
+        if (focus.tag === "SUMMARY" || focus.tag === "BUTTON")
+          await page.keyboard.press("Enter");
+      }
+      if (focus.footer) {
+        footer = true;
+        break;
+      }
+    }
+    expect(footer, "Keyboard focus must reach the footer without a trap").toBe(
+      true,
+    );
+    expect([...reached]).toEqual([
+      "entrance",
+      "tools",
+      "flagz",
+      "waffle-agent",
+      "agent-skills",
+      "waystone",
+      "acquisitions",
+      "human-error",
+      "gift-shop",
+    ]);
+    await test.info().attach(`${view}-keyboard-journey`, {
+      body: JSON.stringify(journey, null, 2),
+      contentType: "application/json",
+    });
+  });
+}
