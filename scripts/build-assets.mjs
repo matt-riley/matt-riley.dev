@@ -97,9 +97,21 @@ function main() {
       const steps = [
         ["dedup"],
         // Keep camera stops, anchors and touch pivots even when they have no mesh.
-        ["prune", "--keep-leaves", "true"],
+        [
+          "prune",
+          "--keep-leaves",
+          "true",
+          ...(name === "room" ? ["--keep-attributes", "true"] : []),
+        ],
         ["weld"],
-        ["resize", "--width", "1024", "--height", "1024"],
+        // B-03's single room lightmap is explicitly 2048px; object textures stay 1024px.
+        [
+          "resize",
+          "--width",
+          name === "room" ? "2048" : "1024",
+          "--height",
+          name === "room" ? "2048" : "1024",
+        ],
         ["webp"],
         ["meshopt"],
       ];
