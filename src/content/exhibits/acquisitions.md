@@ -10,7 +10,7 @@ links:
     href: "https://github.com/matt-riley"
 touchLabel: "Show the next acquisition"
 touchResult: "The board shows the next item of public GitHub activity."
-draft: true
+draft: false
 ---
 
 The collection is still being added to. The board keeps the receipts.

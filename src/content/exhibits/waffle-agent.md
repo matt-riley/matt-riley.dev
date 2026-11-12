@@ -11,7 +11,7 @@ links:
     href: "https://github.com/matt-riley/waffle"
 touchLabel: "Wake the cursor"
 touchResult: "The waffle displays a line from its repository description."
-draft: true
+draft: false
 ---
 
 Not the cat. Named after the cat. The cat was not consulted.

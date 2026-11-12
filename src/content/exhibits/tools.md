@@ -32,7 +32,7 @@ items:
   - label: "skill-eval"
     href: "https://mattriley.tools/tools/skill-eval/"
     note: "Evaluate agent skills from the command line."
-draft: true
+draft: false
 ---
 
 A place for the tools. The tools have places to be.
