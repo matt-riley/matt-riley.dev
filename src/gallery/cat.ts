@@ -49,6 +49,69 @@ export async function mountCat(
     }
   });
   spots.sort((a, b) => Number(a.name.slice(4)) - Number(b.name.slice(4)));
+  root.updateMatrixWorld(true);
+  const localBounds = new Box3()
+    .setFromObject(root)
+    .applyMatrix4(new Matrix4().copy(root.matrixWorld).invert());
+  const projectedPoint = new Vector3();
+  const candidateMatrix = new Matrix4();
+  const candidatePosition = new Vector3();
+  const labels = [...document.querySelectorAll<HTMLElement>(".exhibit__label")];
+  const header = document.querySelector<HTMLElement>(".site-header");
+  function visibleDestination(candidate: Spot) {
+    app.camera.updateMatrixWorld();
+    candidate.node.getWorldPosition(candidatePosition);
+    candidateMatrix
+      .makeRotationY(candidate.stop === 7 ? Math.PI : 0)
+      .scale(root.scale)
+      .setPosition(candidatePosition);
+    const bounds = localBounds.clone().applyMatrix4(candidateMatrix);
+    const canvas = app.renderer.domElement.getBoundingClientRect();
+    const viewport = {
+      left: canvas.left,
+      top: canvas.top,
+      width: canvas.width || innerWidth,
+      height: canvas.height || innerHeight,
+    };
+    const rectangle = {
+      left: Infinity,
+      right: -Infinity,
+      top: Infinity,
+      bottom: -Infinity,
+    };
+    for (const x of [bounds.min.x, bounds.max.x])
+      for (const y of [bounds.min.y, bounds.max.y])
+        for (const z of [bounds.min.z, bounds.max.z]) {
+          projectedPoint.set(x, y, z).project(app.camera);
+          if (projectedPoint.z < -1 || projectedPoint.z > 1) return false;
+          const sx =
+            viewport.left + ((projectedPoint.x + 1) * viewport.width) / 2;
+          const sy =
+            viewport.top + ((1 - projectedPoint.y) * viewport.height) / 2;
+          rectangle.left = Math.min(rectangle.left, sx);
+          rectangle.right = Math.max(rectangle.right, sx);
+          rectangle.top = Math.min(rectangle.top, sy);
+          rectangle.bottom = Math.max(rectangle.bottom, sy);
+        }
+    if (
+      rectangle.left < viewport.left + 8 ||
+      rectangle.right > viewport.left + viewport.width - 8 ||
+      rectangle.top < viewport.top + 8 ||
+      rectangle.bottom > viewport.top + viewport.height - 8
+    )
+      return false;
+    return ![...(header ? [header] : []), ...labels].some((element) => {
+      const box = element.getBoundingClientRect();
+      return (
+        box.width > 0 &&
+        box.height > 0 &&
+        rectangle.left < box.right + 4 &&
+        rectangle.right > box.left - 4 &&
+        rectangle.top < box.bottom + 4 &&
+        rectangle.bottom > box.top - 4
+      );
+    });
+  }
   let visit: CatVisit = {
     random: crypto.getRandomValues(new Uint32Array(1))[0] || 1,
     last: {},
@@ -80,8 +143,7 @@ export async function mountCat(
       (spot) => spot.stop === stop && (!scripted || spot.name === scripted),
     );
   };
-  const choose = (stop: number) => {
-    const options = candidates(stop);
+  const choose = (stop: number, options = candidates(stop)) => {
     const name = chooseCatSpot(
       visit,
       stop,
@@ -196,28 +258,30 @@ export async function mountCat(
       direction = Math.sign(app.activeStop - previousStop);
       previousStop = app.activeStop;
     }
-    // Wait ahead of the visitor when possible. In particular, the Human Error
-    // plinth must already be occupied before its neighbour enters the view:
-    // moving a visible cat between those adjacent exhibits would break the gag.
-    const destination =
-      app.activeStop >= 7
-        ? app.activeStop
-        : Math.max(0, Math.min(8, app.activeStop + direction));
-    if (
-      get("cat") === "on" &&
-      root.visible &&
-      spot.stop !== app.activeStop &&
-      spot.stop !== destination &&
-      !visible()
-    ) {
-      // The previous figurine is outside an expanded frustum before either
-      // position or pose changes. A gentle arrival avoids a visible pop if a
-      // native hash jump put the destination directly in the new view.
-      place(choose(destination));
-      if (visible()) {
-        alpha = 0;
-        opacity(0);
-        target = 1;
+    // An invisible next-stop cat is not an encounter at this stop. Prefer a
+    // card-clear current marker; use an ahead marker only if it can be seen.
+    // The old figurine still has to leave the expanded frustum before moving.
+    if (get("cat") === "on" && root.visible && !visible()) {
+      const current = candidates(app.activeStop).filter(visibleDestination);
+      const aheadStop = Math.max(0, Math.min(8, app.activeStop + direction));
+      const ahead =
+        app.activeStop >= 7
+          ? []
+          : candidates(aheadStop).filter(visibleDestination);
+      const options = current.length ? current : ahead;
+      if (options.length) {
+        const next = choose(
+          current.length ? app.activeStop : aheadStop,
+          options,
+        );
+        if (next.name !== spot.name) {
+          place(next);
+          if (visible()) {
+            alpha = 0;
+            opacity(0);
+            target = 1;
+          }
+        }
       }
     }
     if (alpha !== target) {
