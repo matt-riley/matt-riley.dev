@@ -2,6 +2,7 @@
 import type { CollectionEntry } from "astro:content";
 import type { GitHubDossier } from "../data/types";
 import Placard from "./Placard.astro";
+import FlagzControls from "./FlagzControls.astro";
 import HumanError from "./HumanError.astro";
 import CataloguePhoto from "./CataloguePhoto.astro";
 
@@ -33,7 +34,7 @@ const hasItems = Boolean(data.items?.length);
       <slot />
       <Fragment slot="after"><slot name="after" /></Fragment>
     </Placard>
-    {hasItems ? (
+    {data.id === "flagz" ? <FlagzControls /> : hasItems ? (
       <details class="exhibit__reveal" data-reveal>
         <summary class="touch-control" data-touch>{data.touchLabel}<span aria-hidden="true"> +</span></summary>
         <div class="exhibit__items">

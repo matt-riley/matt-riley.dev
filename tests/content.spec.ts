@@ -39,8 +39,12 @@ test("the complete catalogue preserves the museum's stop order and heading outli
     await expect(
       section.getByRole("heading", { level: order === 0 ? 1 : 2 }),
     ).toHaveCount(1);
-    await expect(section.locator("[data-touch]")).toHaveCount(1);
-    await expect(section.locator("[data-touch]")).toBeVisible();
+    if ((await section.getAttribute("id")) === "flagz") {
+      await expect(section.getByRole("switch")).toHaveCount(3);
+    } else {
+      await expect(section.locator("[data-touch]")).toHaveCount(1);
+      await expect(section.locator("[data-touch]")).toBeVisible();
+    }
     if (linkedStops.includes(id)) {
       expect(await section.getByRole("link").count()).toBeGreaterThan(0);
     }
