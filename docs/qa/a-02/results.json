@@ -4,9 +4,7 @@
   "skipped": 14,
   "failed": 0,
   "flaky": 0,
-  "peak": [
-    "0.19297 linear / -14.29 dBFS"
-  ],
+  "peak": ["0.19297 linear / -14.29 dBFS"],
   "unminifiedModuleGzipBytes": 2507,
   "finalSampleCeiling": 0.45
 }
