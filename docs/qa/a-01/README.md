@@ -25,6 +25,20 @@
 
 The native trace was isolated from other browser and Blender work. GPU-slot
 ownership returned to the parent after the trace; no browser context was retained.
-The first nine-stop keyboard pass exposed native focus scrolling from Human
-Error to Gift Shop. A shared Day/Night one-shot focus alignment fixes that rail
-mismatch; the corrected walkthrough is queued.
+The first keyboard pass exposed native smooth focus scrolling from Human Error
+to Gift Shop. The shared Day/Night fix performs one instant window scroll to the
+focused section's center after focus settles, cancelling the browser's queued
+smooth scroll. Wheel/pointer input cancels that correction; hashes and A03's
+fragment framing are unchanged.
+
+The replay navigates section hashes, then uses native Tab/Shift+Tab within each
+visible placard. The corrected nine-stop pass now keeps each camera stop on its focused
+section. Uploaded torch directions align with each stop target (dot .979–1.000,
+inside the 22° cone). The focused Human summary stays at stop7 in both Day and
+Night; `keyboard-tour.json`, `human-keyboard.json`, `keyboard-contact.png` and the
+full screenshots record the checks. No browser/page errors occurred.
+
+`transition-contact.png` captures ten native frames across both 900ms sweeps
+while mid-scroll. `transition.json` records Gallery ready and one live canvas
+throughout; the images show no white flash. The CPU reversal test separately
+checks bounded exposure continuity on a mid-sweep reversal.
