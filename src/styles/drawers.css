@@ -1,0 +1,33 @@
+#tools .item-list,
+#agent-skills .item-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+#agent-skills .item-list a {
+  display: inline-block;
+  padding: var(--space-2);
+  border: 1px solid var(--rule);
+  background: var(--plinth);
+  overflow-wrap: anywhere;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html:not([data-gallery="ready"])
+    :is(#tools, #agent-skills)
+    details[open]
+    .exhibit__items {
+    animation: drawer-list-open 180ms ease-out;
+  }
+  @keyframes drawer-list-open {
+    from {
+      opacity: 0;
+      transform: translateY(-0.4rem);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
