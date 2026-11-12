@@ -2,6 +2,7 @@
 id: "agent-skills"
 order: 4
 title: "agent-skills"
+alt: "A two-drawer porcelain card cabinet with an open upper drawer, an orange label holder and rows of upright cards."
 dates: "2026 to ongoing"
 medium: "Markdown, instructions, a card-catalogue drawer."
 accession: "MR.2026.005"
@@ -36,7 +37,7 @@ items:
   - label: "verification-before-completion"
     href: "https://github.com/matt-riley/agent-skills/tree/main/skills/verification-before-completion"
     note: "Verify the evidence before calling work done."
-draft: true
+draft: false
 ---
 
 Instructions, filed where they can be found. This is itself an instruction.

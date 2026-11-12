@@ -23,6 +23,7 @@ const exhibits = defineCollection({
     id: z.enum(exhibitIds),
     order: z.number().int().min(0).max(8),
     title: text,
+    alt: text,
     dates: text,
     medium: text,
     accession: z.string().regex(/^MR\.\d{4}\.\d{3}$/),
