@@ -1,0 +1,73 @@
+.back-matter {
+  max-width: var(--measure);
+  margin-inline: auto;
+  padding-block: var(--space-6) var(--space-16);
+}
+
+:where(.back-matter) section > * + *,
+.back-matter > * + * {
+  margin-block-start: var(--space-6);
+}
+
+.back-matter h1 {
+  max-width: 14ch;
+  margin-block: var(--space-12) var(--space-8);
+  font-size: clamp(2.5rem, 1.8rem + 3vw, 5rem);
+}
+
+.back-matter h2 {
+  display: flex;
+  gap: var(--space-4);
+  align-items: baseline;
+  font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+  line-height: 1.2;
+}
+
+:where(.back-matter) h2 .mono {
+  flex: 0 0 auto;
+  color: var(--ink-soft);
+}
+
+.back-matter section {
+  padding-block: var(--space-8);
+  border-block-start: 1px solid var(--rule);
+}
+
+.back-matter__updated {
+  color: var(--ink-soft);
+}
+
+.loan-label {
+  padding-block: var(--space-8);
+  border-block: 1px solid var(--rule);
+}
+
+.loan-label > * + * {
+  margin-block-start: var(--space-3);
+}
+
+.loan-label h2 {
+  font-family: var(--font-wall);
+  font-size: var(--text-title);
+}
+
+.loan-label .mono {
+  margin-block-start: var(--space-6);
+}
+
+.stop-menu {
+  padding-block-start: var(--space-8);
+}
+
+.stop-menu ul {
+  display: grid;
+  gap: var(--space-3);
+  margin-block-start: var(--space-6);
+  padding: 0;
+  list-style: none;
+}
+
+.stop-menu a {
+  display: inline-block;
+  min-height: 24px;
+}
