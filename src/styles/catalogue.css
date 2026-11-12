@@ -179,3 +179,7 @@ nav ul {
   padding: 0;
   list-style: none;
 }
+
+.skip-link:not(:focus) {
+  clip-path: inset(50%);
+}
