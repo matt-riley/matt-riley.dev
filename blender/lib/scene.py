@@ -67,6 +67,7 @@ def cube(name, dimensions, location=(0, 0, 0), material=None, bevel_width=0.005)
     bpy.ops.mesh.primitive_cube_add(size=1, location=location)
     obj = bpy.context.object
     obj.name = name
+    obj.data.name = name
     obj.dimensions = dimensions
     bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
     if material:
@@ -82,6 +83,7 @@ def sphere(name, radius, location=(0, 0, 0), material=None, segments=24, rings=1
     )
     obj = bpy.context.object
     obj.name = name
+    obj.data.name = name
     if material:
         obj.data.materials.append(material)
     return smooth(obj)

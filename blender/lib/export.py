@@ -15,7 +15,7 @@ def export_glb(path, objects):
     export_objects = {obj for obj in export_objects if obj.type not in {"CAMERA", "LIGHT"}}
     # Quantisation can recenter mesh leaf nodes. A named parent pivot keeps its
     # authored transform while the anonymous geometry child absorbs that change.
-    for obj in list(export_objects):
+    for obj in sorted(export_objects, key=lambda item: item.name):
         if obj.type != "MESH" or not obj.name.startswith("touch_"):
             continue
         name, world, parent = obj.name, obj.matrix_world.copy(), obj.parent
@@ -36,7 +36,7 @@ def export_glb(path, objects):
     bpy.ops.object.select_all(action="DESELECT")
     for obj in export_objects:
         obj.select_set(True)
-    bpy.context.view_layer.objects.active = next(iter(export_objects))
+    bpy.context.view_layer.objects.active = min(export_objects, key=lambda item: item.name)
     bpy.ops.export_scene.gltf(
         filepath=str(path),
         export_format="GLB",
