@@ -19,7 +19,7 @@ function assetPath(url: string, importer: string): string {
     : resolve(dirname(importer), path);
 }
 
-function eagerBytes(html: string, file: string): number {
+function scriptInventory(html: string, file: string, dynamic = false) {
   const assets = new Set<string>();
   let bytes = 0;
   function visit(url: string, importer: string) {
@@ -35,6 +35,12 @@ function eagerBytes(html: string, file: string): number {
     const pattern =
       /\b(?:import\s*(?:[^('";]+?\s*from\s*)?|export\s+[^;]+?\s+from\s*)["']([^"']+)["']/g;
     for (const match of code.matchAll(pattern)) visit(match[1], importer);
+    if (dynamic) {
+      for (const match of code.matchAll(
+        /\bimport\s*\(\s*["'`]([^"'`$]+)["'`]/g,
+      ))
+        visit(match[1], importer);
+    }
   }
   for (const [, attributes, code] of html.matchAll(
     /<script\b([^>]*)>([\s\S]*?)<\/script>/gi,
@@ -57,7 +63,11 @@ function eagerBytes(html: string, file: string): number {
     const href = attribute(attributes, "href");
     if (href) visit(href, file);
   }
-  return bytes;
+  return { bytes, assets };
+}
+
+function eagerBytes(html: string, file: string): number {
+  return scriptInventory(html, file).bytes;
 }
 
 function modelFiles(directory: string): string[] {
@@ -96,4 +106,31 @@ test("gallery models stay below 1.5MB combined", () => {
   test.skip(files.length === 0, "No gallery models have been authored yet.");
   const bytes = files.reduce((sum, file) => sum + statSync(file).size, 0);
   expect(bytes).toBeLessThan(1_500_000);
+});
+
+test("lazy gallery JavaScript stays below 260KB gzip", () => {
+  test.skip(
+    test.info().project.name !== "desktop-chromium",
+    "The build is shared by every browser project.",
+  );
+  const eager = new Set<string>();
+  const complete = new Set<string>();
+  for (const file of htmlFiles()) {
+    const html = readFileSync(file, "utf8");
+    for (const asset of scriptInventory(html, file).assets) eager.add(asset);
+    for (const asset of scriptInventory(html, file, true).assets)
+      complete.add(asset);
+  }
+  const lazy = [...complete].filter((asset) => !eager.has(asset));
+  expect(
+    lazy.length,
+    "the gallery must have a lazy import boundary",
+  ).toBeGreaterThan(0);
+  const bytes = lazy.reduce(
+    (sum, file) => sum + gzipSync(readFileSync(file, "utf8")).length,
+    0,
+  );
+  expect(bytes, `${bytes} bytes of lazy gallery JavaScript gzip`).toBeLessThan(
+    260_000,
+  );
 });
