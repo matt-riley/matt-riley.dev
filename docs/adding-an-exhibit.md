@@ -16,7 +16,7 @@ Create `blender/scenes/<python_module>.py` with `create()` if useful and `build(
 
 Author in metres, Blender Z-up. The exporter converts to glTF Y-up. Every object has a single base-centred `exhibit_<id>` root and fits inside a 0.5m cube. Parent all geometry and pivots to that root. Use porcelain `#F1EEE6` roughness 0.85 and the approved `#E8741A` clear-coated glaze only on the working part. The cat’s darker stripes are its documented exception. Keep normal objects below 120KB and 15k triangles, with textures at most 1024px. The room alone has a 2048px baked atlas.
 
-Each movable part is a separate `touch_<name>` pivot at its actual hinge/slide origin. Export extras `kind: "hinge"|"slide"`, `axis: "x"|"y"|"z"` **in exported glTF axes**, and finite two-number `range`. The exporter wraps mesh parts in same-origin empty pivots so quantisation cannot move the hinge. Keep names through optimisation; do not flatten/join across touch pivots. `animatePart(part,fraction)` maps 0..1 to the authored range relative to the captured base. Rest is not always 0: symmetric mic hinges rest at 0.5, drum pads at 1.
+Each movable part is a separate `touch_<name>` pivot at its actual hinge/slide origin. Export extras `kind: "hinge"|"slide"`, `axis: "x"|"y"|"z"` **in exported glTF axes**, and finite two-number `range`: hinges use radians, slides use metres. The exporter wraps mesh parts in same-origin empty pivots so quantisation cannot move the hinge. Keep names through optimisation; do not flatten/join across touch pivots. `animatePart(part,fraction)` maps 0..1 to the authored range relative to the captured base. Rest is not always 0: symmetric mic hinges rest at 0.5, drum pads at 1.
 
 ```sh
 pnpm assets -- --only python_module
