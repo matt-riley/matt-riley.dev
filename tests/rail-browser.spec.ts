@@ -77,3 +77,47 @@ test("an initial Waystone fragment measures the gallery rather than the loading 
     "5 of 8, waystone.nvim",
   );
 });
+
+test("the last painted photograph fades at its original rectangle and releases its layer", async ({
+  page,
+}, info) => {
+  test.skip(
+    info.project.name !== "desktop-chromium",
+    "One compositor crossfade check is sufficient.",
+  );
+  await page.addInitScript(() => {
+    new MutationObserver(() => {
+      if (document.documentElement.dataset.gallery !== "ready") return;
+      const layer = document.querySelector<HTMLElement>(
+        ".gallery-photo-handover",
+      );
+      if (layer)
+        Object.assign(window, {
+          railPhotoFade: {
+            animation: getComputedStyle(layer).animationName,
+            images: layer.querySelectorAll("img").length,
+            inert: layer.inert,
+            hidden: layer.getAttribute("aria-hidden"),
+          },
+        });
+    }).observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-gallery"],
+    });
+  });
+  await page.goto("/");
+  await expect(page.locator("html")).toHaveAttribute("data-gallery", "ready", {
+    timeout: 30_000,
+  });
+  expect(
+    await page.evaluate(
+      () => (window as unknown as { railPhotoFade: object }).railPhotoFade,
+    ),
+  ).toEqual({
+    animation: "gallery-photo-fade",
+    images: 1,
+    inert: true,
+    hidden: "true",
+  });
+  await expect(page.locator(".gallery-photo-handover")).toHaveCount(0);
+});
