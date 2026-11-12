@@ -1,4 +1,10 @@
 import { expect, test } from "@playwright/test";
+import { allowSoftwareWebGL } from "./gallery-capability";
+
+test.beforeEach(async ({ page }, info) => {
+  if (["desktop-chromium", "mobile-chromium"].includes(info.project.name))
+    await allowSoftwareWebGL(page);
+});
 
 test("gallery handover preserves layout and a native hash chosen while loading", async ({
   page,
@@ -100,10 +106,23 @@ test("the last painted photograph fades at its original rectangle and releases i
             hidden: layer.getAttribute("aria-hidden"),
           },
         });
-    }).observe(document.documentElement, {
+    }).observe(document, {
+      subtree: true,
       attributes: true,
       attributeFilter: ["data-gallery"],
     });
+  });
+  await page.route("**/models/room.glb", async (route) => {
+    await page
+      .locator('#entrance [data-photo-mode="day"] img')
+      .evaluate(async (image) => {
+        await (image as HTMLImageElement).decode();
+        image.scrollIntoView({ block: "center", behavior: "instant" });
+        await new Promise<void>((resolve) =>
+          requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+        );
+      });
+    await route.continue();
   });
   await page.goto("/");
   await expect(page.locator("html")).toHaveAttribute("data-gallery", "ready", {
