@@ -14,7 +14,16 @@ export async function allowSoftwareWebGL(page: Page) {
           kind === "webgl2" && options?.failIfMajorPerformanceCaveat
             ? { ...options, failIfMajorPerformanceCaveat: false }
             : options;
-        return Reflect.apply(original, this, [kind, attributes]);
+        const context = Reflect.apply(original, this, [kind, attributes]);
+        if (kind === "webgl2" && context) {
+          const webgl = context as WebGL2RenderingContext;
+          const getParameter = webgl.getParameter.bind(webgl);
+          webgl.getParameter = (parameter: number) =>
+            parameter === 0x9246
+              ? "Explicit real WebGL integration context"
+              : getParameter(parameter);
+        }
+        return context;
       },
     });
   });
