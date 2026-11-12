@@ -29,6 +29,7 @@ for (const [name, size] of [
 ])
   await sharp(favicon, { density: 600 })
     .resize(size, size)
+    .flatten({ background: "#f4f1ea" })
     .png()
     .toFile(join(root, `public/${name}.png`));
 if (args[0] === "--icons-only") process.exit(0);
