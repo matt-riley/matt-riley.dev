@@ -334,6 +334,9 @@ html[data-lights="after-hours"] .exhibit__label {
 .human-error__item {
   scroll-margin-block-start: var(--space-24);
 }
+.human-error__item[data-model="boom-bap"] {
+  grid-column: 1 / -1;
+}
 .human-error__item:focus {
   outline: 2px solid var(--glaze-ink);
   outline-offset: var(--space-3);
