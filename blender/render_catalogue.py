@@ -105,6 +105,10 @@ def assemble(raw):
         pose = clone_pose(poses[f"cat_{cat_pose(marker, stop)}"])
         pose.name = f"photograph_cat_stop_{stop}"
         pose.matrix_world = marker.matrix_world.copy()
+        if stop == 7:
+            # Runtime rotates around glTF Y by pi: Blender's equivalent is Z.
+            # The cat pointedly looks away from the fallen porcelain fragments.
+            pose.rotation_euler.rotate_axis("Z", math.pi)
     for obj in cat_objects:
         obj.hide_render = True
     # The original approved photograph is the only photographic texture; UV0 is
@@ -271,7 +275,7 @@ def main():
                 print(f"Catalogue {name} {mode} {crop} complete", flush=True)
     sources = {path.name: hashlib.sha256(path.read_bytes()).hexdigest() for path in [args.raw_dir / f"{name}.glb" for name in ("room", *MODELS, "cat")]}
     markers = [obj for obj in nodes.values() if obj.name.startswith("cat_") and obj.name[4:].isdigit()]
-    cats = {name: {"marker": marker.name, "pose": cat_pose(marker, stop), "position": list(marker.matrix_world.translation)} for stop, name in enumerate(STOPS) for marker in [cat_marker(markers, stop)]}
+    cats = {name: {"marker": marker.name, "pose": cat_pose(marker, stop), "position": list(marker.matrix_world.translation), "turn_z_degrees": 180 if stop == 7 else 0} for stop, name in enumerate(STOPS) for marker in [cat_marker(markers, stop)]}
     (args.output_dir / "parameters.json").write_text(json.dumps({"sources_sha256": sources, "vertical_fov_degrees": 35, "samples": args.samples, "denoise": True, "seed": 7, "exposure": -0.5, "view_transform": "AgX", "day": "B-02 approved 420W skylight/45W bounce/world0.16", "night": "B-02 approved 35W torch/28deg cone/world0.001/glaze emission0.12", "room": "Original shared surface colours, path-traced rather than double-lighting the runtime atlas", "portrait": "Original waffle-portrait.jpg on B-03 portrait_plane UV0; original aspect ratio preserved", "cats": cats, "crops": {"wide": [2400,1600], "square": [1600,1600]}}, indent=2) + "\n")
 
 
