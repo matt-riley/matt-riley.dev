@@ -1,0 +1,79 @@
+# Museum asset pipeline
+
+Scene scripts are the source of truth. Generated `.blend` files and raw/intermediate
+exports are not committed. Optimised `.glb` files in `public/models/` are committed.
+
+Use Node 26, pnpm 10 and Blender 5.2 LTS. Install the repository's locked packages:
+
+```sh
+pnpm install --frozen-lockfile
+pnpm assets -- --only _sample
+pnpm assets
+```
+
+The default Blender executable is
+`/Applications/Blender.app/Contents/MacOS/Blender`. Set `BLENDER_BIN` to another
+executable path when needed. A missing executable or failed scene exits non-zero
+with a diagnostic. Blender runs without opening its UI.
+
+To inspect an unoptimised export directly:
+
+```sh
+"$BLENDER_BIN" --background --python-exit-code 1 --python blender/build.py -- --only _sample
+```
+
+For this command, set `BLENDER_BIN` first (the package script supplies the default).
+Omit `--only` to run every Python scene file in `blender/scenes/`, in filename order.
+Each module exposes `build(output_path)` and must export its scene to that path.
+The shared reset helper uses Cycles CPU when available and reports an EEVEE
+fallback if the Cycles add-on cannot be enabled. No still rendering happens yet.
+
+## Coordinate and naming contract
+
+- Author in metres using Blender's Z-up coordinates. The GLB exporter converts to
+  glTF +Y up. The centre of each exhibit's base becomes `(0, 0, 0)` in the GLB.
+- Each exhibit has one root empty named `exhibit_<id>`. Parent every part to it.
+  An exhibit fits inside a 0.5m cube.
+- Touch parts are separate objects named `touch_<part>`, with their origin at the
+  hinge or slide axis. Their custom properties `axis`, `kind` (`hinge` or `slide`)
+  and `range` are exported as glTF extras. Axis names describe exported glTF axes.
+- Camera stops, object anchors and other empties are retained by optimisation.
+- Modifiers are applied on export; scene cameras and lights are excluded.
+- Export wraps mesh touch parts in same-origin named pivot empties with geometry
+  children. This preserves hinge/slide origins through position quantisation;
+  raycast geometry can resolve its named touch ancestor.
+- The `_sample` fixture has a bevelled porcelain cube and one glazed sphere. It
+  demonstrates material reuse, hierarchy, extras, metre scale and a base at Y=0.
+
+## Material rule
+
+Use the shared factories in `lib/materials.py`:
+
+- `porcelain`: sRGB `#F1EEE6`, roughness 0.85, metallic 0. Subsurface is disabled
+  for GLBs and is only enabled by the explicit `still=True` option for later stills.
+- `glaze`: sRGB `#E8741A`, roughness 0.15, clearcoat enabled.
+- `room`: neutral wall/floor surface reserved for B-03's baked room.
+
+Only the working part of an exhibit is glazed. Everything else is porcelain.
+Additional materials require a comment on the Notion brief before introduction.
+
+## Optimisation and budgets
+
+`pnpm assets` runs Blender into ignored `blender/out/`, then runs glTF Transform:
+`dedup`, `prune` (keeping empty leaves), `weld`, `resize` (maximum 1024×1024,
+keeping aspect ratio), `webp`, and `meshopt`. No flattening or joining removes
+named interaction parts. Draco is not used.
+
+The script prints the final byte size and triangle count for every model,
+including existing models outside a `--only` build. It rejects a proposed model
+set of 1,500,000 bytes or more before replacing any committed output. Intermediate
+files are cleaned up after success or failure. The budget is for the complete
+`public/models/*.glb` set, not each individual file.
+
+## Sample viewer
+
+The screenshot below is the exported `_sample.glb` loaded by Three.js GLTFLoader
+with Meshopt decoding, rather than a Blender still. Its contract and world-space
+bounds were also checked in the viewer.
+
+![Sample GLB viewed in Three.js](sample-preview.png)
