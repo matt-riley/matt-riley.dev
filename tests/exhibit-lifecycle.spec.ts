@@ -25,7 +25,11 @@ test("closing during an unfinished adapter releases listeners and cannot clear a
       const current = listeners.get(type) ?? new Set();
       current.add(listener);
       listeners.set(type, current);
-      EventTarget.prototype.addEventListener.call(documentTarget, type, listener);
+      EventTarget.prototype.addEventListener.call(
+        documentTarget,
+        type,
+        listener,
+      );
     },
     removeEventListener(
       type: string,
