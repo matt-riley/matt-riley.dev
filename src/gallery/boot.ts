@@ -16,6 +16,8 @@ import {
 } from "three";
 import type { GLTF } from "three/addons/loaders/GLTFLoader.js";
 import { type AssetId, AssetStore } from "./assets";
+import { batchExhibit, batchRoom } from "./batch-room";
+import { mountQuality } from "./quality";
 import { publishGallery } from "./state";
 import type {
   Cleanup,
@@ -42,7 +44,11 @@ export function boot({ onFailure }: Options): GallerySession {
   document.body.append(layer);
   let renderer: WebGLRenderer;
   try {
-    renderer = new WebGLRenderer({ canvas, antialias: true });
+    renderer = new WebGLRenderer({
+      canvas,
+      antialias: true,
+      failIfMajorPerformanceCaveat: true,
+    });
   } catch (error) {
     layer.remove();
     throw error;
@@ -76,7 +82,9 @@ export function boot({ onFailure }: Options): GallerySession {
   const night = () => root.dataset.lights === "after-hours";
   let disposed = false;
   let enabled = false;
+  let paused = false;
   let frame = 0;
+  let nextContinuous = false;
   let lastTime = 0;
   let app: GalleryApp | undefined;
 
@@ -123,6 +131,17 @@ export function boot({ onFailure }: Options): GallerySession {
           material.roughness = 0.85;
           material.metalness = 0;
         } else if (material.name.startsWith("glaze")) {
+          if (material.name === "glaze") {
+            // Match Blender's approved AgX glaze without changing its #E8741A paint.
+            // The renderer retains ACES for the other live materials.
+            material.onBeforeCompile = (shader) => {
+              shader.fragmentShader = shader.fragmentShader.replace(
+                "#include <tonemapping_fragment>",
+                "gl_FragColor.rgb = AgXToneMapping(gl_FragColor.rgb * 3.0);",
+              );
+            };
+            material.customProgramCacheKey = () => "museum-glaze-agx";
+          }
           material.roughness = 0.15;
           material.metalness = 0;
           glazed.add(material);
@@ -136,22 +155,28 @@ export function boot({ onFailure }: Options): GallerySession {
         ? object.material.map(convert)
         : convert(object.material);
     });
+    if (id === "room") batchRoom(asset.scene);
+    else if (id !== "cat") batchExhibit(asset.scene);
   }
   const assets = new AssetStore(prepare);
 
   function requestRender() {
-    if (disposed || !enabled || frame || document.hidden) return;
+    if (disposed || !enabled || paused || frame || document.hidden) return;
+    nextContinuous = false;
     frame = requestAnimationFrame(draw);
   }
   function draw(time: number) {
     frame = 0;
+    const continuous = nextContinuous;
+    nextContinuous = false;
     if (disposed || document.hidden || root.dataset.gallery !== "ready") return;
     const delta = lastTime ? Math.min((time - lastTime) / 1000, 0.05) : 0;
     lastTime = time;
     let again = false;
     try {
       for (const listener of frames)
-        if (listener(delta, time / 1000)) again = true;
+        if (listener(delta, time / 1000, continuous)) again = true;
+      if (disposed) return;
       if (app) {
         const target = app.room.getObjectByName(
           `stop_${app.activeStop}_target`,
@@ -161,7 +186,10 @@ export function boot({ onFailure }: Options): GallerySession {
       }
       renderer.render(scene, camera);
       layer.dataset.rendered = "true";
-      if (again) requestRender();
+      if (again) {
+        requestRender();
+        nextContinuous = true;
+      }
     } catch {
       dispose();
       onFailure();
@@ -277,6 +305,17 @@ export function boot({ onFailure }: Options): GallerySession {
         return disposed;
       },
       requestRender,
+      setPaused(value) {
+        if (paused === value) return;
+        paused = value;
+        if (paused) {
+          cancelAnimationFrame(frame);
+          frame = 0;
+        } else {
+          lastTime = 0;
+          requestRender();
+        }
+      },
       addCleanup,
       onFrame(listener) {
         frames.add(listener);
@@ -292,6 +331,7 @@ export function boot({ onFailure }: Options): GallerySession {
       },
     };
     await publishGallery(app);
+    app.addCleanup(mountQuality(app));
     if (disposed) throw new DOMException("Gallery was disposed", "AbortError");
     // Compile shader programs without stalling the first visible frame.
     await renderer.compileAsync(scene, camera);

@@ -6,7 +6,7 @@ export interface InteractionApp {
   room: Object3D;
   camera: PerspectiveCamera;
   renderer: WebGLRenderer;
-  assets: { get(id: string): Promise<GLTF> };
+  assets: { get(id: string): Promise<GLTF>; release?(id: string): void };
   activeStop: number;
   requestRender(): void;
   onFrame(callback: (delta: number) => boolean): () => void;

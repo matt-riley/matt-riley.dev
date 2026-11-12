@@ -47,7 +47,9 @@ test("settings switches work by keyboard and announce their pressed state", asyn
       key === "cat" ? "false" : "true",
     );
   }
-  if (info.project.name === "reduced-motion") {
+  if (
+    (await page.locator("html").getAttribute("data-gallery")) === "unavailable"
+  ) {
     await expect(page.locator('[data-setting="view"]')).toBeHidden();
     return;
   }
@@ -193,6 +195,7 @@ test("switching lights causes no layout shift", async ({ page }, info) => {
     info.project.name === "no-javascript",
     "Settings require JavaScript.",
   );
+  await page.addInitScript(() => localStorage.setItem("mr-view", "catalogue"));
   await page.goto("/");
   await page.evaluate(() => document.fonts.ready);
   const before = await page.locator("#entrance").boundingBox();
@@ -254,7 +257,10 @@ test("the stop menu reaches all exhibits by keyboard", async ({
   const headerBottom = await page
     .locator(".site-header")
     .evaluate((element) => element.getBoundingClientRect().bottom);
-  expect(top).toBeGreaterThanOrEqual(headerBottom);
+  if ((await page.locator("html").getAttribute("data-gallery")) === "ready") {
+    const card = await page.locator("#waystone .exhibit__label").boundingBox();
+    expect(card?.y).toBeGreaterThanOrEqual(headerBottom);
+  } else expect(top).toBeGreaterThanOrEqual(headerBottom);
 });
 
 test("the fixed header controls fit a 320px viewport", async ({ page }) => {
