@@ -293,6 +293,9 @@ export function boot({ onFailure }: Options): GallerySession {
     };
     await publishGallery(app);
     if (disposed) throw new DOMException("Gallery was disposed", "AbortError");
+    // Compile shader programs without stalling the first visible frame.
+    await renderer.compileAsync(scene, camera);
+    if (disposed) throw new DOMException("Gallery was disposed", "AbortError");
     // One hidden frame proves the renderer before the gate publishes ready.
     // Plugins run on the following RAF, after gallery CSS is active, before the
     // canvas becomes visible. A direct hash visit never flashes the entrance.
