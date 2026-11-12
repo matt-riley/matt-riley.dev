@@ -1,0 +1,352 @@
+[
+  {
+    "width": 360,
+    "id": "entrance",
+    "scrollY": 292,
+    "current": "0 of 8, Please Touch",
+    "card": {
+      "x": 16,
+      "y": 440,
+      "width": 328,
+      "height": 360,
+      "top": 440,
+      "right": 344,
+      "bottom": 800,
+      "left": 16
+    },
+    "projection": [
+      {
+        "x": 55.125,
+        "y": 167.75,
+        "width": 190.953125,
+        "height": 103.828125,
+        "top": 167.75,
+        "right": 246.078125,
+        "bottom": 271.578125,
+        "left": 55.125
+      }
+    ]
+  },
+  {
+    "width": 360,
+    "id": "tools",
+    "scrollY": 1492,
+    "current": "1 of 8, mattriley.tools",
+    "card": {
+      "x": 16,
+      "y": 440,
+      "width": 328,
+      "height": 360,
+      "top": 440,
+      "right": 344,
+      "bottom": 800,
+      "left": 16
+    },
+    "projection": []
+  },
+  {
+    "width": 360,
+    "id": "flagz",
+    "scrollY": 2692,
+    "current": "2 of 8, flagz",
+    "card": {
+      "x": 16,
+      "y": 440,
+      "width": 328,
+      "height": 360,
+      "top": 440,
+      "right": 344,
+      "bottom": 800,
+      "left": 16
+    },
+    "projection": []
+  },
+  {
+    "width": 360,
+    "id": "waffle-agent",
+    "scrollY": 3892,
+    "current": "3 of 8, waffle",
+    "card": {
+      "x": 16,
+      "y": 440,
+      "width": 328,
+      "height": 360,
+      "top": 440,
+      "right": 344,
+      "bottom": 800,
+      "left": 16
+    },
+    "projection": []
+  },
+  {
+    "width": 360,
+    "id": "agent-skills",
+    "scrollY": 5092,
+    "current": "4 of 8, agent-skills",
+    "card": {
+      "x": 16,
+      "y": 440,
+      "width": 328,
+      "height": 360,
+      "top": 440,
+      "right": 344,
+      "bottom": 800,
+      "left": 16
+    },
+    "projection": []
+  },
+  {
+    "width": 360,
+    "id": "waystone",
+    "scrollY": 6292,
+    "current": "5 of 8, waystone.nvim",
+    "card": {
+      "x": 16,
+      "y": 440,
+      "width": 328,
+      "height": 360,
+      "top": 440,
+      "right": 344,
+      "bottom": 800,
+      "left": 16
+    },
+    "projection": []
+  },
+  {
+    "width": 360,
+    "id": "acquisitions",
+    "scrollY": 7492,
+    "current": "6 of 8, Recent Acquisitions",
+    "card": {
+      "x": 16,
+      "y": 440,
+      "width": 328,
+      "height": 360,
+      "top": 440,
+      "right": 344,
+      "bottom": 800,
+      "left": 16
+    },
+    "projection": [
+      {
+        "x": 29.421875,
+        "y": 200.9375,
+        "width": 301.125,
+        "height": 150.109375,
+        "top": 200.9375,
+        "right": 330.546875,
+        "bottom": 351.046875,
+        "left": 29.421875
+      }
+    ]
+  },
+  {
+    "width": 360,
+    "id": "human-error",
+    "scrollY": 8692,
+    "current": "7 of 8, The Human Error",
+    "card": {
+      "x": 16,
+      "y": 440,
+      "width": 328,
+      "height": 360,
+      "top": 440,
+      "right": 344,
+      "bottom": 800,
+      "left": 16
+    },
+    "projection": []
+  },
+  {
+    "width": 360,
+    "id": "gift-shop",
+    "scrollY": 9892,
+    "current": "8 of 8, Exit through the gift shop",
+    "card": {
+      "x": 16,
+      "y": 440,
+      "width": 328,
+      "height": 360,
+      "top": 440,
+      "right": 344,
+      "bottom": 800,
+      "left": 16
+    },
+    "projection": []
+  },
+  {
+    "width": 1280,
+    "id": "entrance",
+    "scrollY": 172,
+    "current": "0 of 8, Please Touch",
+    "card": {
+      "x": 40,
+      "y": 207.15625,
+      "width": 416,
+      "height": 457.6875,
+      "top": 207.15625,
+      "right": 456,
+      "bottom": 664.84375,
+      "left": 40
+    },
+    "projection": [
+      {
+        "x": 568.28125,
+        "y": 168.484375,
+        "width": 437.1875,
+        "height": 237.734375,
+        "top": 168.484375,
+        "right": 1005.46875,
+        "bottom": 406.21875,
+        "left": 568.28125
+      }
+    ]
+  },
+  {
+    "width": 1280,
+    "id": "tools",
+    "scrollY": 1172,
+    "current": "1 of 8, mattriley.tools",
+    "card": {
+      "x": 824,
+      "y": 164.9375,
+      "width": 416,
+      "height": 542.109375,
+      "top": 164.9375,
+      "right": 1240,
+      "bottom": 707.046875,
+      "left": 824
+    },
+    "projection": []
+  },
+  {
+    "width": 1280,
+    "id": "flagz",
+    "scrollY": 2172,
+    "current": "2 of 8, flagz",
+    "card": {
+      "x": 40,
+      "y": 163.390625,
+      "width": 416,
+      "height": 545.203125,
+      "top": 163.390625,
+      "right": 456,
+      "bottom": 708.59375,
+      "left": 40
+    },
+    "projection": []
+  },
+  {
+    "width": 1280,
+    "id": "waffle-agent",
+    "scrollY": 3172,
+    "current": "3 of 8, waffle",
+    "card": {
+      "x": 824,
+      "y": 163.390625,
+      "width": 416,
+      "height": 545.203125,
+      "top": 163.390625,
+      "right": 1240,
+      "bottom": 708.59375,
+      "left": 824
+    },
+    "projection": []
+  },
+  {
+    "width": 1280,
+    "id": "agent-skills",
+    "scrollY": 4172,
+    "current": "4 of 8, agent-skills",
+    "card": {
+      "x": 40,
+      "y": 149.140625,
+      "width": 416,
+      "height": 573.703125,
+      "top": 149.140625,
+      "right": 456,
+      "bottom": 722.84375,
+      "left": 40
+    },
+    "projection": []
+  },
+  {
+    "width": 1280,
+    "id": "waystone",
+    "scrollY": 5172,
+    "current": "5 of 8, waystone.nvim",
+    "card": {
+      "x": 824,
+      "y": 149.140625,
+      "width": 416,
+      "height": 573.703125,
+      "top": 149.140625,
+      "right": 1240,
+      "bottom": 722.84375,
+      "left": 824
+    },
+    "projection": []
+  },
+  {
+    "width": 1280,
+    "id": "acquisitions",
+    "scrollY": 6172,
+    "current": "6 of 8, Recent Acquisitions",
+    "card": {
+      "x": 40,
+      "y": 88,
+      "width": 416,
+      "height": 696,
+      "top": 88,
+      "right": 456,
+      "bottom": 784,
+      "left": 40
+    },
+    "projection": [
+      {
+        "x": 519.515625,
+        "y": 95.828125,
+        "width": 597.125,
+        "height": 297.65625,
+        "top": 95.828125,
+        "right": 1116.640625,
+        "bottom": 393.484375,
+        "left": 519.515625
+      }
+    ]
+  },
+  {
+    "width": 1280,
+    "id": "human-error",
+    "scrollY": 7172,
+    "current": "7 of 8, The Human Error",
+    "card": {
+      "x": 824,
+      "y": 191.1875,
+      "width": 416,
+      "height": 489.609375,
+      "top": 191.1875,
+      "right": 1240,
+      "bottom": 680.796875,
+      "left": 824
+    },
+    "projection": []
+  },
+  {
+    "width": 1280,
+    "id": "gift-shop",
+    "scrollY": 8172,
+    "current": "8 of 8, Exit through the gift shop",
+    "card": {
+      "x": 40,
+      "y": 89.296875,
+      "width": 416,
+      "height": 693.390625,
+      "top": 89.296875,
+      "right": 456,
+      "bottom": 782.6875,
+      "left": 40
+    },
+    "projection": []
+  }
+]
