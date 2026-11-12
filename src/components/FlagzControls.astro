@@ -1,0 +1,24 @@
+---
+const initial = { lights: "day", cat: "on", sound: "off" } as const;
+const keys = ["lights", "cat", "sound"] as const;
+---
+<fieldset class="flagz-controls" data-flagz-controls>
+  <legend class="mono">Site feature flags</legend>
+  {keys.map(key => (
+    <button type="button" class="touch-control flagz-switch" role="switch" aria-label={key} aria-checked={key !== "sound" ? "true" : "false"} data-flagz-setting={key} disabled>
+      <code>{key}</code><span class="mono" data-flagz-value>{initial[key]}</span>
+    </button>
+  ))}
+</fieldset>
+<pre class="flagz-json"><code data-flagz-json>{JSON.stringify(initial, null, 2)}</code></pre>
+<script>
+  import "../exhibits/flagz";
+</script>
+<style>
+  .flagz-controls { margin-block-start: var(--space-8); padding: 0; border: 0; display: grid; gap: var(--space-3); }
+  legend { padding: 0; margin-block-end: var(--space-3); font-size: .65rem; }
+  .flagz-switch { width: 100%; margin: 0; align-items: center; min-height: 44px; }
+  .flagz-switch[aria-checked="true"] { border-inline-start: 3px solid var(--glaze-ink); }
+  .flagz-switch code { color: inherit; }
+  .flagz-json { margin-block-start: var(--space-4); font-family: var(--font-mono); font-size: .7rem; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; user-select: text; }
+</style>
