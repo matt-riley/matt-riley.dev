@@ -69,14 +69,28 @@ const prefix = Astro.url.pathname === "/" ? "" : "/";
   stopLinks.forEach(link => link.addEventListener("click", () => { if (menu) menu.open = false; }));
   if ("IntersectionObserver" in window) {
     const current = document.querySelector("[data-current-stop]");
-    const observer = new IntersectionObserver(entries => {
-      for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
-        const link = stopLinks.find(link => link.dataset.stop === entry.target.id);
-        if (link && current) current.textContent = `${link.dataset.stopOrder} of 8, ${link.dataset.stopTitle}`;
-      }
-    }, { rootMargin: "-15% 0px -25% 0px" });
-    document.querySelectorAll("section[data-exhibit]").forEach(section => observer.observe(section));
+    const sections = [...document.querySelectorAll<HTMLElement>("section[data-exhibit]")];
+    function updateCurrent() {
+      const centre = innerHeight / 2;
+      const nearest = sections.reduce<HTMLElement | undefined>((best, section) => {
+        const rect = section.getBoundingClientRect();
+        const bestRect = best?.getBoundingClientRect();
+        return !bestRect || Math.abs(rect.top + rect.height / 2 - centre) < Math.abs(bestRect.top + bestRect.height / 2 - centre) ? section : best;
+      }, undefined);
+      const link = stopLinks.find(link => link.dataset.stop === nearest?.id);
+      const text = link ? `${link.dataset.stopOrder} of 8, ${link.dataset.stopTitle}` : "";
+      if (current && text && current.textContent !== text) current.textContent = text;
+    }
+    const observer = new IntersectionObserver(updateCurrent, { rootMargin: "-15% 0px -25% 0px" });
+    sections.forEach(section => observer.observe(section));
+    let pending = false;
+    window.addEventListener("scroll", () => {
+      if (pending) return;
+      pending = true;
+      requestAnimationFrame(() => { pending = false; updateCurrent(); });
+    }, { passive: true });
+    window.addEventListener("resize", updateCurrent);
+
   }
 </script>
 

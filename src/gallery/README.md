@@ -48,3 +48,17 @@ The baked room map uses UV1 in an unlit, untone-mapped material. Exhibit materia
 retain approved porcelain/glaze values and use the shared hemisphere/key light.
 The gallery renders on demand, including after a resize or setting change, and
 pauses while the document is hidden.
+
+## Photograph colour calibration
+
+The renderer uses ACES, while the approved Blender photographs use AgX. The
+orange glaze alone uses Three's AgX shader with a display-light scale of 3;
+its GLB base colour remains #E8741A. Dark cat stripe glaze is excluded. This
+approximates Blender's soft glaze highlights without a white environment map,
+extra textures, or a palette change. The baked room remains unlit and is not
+re-exposed: it already contains Blender's display transform.
+
+Measured entrance medians (sRGB bytes): baked wall 216/214/210 versus photograph
+216/212/206; glaze before 216/117/30, calibrated 233/172/125, photograph
+222/160/130. These are representative patches rather than a claim of pixel
+identity: the live rail also offsets framing to clear the HTML placard.
