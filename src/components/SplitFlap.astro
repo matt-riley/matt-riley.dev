@@ -1,0 +1,66 @@
+---
+import type { GitHubDossier } from "../data/types";
+
+interface Props { dossier: GitHubDossier }
+const { dossier } = Astro.props;
+const date = (value: string) => new Intl.DateTimeFormat("en-GB", {
+  day: "2-digit", month: "short", timeZone: "UTC",
+}).format(new Date(value));
+const rows = dossier.activity.map(item => ({
+  text: `${date(item.occurredAt)} — ${item.repo}: ${item.summary}`,
+  href: item.repoUrl,
+}));
+const release = dossier.releases[0];
+---
+
+<div class="acquisitions-board" data-split-flap data-rows={JSON.stringify(rows)}>
+  <ol class="flap-list" aria-label="Recent GitHub activity">
+    {rows.slice(0, 5).map(row => <li><a href={row.href} class="flap-row"><span class="flap-copy">{row.text}</span></a></li>)}
+  </ol>
+  <div class="board-label">
+    <h3>Materials</h3>
+    <ul class="materials" aria-label="Repository languages">
+      {dossier.languages.map(language => <li>{language.name} <span class="mono">({language.count})</span></li>)}
+    </ul>
+  </div>
+  <div class="board-label">
+    <h3>Catalogue raisonné</h3>
+    <p>{dossier.totals.originalRepositories} original works, {dossier.profile.accountAgeYears} years, {dossier.totals.stars} stars. Admission free.</p>
+  </div>
+  {release && <div class="board-label"><h3>Latest release</h3><p><a href={release.releaseUrl}>{release.repo}: {release.summary}</a> <span class="mono">{date(release.publishedAt)}</span></p></div>}
+  <p class="provenance mono">{dossier.source === "live" ? "Live from GitHub" : "From the archive"}, {dossier.snapshotDate}</p>
+</div>
+
+<script>
+  const boards = document.querySelectorAll<HTMLElement>("[data-split-flap]");
+  const load = async (board: HTMLElement) => {
+    const { initSplitFlap } = await import("../scripts/split-flap");
+    initSplitFlap(board);
+  };
+  if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(entries => {
+      for (const entry of entries) if (entry.isIntersecting) {
+        observer.unobserve(entry.target);
+        void load(entry.target as HTMLElement);
+      }
+    }, { rootMargin: "300px" });
+    boards.forEach(board => observer.observe(board));
+  }
+</script>
+
+<style is:global>
+  .acquisitions-board { margin-block: var(--space-8); }
+  .flap-list { list-style: none; padding: 0; border-block-start: 1px solid var(--rule); }
+  .flap-row { position: relative; display: block; padding: var(--space-4) 0; border-block-end: 1px solid var(--rule); font-family: var(--font-mono); font-size: var(--text-meta); line-height: 1.8; overflow-wrap: anywhere; }
+  .flap-row:hover { color: var(--ink); }
+  .flap-cells { position: absolute; inset: var(--space-4) 0; pointer-events: none; overflow: hidden; perspective: 30rem; }
+  .flap-word { display: inline-block; max-width: 100%; }
+  .flap-cell { display: inline-block; transform-origin: center; animation: flap-in 280ms both; animation-delay: var(--flap-delay, 0ms); }
+  .flap-row[data-enhanced] > .flap-copy { opacity: 0; }
+  .board-label { margin-block-start: var(--space-6); }
+  .board-label h3 { font-family: var(--font-mono); font-size: var(--text-meta); font-weight: 400; line-height: 1.5; margin-block-end: var(--space-2); }
+  .materials { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-3); list-style: none; padding: 0; }
+  .provenance { margin-block-start: var(--space-6); color: var(--ink-soft); }
+  @keyframes flap-in { from { transform: rotateX(-80deg); opacity: 0; } to { transform: none; opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) { .flap-cell { animation: none; } }
+</style>

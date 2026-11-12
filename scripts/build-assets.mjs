@@ -65,7 +65,7 @@ function main() {
   ) {
     throw new Error("Usage: pnpm assets [-- --only SCENE]");
   }
-  const names = readdirSync(join(root, "blender/scenes"))
+  let names = readdirSync(join(root, "blender/scenes"))
     .filter((name) => name.endsWith(".py") && name !== "__init__.py")
     .map((name) => name.slice(0, -3))
     .filter((name) => !args.length || name === args[1])
@@ -87,6 +87,8 @@ function main() {
       ...args,
     ],
   );
+
+  names = JSON.parse(readFileSync(join(raw, "manifest.json"), "utf8")).scenes;
 
   const temporary = mkdtempSync(join(raw, ".optimise-"));
   try {

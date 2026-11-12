@@ -5,6 +5,7 @@ import bodyItalic from "@fontsource-variable/newsreader/files/newsreader-latin-w
 import monoFont from "@fontsource/commit-mono/files/commit-mono-latin-400-normal.woff2?url";
 import "../styles/tokens.css";
 import "../styles/catalogue.css";
+import { site } from "../content/site";
 
 interface Props {
   title: string;
@@ -13,7 +14,31 @@ interface Props {
 }
 
 const { title, description, noindex = false } = Astro.props;
-const canonical = new URL(Astro.url.pathname, Astro.site);
+const canonical = new URL(Astro.url.pathname.replace(/^\/404\/?$/, "/404.html"), Astro.site);
+const shareImage = new URL("/og.png", Astro.site);
+const home = new URL("/", Astro.site).href;
+const structuredData = JSON.stringify({
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${home}#website`,
+      name: site.title,
+      url: home,
+      description: site.description,
+      inLanguage: "en-GB",
+      publisher: { "@id": `${home}#person` },
+    },
+    {
+      "@type": "Person",
+      "@id": `${home}#person`,
+      name: "Matt Riley",
+      url: home,
+      sameAs: ["https://github.com/matt-riley", "https://mattriley.work/", "https://mattriley.tools/"],
+      homeLocation: { "@type": "Place", name: "Yorkshire" },
+    },
+  ],
+}).replace(/</g, "\\u003c");
 const fontFaces = [
   ["Bricolage Grotesque Variable", wallFont, "normal", "200 800"],
   ["Newsreader Variable", bodyFont, "normal", "200 800"],
@@ -27,7 +52,6 @@ const fontFaces = [
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <script is:inline>(()=>{try{let d=document.documentElement;for(let[k,a,b,v]of[["lights","day","after-hours",matchMedia("(prefers-color-scheme: dark)").matches?"after-hours":"day"],["cat","on","off","on"],["sound","on","off","off"],["view","gallery","catalogue","gallery"]]){let s;try{s=localStorage.getItem("mr-"+k)}catch{}d.dataset[k]=s===a||s===b?s:v}}catch{}})();</script>
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonical} />
@@ -35,6 +59,25 @@ const fontFaces = [
     <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
     <link rel="preload" href={wallFont} as="font" type="font/woff2" crossorigin />
     <style is:inline set:html={fontFaces} />
+    <meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0e0e10" media="(prefers-color-scheme: dark)" />
+    <script is:inline>(()=>{try{let d=document.documentElement;for(let[k,a,b,v]of[["lights","day","after-hours",matchMedia("(prefers-color-scheme: dark)").matches?"after-hours":"day"],["cat","on","off","on"],["sound","on","off","off"],["view","gallery","catalogue","gallery"]]){let s;try{s=localStorage.getItem("mr-"+k)}catch{}d.dataset[k]=s===a||s===b?s:v}let t=()=>d.querySelectorAll("meta[name=theme-color]").forEach(m=>m.content=d.dataset.lights==="after-hours"?"#0e0e10":"#f4f1ea");t();document.addEventListener("mr:setting",t)}catch{}})();</script>
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.title} />
+    <meta property="og:locale" content="en_GB" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={shareImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Please Touch: The Museum of Small Useful Things, by Matt Riley" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={shareImage} />
+    <meta name="twitter:image:alt" content="Please Touch: The Museum of Small Useful Things, by Matt Riley" />
+    {Astro.url.pathname === "/" && <script type="application/ld+json" is:inline set:html={structuredData} />}
     <title>{title}</title>
   </head>
   <body>

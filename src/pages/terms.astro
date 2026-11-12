@@ -1,21 +1,25 @@
 ---
 import Base from "../layouts/Base.astro";
+import "../styles/back-matter.css";
 ---
 
-<Base
-  title="Terms — Matt Riley"
-  description="The short version of the terms for using matt-riley.dev."
->
+<Base title="Terms — Matt Riley" description="The short version of the terms for using matt-riley.dev.">
+  <article class="back-matter">
     <a href="/">← Back to matt-riley.dev</a>
     <h1>Terms, in plain English.</h1>
     <p>Use the site, inspect the public work, and follow the links. Please do not make it weird.</p>
-    <div>
-      <h2>Content</h2>
+    <section aria-labelledby="content-heading">
+      <h2 id="content-heading"><span class="mono">01</span> Content</h2>
       <p>The writing, design, and original materials on this site belong to Matt Riley unless a source is clearly identified otherwise.</p>
-      <h2>Public code</h2>
+    </section>
+    <section aria-labelledby="code-heading">
+      <h2 id="code-heading"><span class="mono">02</span> Public code</h2>
       <p>Code linked from GitHub is governed by the licence in its own repository. This page does not change those licences.</p>
-      <h2>Availability</h2>
+    </section>
+    <section aria-labelledby="availability-heading">
+      <h2 id="availability-heading"><span class="mono">03</span> Availability</h2>
       <p>This is a personal site offered as is. Links and public data can change when the internet gets ideas.</p>
-      <p>Last updated: 27 August 2026</p>
-    </div>
+    </section>
+    <p class="back-matter__updated mono">Last updated: 27 August 2026</p>
+  </article>
 </Base>

@@ -2,6 +2,10 @@
 
 import bpy
 
+# B-02: Matt approved P2/G2 in the Codex chat; decision recorded on the Notion task.
+PORCELAIN_ROUGHNESS = 0.85
+GLAZE_COLOUR = "#E8741A"
+
 
 def _linear(hex_colour):
     channels = [int(hex_colour[index:index + 2], 16) / 255 for index in (1, 3, 5)]
@@ -25,13 +29,13 @@ def _material(name, colour, roughness):
 
 
 def porcelain(still=False):
-    material, shader = _material("porcelain", "#F1EEE6", 0.85)
+    material, shader = _material("porcelain", "#F1EEE6", PORCELAIN_ROUGHNESS)
     shader.inputs["Subsurface Weight"].default_value = 0.025 if still else 0
     return material
 
 
 def glaze():
-    material, shader = _material("glaze", "#E8741A", 0.15)
+    material, shader = _material("glaze", GLAZE_COLOUR, 0.15)
     shader.inputs["Coat Weight"].default_value = 1
     shader.inputs["Coat Roughness"].default_value = 0.1
     return material

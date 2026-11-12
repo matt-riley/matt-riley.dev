@@ -2,6 +2,7 @@
 import { getCollection, render } from "astro:content";
 import Exhibit from "../components/Exhibit.astro";
 import Header from "../components/Header.astro";
+import SplitFlap from "../components/SplitFlap.astro";
 import { site } from "../content/site";
 import { loadDossier } from "../data/github";
 import Base from "../layouts/Base.astro";
@@ -18,6 +19,7 @@ const exhibits = await Promise.all(entries.map(async (exhibit) => ({ exhibit, ..
     {exhibits.map(({ exhibit, Content }) => (
       <Exhibit exhibit={exhibit} dossier={dossier}>
         <Content />
+        {exhibit.data.id === "acquisitions" && <SplitFlap dossier={dossier} />}
         <Fragment slot="after">
           {exhibit.data.id === "entrance" && <p class="opening-hours" data-opening-hours>{site.openingHours.open}</p>}
           {exhibit.data.id === "gift-shop" && (
