@@ -253,7 +253,7 @@ export function mountRail(app: RailHost) {
       scrollY +
       section.getBoundingClientRect().height / 2,
   );
-  const initialProgress =
+  let initialProgress =
     hashIndex >= 0
       ? hashIndex
       : nativeProgress(scrollY + innerHeight / 2, originalCentres);
@@ -309,6 +309,7 @@ export function mountRail(app: RailHost) {
     const section = sections.find(
       (section) => `#${section.id}` === location.hash,
     );
+    if (firstFrame && section) initialProgress = sections.indexOf(section);
     section?.scrollIntoView({ block: "center", behavior: "smooth" });
   }
   const boardChanges = new MutationObserver(() => {

@@ -49,6 +49,7 @@ test("the lazy flap enhancement has no layout shift and touching advances the bo
 }) => {
   test.skip(!javaScriptEnabled, "The static board is covered separately.");
   await page.addInitScript(() => {
+    localStorage.setItem("mr-view", "catalogue");
     const state = window;
     state.boardShifts = [];
     new PerformanceObserver((list) => {
