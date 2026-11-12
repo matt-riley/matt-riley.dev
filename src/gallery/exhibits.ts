@@ -40,6 +40,12 @@ export class ExhibitRegistry {
   readonly controls = new Map<string, HTMLElement>();
   readonly handlers = new Map<string, (event: CustomEvent) => void>();
   private ended = false;
+  private windowStop = 0;
+  private windowRadius = Infinity;
+  private recordMounts = new Map<
+    (record: ExhibitRecord) => (() => void) | undefined,
+    Map<string, () => void>
+  >();
   get disposed() {
     return this.ended;
   }
@@ -89,6 +95,12 @@ export class ExhibitRegistry {
       owned,
       draggable: true,
     });
+    const record = this.records.get(id);
+    if (record)
+      for (const [mount, releases] of this.recordMounts) {
+        const cleanup = mount(record);
+        if (cleanup) releases.set(id, cleanup);
+      }
     this.app.requestRender();
   }
 
@@ -108,6 +120,66 @@ export class ExhibitRegistry {
       anchor.add(asset.scene);
       this.add(id, stop, index, asset.scene, true);
     }
+  }
+
+  /** Model adapters mount again when Low quality reloads an exhibit. */
+  onRecord(mount: (record: ExhibitRecord) => (() => void) | undefined) {
+    const releases = new Map<string, () => void>();
+    this.recordMounts.set(mount, releases);
+    for (const record of this.records.values()) {
+      const cleanup = mount(record);
+      if (cleanup) releases.set(record.id, cleanup);
+    }
+    return () => {
+      releases.forEach((cleanup) => {
+        cleanup();
+      });
+      releases.clear();
+      this.recordMounts.delete(mount);
+    };
+  }
+
+  private removeRecord(id: string) {
+    const record = this.records.get(id);
+    if (!record?.owned) return;
+    for (const releases of this.recordMounts.values()) {
+      releases.get(id)?.();
+      releases.delete(id);
+    }
+    record.parts.forEach(releasePart);
+    record.root.removeFromParent();
+    this.records.delete(id);
+    this.app.assets.release?.(id);
+  }
+
+  async setWindow(stop: number, radius: number) {
+    this.windowStop = stop;
+    this.windowRadius = radius;
+    for (const record of this.records.values())
+      if (Math.abs(record.index - stop) > radius) this.removeRecord(record.id);
+    const order = [...modelSpecs].sort(
+      (a, b) => Math.abs(a.index - stop) - Math.abs(b.index - stop),
+    );
+    for (const spec of order) {
+      if (this.ended) return;
+      if (
+        this.records.has(spec.id) ||
+        Math.abs(spec.index - this.windowStop) > this.windowRadius
+      )
+        continue;
+      const asset = await this.app.assets.get(spec.id);
+      if (this.ended) return;
+      if (Math.abs(spec.index - this.windowStop) > this.windowRadius) {
+        this.app.assets.release?.(spec.id);
+        continue;
+      }
+      if (this.records.has(spec.id)) continue;
+      const anchor = this.app.room.getObjectByName(`anchor_${spec.id}`);
+      if (!anchor) throw new Error(`Missing room anchor: anchor_${spec.id}`);
+      anchor.add(asset.scene);
+      this.add(spec.id, spec.stop, spec.index, asset.scene, true);
+    }
+    this.app.requestRender();
   }
 
   atStop(index: number) {
@@ -159,6 +231,11 @@ export class ExhibitRegistry {
   dispose() {
     if (this.ended) return;
     this.ended = true;
+    for (const releases of this.recordMounts.values())
+      releases.forEach((cleanup) => {
+        cleanup();
+      });
+    this.recordMounts.clear();
     for (const record of this.records.values()) {
       record.parts.forEach(releasePart);
       if (record.owned) record.root.removeFromParent();

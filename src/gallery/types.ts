@@ -16,6 +16,7 @@ export interface GalleryApp {
   activeStop: number;
   readonly disposed: boolean;
   requestRender(): void;
+  setPaused(paused: boolean): void;
   onFrame(listener: FrameListener): Cleanup;
   onResize(listener: (width: number, height: number) => void): Cleanup;
   addCleanup(cleanup: Cleanup): Cleanup;

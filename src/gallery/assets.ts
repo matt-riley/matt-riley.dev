@@ -176,6 +176,14 @@ export class AssetStore {
     }
   }
 
+  release(id: AssetId) {
+    const cleanup = this.loaded.get(id);
+    if (!cleanup) return;
+    cleanup();
+    this.loaded.delete(id);
+    this.promises.delete(id);
+  }
+
   dispose() {
     if (this.disposed) return;
     this.disposed = true;

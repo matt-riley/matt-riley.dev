@@ -16,6 +16,7 @@ import {
 } from "three";
 import type { GLTF } from "three/addons/loaders/GLTFLoader.js";
 import { type AssetId, AssetStore } from "./assets";
+import { mountQuality } from "./quality";
 import { publishGallery } from "./state";
 import type {
   Cleanup,
@@ -76,6 +77,7 @@ export function boot({ onFailure }: Options): GallerySession {
   const night = () => root.dataset.lights === "after-hours";
   let disposed = false;
   let enabled = false;
+  let paused = false;
   let frame = 0;
   let lastTime = 0;
   let app: GalleryApp | undefined;
@@ -123,6 +125,17 @@ export function boot({ onFailure }: Options): GallerySession {
           material.roughness = 0.85;
           material.metalness = 0;
         } else if (material.name.startsWith("glaze")) {
+          if (material.name === "glaze") {
+            // Match Blender's approved AgX glaze without changing its #E8741A paint.
+            // The renderer retains ACES for the other live materials.
+            material.onBeforeCompile = (shader) => {
+              shader.fragmentShader = shader.fragmentShader.replace(
+                "#include <tonemapping_fragment>",
+                "gl_FragColor.rgb = AgXToneMapping(gl_FragColor.rgb * 3.0);",
+              );
+            };
+            material.customProgramCacheKey = () => "museum-glaze-agx";
+          }
           material.roughness = 0.15;
           material.metalness = 0;
           glazed.add(material);
@@ -140,7 +153,7 @@ export function boot({ onFailure }: Options): GallerySession {
   const assets = new AssetStore(prepare);
 
   function requestRender() {
-    if (disposed || !enabled || frame || document.hidden) return;
+    if (disposed || !enabled || paused || frame || document.hidden) return;
     frame = requestAnimationFrame(draw);
   }
   function draw(time: number) {
@@ -152,6 +165,7 @@ export function boot({ onFailure }: Options): GallerySession {
     try {
       for (const listener of frames)
         if (listener(delta, time / 1000)) again = true;
+      if (disposed) return;
       if (app) {
         const target = app.room.getObjectByName(
           `stop_${app.activeStop}_target`,
@@ -277,6 +291,16 @@ export function boot({ onFailure }: Options): GallerySession {
         return disposed;
       },
       requestRender,
+      setPaused(value) {
+        paused = value;
+        if (paused) {
+          cancelAnimationFrame(frame);
+          frame = 0;
+        } else {
+          lastTime = 0;
+          requestRender();
+        }
+      },
       addCleanup,
       onFrame(listener) {
         frames.add(listener);
@@ -292,6 +316,7 @@ export function boot({ onFailure }: Options): GallerySession {
       },
     };
     await publishGallery(app);
+    app.addCleanup(mountQuality(app));
     if (disposed) throw new DOMException("Gallery was disposed", "AbortError");
     // Compile shader programs without stalling the first visible frame.
     await renderer.compileAsync(scene, camera);
