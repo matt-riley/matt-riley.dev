@@ -11,11 +11,13 @@ def create(still=False):
     porcelain, glaze = materials.porcelain(still=still), materials.glaze()
     root = scene.empty("exhibit_gift-shop")
     work = part("touch_item_work", root, (-0.14, 0.045, 0), axis="y", kind="slide", limits=(0, 0.04))
-    box("notebook_pages", (0.068, 0.052, 0.102), (-0.14, 0.045, 0.051), porcelain, work)
-    box("notebook_cover_front", (0.076, 0.006, 0.11), (-0.14, 0.015, 0.055), porcelain, work)
-    box("notebook_cover_back", (0.076, 0.006, 0.11), (-0.14, 0.075, 0.055), porcelain, work)
-    box("notebook_spine", (0.008, 0.062, 0.11), (-0.174, 0.045, 0.055), porcelain, work)
-    box("notebook_glazed_band", (0.078, 0.064, 0.004), (-0.14, 0.045, 0.073), glaze, work, 0.002)
+    # A closed notebook lying flat: projecting covers, inset pages and a rounded spine.
+    box("notebook_pages", (0.084, 0.064, 0.018), (-0.14, 0.045, 0.013), porcelain, work)
+    box("notebook_cover_bottom", (0.096, 0.074, 0.004), (-0.14, 0.045, 0.002), porcelain, work)
+    box("notebook_cover_top", (0.096, 0.074, 0.004), (-0.14, 0.045, 0.024), porcelain, work)
+    spine = cylinder("rounded_notebook_spine", 0.012, 0.07, (-0.182, 0.045, 0.013), porcelain, work, 24)
+    spine.rotation_euler.x = math.pi / 2
+    box("notebook_glazed_band", (0.006, 0.077, 0.029), (-0.123, 0.045, 0.0145), glaze, work, 0.002)
     tools = part("touch_item_tools", root, (-0.025, 0.06, 0), axis="y", kind="slide", limits=(0, 0.04))
     tray("tiny_toolbox", (-0.025, 0.06, 0.005), 0.098, 0.065, 0.045, porcelain, tools)
     # The little open toolbox echoes the collection's first cantilever tool chest.

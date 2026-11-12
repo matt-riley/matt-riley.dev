@@ -21,10 +21,12 @@ def create(still=False):
         vertices = []
         for inside in (False, True):
             for row in range(rows + 1):
-                z = height * (row / rows - 0.5)
                 radius = 0.067 + 0.01 * math.cos(row * math.pi / rows) - (0.006 if inside else 0)
                 for column in range(columns + 1):
-                    angle = (column / columns - 0.5) * width
+                    angle = (column / columns - 0.5) * width + 0.04 * math.sin(row + index)
+                    z = height * (row / rows - 0.5)
+                    if row in (0, rows):
+                        z += 0.004 * math.sin(column * 1.7 + index)
                     vertices.append((radius * math.sin(angle), radius * math.cos(angle) - 0.067, z))
         surface_count = (columns + 1) * (rows + 1)
         faces, inner_faces = [], []
