@@ -10,6 +10,6 @@ This is a documented contributor walkthrough and independent source review, not 
 
 ## Source preparation
 
-Astro check: zero errors, warnings or hints. Biome lint passes; both Python renderer sources parse successfully. The new opaque Apple/manifest icons are generated from the native SVG at exactly180/192/512px. All production and development dependencies have a corresponding source import, build command or test use; no unused package was removed speculatively. The former styleguide route was already removed in C-06. A case-insensitive legacy-name search across the isolated worktree returns no matches, excluding node_modules, Git metadata and ignored render intermediates.
+Astro check: zero errors, warnings or hints. Biome lint passes; both Python renderer sources parse successfully. The new opaque Apple/manifest icons are generated from the native SVG at exactly 180/192/512px. All production and development dependencies have a corresponding source import, build command or test use; no unused package was removed speculatively. The former styleguide route was already removed in C-06. A case-insensitive legacy-name search across the isolated worktree returns no matches, excluding only node_modules and Git metadata (including ignored render intermediates and binary files).
 
 Final share-image rendering, two actual preview-tool screenshots, browser-tab theme screenshots and refreshed canonical-cat photographs remain pending the coordinated render/browser slot. No deployment or production preview verification has been claimed.
