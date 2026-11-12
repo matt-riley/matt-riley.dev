@@ -8,6 +8,9 @@ const built = openingHoursAt(new Date());
   import "../exhibits/entrance";
 </script>
 <style>
+  :global(.entrance-line:nth-child(1)) { --line: 0; }
+  :global(.entrance-line:nth-child(2)) { --line: 1; }
+  :global(.entrance-line:nth-child(3)) { --line: 2; }
   :global(#entrance-heading .entrance-line) { display: block; }
   :global(.gallery-wall-title:has(.entrance-line)) { display: flex; flex-direction: column; justify-content: center; gap: .1em; }
   :global(.gallery-wall-title .entrance-line) { display: block; }

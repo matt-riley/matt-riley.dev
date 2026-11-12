@@ -1,8 +1,6 @@
 ---
 import wallFont from "@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2?url";
-import bodyFont from "@fontsource-variable/newsreader/files/newsreader-latin-wght-normal.woff2?url";
-import bodyItalic from "@fontsource-variable/newsreader/files/newsreader-latin-wght-italic.woff2?url";
-import monoFont from "@fontsource/commit-mono/files/commit-mono-latin-400-normal.woff2?url";
+import "../styles/fonts.css";
 import "../styles/tokens.css";
 import "../styles/catalogue.css";
 import { site } from "../content/site";
@@ -39,12 +37,7 @@ const structuredData = JSON.stringify({
     },
   ],
 }).replace(/</g, "\\u003c");
-const fontFaces = [
-  ["Bricolage Grotesque Variable", wallFont, "normal", "200 800"],
-  ["Newsreader Variable", bodyFont, "normal", "200 800"],
-  ["Newsreader Variable", bodyItalic, "italic", "200 800"],
-  ["Commit Mono", monoFont, "normal", "400"],
-].map(([family, url, style, weight]) => `@font-face{font-family:"${family}";src:url("${url}") format("woff2");font-style:${style};font-weight:${weight};font-display:swap}`).join("");
+
 ---
 
 <!doctype html>
@@ -58,7 +51,6 @@ const fontFaces = [
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
     <link rel="preload" href={wallFont} as="font" type="font/woff2" crossorigin />
-    <style is:inline set:html={fontFaces} />
     <meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#0e0e10" media="(prefers-color-scheme: dark)" />
     <script is:inline>(()=>{try{let d=document.documentElement;for(let[k,a,b,v]of[["lights","day","after-hours",matchMedia("(prefers-color-scheme: dark)").matches?"after-hours":"day"],["cat","on","off","on"],["sound","on","off","off"],["view","gallery","catalogue","gallery"]]){let s;try{s=localStorage.getItem("mr-"+k)}catch{}d.dataset[k]=s===a||s===b?s:v}let t=()=>d.querySelectorAll("meta[name=theme-color]").forEach(m=>m.content=d.dataset.lights==="after-hours"?"#0e0e10":"#f4f1ea");t();document.addEventListener("mr:setting",t)}catch{}})();</script>
