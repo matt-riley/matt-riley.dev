@@ -203,6 +203,35 @@ export function mountRail(app: RailHost) {
       "Gallery rail needs the semantic wall title, acquisitions board and matching room planes",
     );
   }
+  // Keep the last printed photograph at its painted rectangle while the live
+  // camera fades in. Taking the real figure out of flow must not make it jump.
+  const handover = document.createElement("div");
+  handover.className = "gallery-photo-handover";
+  handover.setAttribute("aria-hidden", "true");
+  handover.inert = true;
+  for (const source of document.querySelectorAll<HTMLImageElement>(
+    ".exhibit__figure img",
+  )) {
+    const rect = source.getBoundingClientRect();
+    if (
+      !source.complete ||
+      !source.naturalWidth ||
+      rect.width <= 0 ||
+      rect.height <= 0 ||
+      rect.bottom <= 0 ||
+      rect.top >= innerHeight
+    )
+      continue;
+    const image = document.createElement("img");
+    image.src = source.currentSrc || source.src;
+    image.alt = "";
+    image.style.cssText = `left:${rect.left}px;top:${rect.top}px;width:${rect.width}px;height:${rect.height}px`;
+    handover.append(image);
+  }
+  handover.addEventListener("animationend", () => handover.remove(), {
+    once: true,
+  });
+  if (handover.childElementCount) document.body.append(handover);
   const overlay = document.createElement("div");
   overlay.className = "gallery-projections";
   overlay.setAttribute("aria-hidden", "true");
@@ -366,6 +395,9 @@ export function mountRail(app: RailHost) {
       return false;
     if (measureNeeded) measure();
     if (firstFrame) {
+      // Native fragment scrolling may have measured the catalogue while assets loaded.
+      // Always measure again after gallery CSS has activated.
+      measure();
       // Enhancement changes section heights. Preserve the visitor's logical stop.
       const first = Math.min(Math.floor(initialProgress), centres.length - 2);
       const position = MathUtils.lerp(
@@ -511,6 +543,7 @@ export function mountRail(app: RailHost) {
     window.removeEventListener("hashchange", hash);
     boardChanges.disconnect();
     overlay.remove();
+    handover.remove();
     titleSource.classList.remove("gallery-wall-source");
     window.removeEventListener("pointermove", pointer);
     document.documentElement.removeEventListener("pointerleave", leave);
