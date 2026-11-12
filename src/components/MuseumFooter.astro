@@ -1,0 +1,13 @@
+---
+import { site } from "../content/site";
+import type { GitHubDossier } from "../data/types";
+interface Props { dossier: GitHubDossier }
+const { dossier } = Astro.props;
+const year = new Date().getUTCFullYear();
+---
+<div class="museum-footer">
+  <nav aria-label="Museum information"><ul class="museum-footer__links"><li><a href="#entrance">Back to the entrance ↑</a></li><li><a href="/privacy">Privacy</a></li><li><a href="/terms">Terms</a></li></ul></nav>
+  <p class="museum-footer__colophon">{site.colophon}</p>
+  <p class="mono">GitHub data: {dossier.source === "live" ? "Live from GitHub" : "From the archive"}, <time datetime={dossier.snapshotDate}>{dossier.snapshotDate}</time>. © {year} Matt Riley.</p>
+  <p class="gift-shop-thanks mono">Thank you for touching.</p>
+</div>
