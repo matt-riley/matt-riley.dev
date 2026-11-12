@@ -30,3 +30,14 @@ pnpm-debug.log*
 candidates/
 test-results/
 .pnpm-store/
+
+# isolated task checkouts
+.worktrees/
+
+# generated Blender scenes
+*.blend
+*.blend[0-9]*
+
+# test reports
+playwright-report/
+.lighthouseci/

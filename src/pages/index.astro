@@ -1,36 +1,17 @@
 ---
-import Base from "../layouts/Base.astro";
-import Masthead from "../components/Masthead.astro";
-import Manifesto from "../components/Manifesto.astro";
-import GitHubDossier from "../components/GitHubDossier.astro";
-import EvidenceWall from "../components/EvidenceWall.astro";
-import RecentNoise from "../components/RecentNoise.astro";
-import PersonalCollage from "../components/PersonalCollage.astro";
-import Classifieds from "../components/Classifieds.astro";
-import Colophon from "../components/Colophon.astro";
 import { loadDossier } from "../data/github";
+import Base from "../layouts/Base.astro";
 
 const dossier = await loadDossier();
 ---
 
-<Base
-  title="Matt Riley — Software, small tools, useful accidents"
-  description="Matt Riley is a software developer in Yorkshire building useful tools, public code, and the occasional beautiful detour."
->
-  <div class="publication-shell">
-    <Masthead />
-    <main id="main">
-      <Manifesto />
-      <GitHubDossier dossier={dossier} />
-      <EvidenceWall repositories={dossier.repositories} />
-      <RecentNoise activity={dossier.activity} releases={dossier.releases} />
-      <PersonalCollage />
-      <Classifieds />
-    </main>
-    <Colophon />
-  </div>
+<Base title="Please Touch — Matt Riley" description="The Museum of Small Useful Things.">
+  <main>
+    <h1>Please Touch</h1>
+    <p>{dossier.profile.name} makes small useful things.</p>
+    <nav aria-label="Site information">
+      <a href="/privacy">Privacy</a>
+      <a href="/terms">Terms</a>
+    </nav>
+  </main>
 </Base>
-
-<script>
-  import "../scripts/main";
-</script>
