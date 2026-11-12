@@ -5,7 +5,9 @@ for (const section of document.querySelectorAll<HTMLElement>(
     const group = control.closest<HTMLElement>("[data-model]");
     const result =
       group?.querySelector<HTMLElement>("[data-touch-result]") ??
-      section.querySelector<HTMLElement>("[data-touch-result]");
+      section.querySelector<HTMLElement>(
+        ":scope > .exhibit__label > [data-touch-result]",
+      );
     if (result)
       result.textContent = open
         ? (control.dataset.touchMessage ?? section.dataset.touchMessage ?? "")
