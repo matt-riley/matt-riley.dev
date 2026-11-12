@@ -6,6 +6,7 @@ import {
   type PerspectiveCamera,
   Vector3,
 } from "three";
+import { resolveStopTarget } from "./rail-state";
 
 interface Stop {
   camera: Vector3;
@@ -392,8 +393,24 @@ export function mountRail(app: RailHost) {
       pointerY = goalY;
     }
     const sample = rail.sample(progress);
+    const first = Math.min(Math.floor(sample.position), bounds.length - 2);
+    const fraction = sample.position - first;
+    frameBox.min.copy(bounds[first].min).lerp(bounds[first + 1].min, fraction);
+    frameBox.max.copy(bounds[first].max).lerp(bounds[first + 1].max, fraction);
+    const adaptation = resolveStopTarget(Math.round(progress), {
+      sectionProgress: MathUtils.clamp(
+        progress - Math.round(progress) + 0.5,
+        0,
+        1,
+      ),
+      defaultTarget: sample.target.clone(),
+      defaultBounds: frameBox.clone(),
+      room: app.room,
+    });
+    if (adaptation?.bounds) frameBox.copy(adaptation.bounds);
+
     app.camera.position.copy(sample.camera);
-    app.camera.lookAt(sample.target);
+    app.camera.lookAt(adaptation?.target ?? sample.target);
     app.camera.rotateY(-pointerX * MathUtils.degToRad(1.5));
     app.camera.rotateX(-pointerY * MathUtils.degToRad(1.5));
     app.activeStop = Math.round(goal);
@@ -420,10 +437,6 @@ export function mountRail(app: RailHost) {
             top: header + 16,
             bottom: height - 16,
           };
-    const first = Math.min(Math.floor(sample.position), bounds.length - 2);
-    const fraction = sample.position - first;
-    frameBox.min.copy(bounds[first].min).lerp(bounds[first + 1].min, fraction);
-    frameBox.max.copy(bounds[first].max).lerp(bounds[first + 1].max, fraction);
     app.camera.fov = baseFov;
     app.camera.clearViewOffset();
     app.camera.updateMatrixWorld(true);
