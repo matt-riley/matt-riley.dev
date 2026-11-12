@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import { site } from "../content/site";
+import EntranceDetails from "./EntranceDetails.astro";
 import type { GitHubDossier } from "../data/types";
 
 interface Props {
@@ -17,7 +18,7 @@ const headingId = `${data.id}-heading`;
 <div class="placard">
   <p class="placard__artist">Matt Riley, b. Yorkshire</p>
   {data.id === "entrance" ? (
-    <h1 id={headingId}>Matt Riley makes small useful things. <em>Please touch.</em></h1>
+    <Fragment><h1 id={headingId}><span class="entrance-line" style="--line: 0">Matt Riley makes</span>{" "}<span class="entrance-line" style="--line: 1">small useful things.</span>{" "}<em class="entrance-line" style="--line: 2">Please touch.</em></h1><EntranceDetails /></Fragment>
   ) : (
     <h2 id={headingId}><em>{data.title}</em></h2>
   )}
