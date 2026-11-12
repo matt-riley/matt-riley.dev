@@ -29,6 +29,8 @@ run independently in catalogue view. A feature's visual adapter can use:
   that exhibit has its own behaviour. The handler receives the DOM event.
 - `registry.setDraggable(id, false)` to keep an intentionally static exhibit
   from rotating. Its returned cleanup restores the previous setting.
+- `registry.setPickBounds(id, resolver)` to include room-owned geometry in an
+  exhibit's bounds without reparenting it, such as the empty Absent plinth.
 - `animatePart(part, fraction, options)` to tween a bound part along its authored
   axis/range. Ranges can be reversed or centred: drum-pad fraction **0** is down
   and **1** is neutral; a microphone with symmetric limits rests at **0.5**.
