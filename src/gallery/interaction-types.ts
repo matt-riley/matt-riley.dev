@@ -6,7 +6,7 @@ export interface InteractionApp {
   room: Object3D;
   camera: PerspectiveCamera;
   renderer: WebGLRenderer;
-  assets: { get(id: string): Promise<GLTF> };
+  assets: { get(id: string): Promise<GLTF>; release?(id: string): void };
   activeStop: number;
   readonly disposed: boolean;
   addCleanup(cleanup: () => void): () => void;

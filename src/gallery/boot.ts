@@ -16,6 +16,8 @@ import {
 } from "three";
 import type { GLTF } from "three/addons/loaders/GLTFLoader.js";
 import { type AssetId, AssetStore } from "./assets";
+import { batchExhibit, batchRoom } from "./batch-room";
+import { mountQuality } from "./quality";
 import { publishGallery } from "./state";
 import type {
   Cleanup,
@@ -76,11 +78,12 @@ export function boot({ onFailure }: Options): GallerySession {
   const frames = new Set<FrameListener>();
   const resizes = new Set<(width: number, height: number) => void>();
   const roomMaterials = new Map<Material, MeshBasicMaterial>();
-  const glazed = new Set<MeshStandardMaterial>();
   const night = () => root.dataset.lights === "after-hours";
   let disposed = false;
   let enabled = false;
+  let paused = false;
   let frame = 0;
+  let nextContinuous = false;
   let lastTime = 0;
   let app: GalleryApp | undefined;
 
@@ -140,7 +143,6 @@ export function boot({ onFailure }: Options): GallerySession {
           }
           material.roughness = 0.15;
           material.metalness = 0;
-          glazed.add(material);
           material.emissive
             .copy(material.color)
             .multiplyScalar(night() ? 0.035 : 0);
@@ -151,22 +153,28 @@ export function boot({ onFailure }: Options): GallerySession {
         ? object.material.map(convert)
         : convert(object.material);
     });
+    if (id === "room") batchRoom(asset.scene);
+    else if (id !== "cat") batchExhibit(asset.scene);
   }
   const assets = new AssetStore(prepare);
 
   function requestRender() {
-    if (disposed || !enabled || frame || document.hidden) return;
+    if (disposed || !enabled || paused || frame || document.hidden) return;
+    nextContinuous = false;
     frame = requestAnimationFrame(draw);
   }
   function draw(time: number) {
     frame = 0;
+    const continuous = nextContinuous;
+    nextContinuous = false;
     if (disposed || document.hidden || root.dataset.gallery !== "ready") return;
     const delta = lastTime ? Math.min((time - lastTime) / 1000, 0.05) : 0;
     lastTime = time;
     let again = false;
     try {
       for (const listener of frames)
-        if (listener(delta, time / 1000)) again = true;
+        if (listener(delta, time / 1000, continuous)) again = true;
+      if (disposed) return;
       if (app) {
         const target = app.room.getObjectByName(
           `stop_${app.activeStop}_target`,
@@ -176,7 +184,10 @@ export function boot({ onFailure }: Options): GallerySession {
       }
       renderer.render(scene, camera);
       layer.dataset.rendered = "true";
-      if (again) requestRender();
+      if (again) {
+        requestRender();
+        nextContinuous = true;
+      }
     } catch {
       dispose();
       onFailure();
@@ -198,10 +209,22 @@ export function boot({ onFailure }: Options): GallerySession {
     key.intensity = night() ? 0.1 : 3;
     for (const material of roomMaterials.values())
       material.color.set(night() ? 0x303030 : 0xffffff);
-    for (const material of glazed)
-      material.emissive
-        .copy(material.color)
-        .multiplyScalar(night() ? 0.035 : 0);
+    // Only currently attached materials participate; unloaded assets must not
+    // remain strongly held by a session-level material collection.
+    scene.traverse((object) => {
+      if (!(object instanceof Mesh)) return;
+      for (const material of Array.isArray(object.material)
+        ? object.material
+        : [object.material]) {
+        if (
+          material instanceof MeshStandardMaterial &&
+          material.name.startsWith("glaze")
+        )
+          material.emissive
+            .copy(material.color)
+            .multiplyScalar(night() ? 0.035 : 0);
+      }
+    });
     requestRender();
   }
   const setting = (event: Event) => {
@@ -253,7 +276,6 @@ export function boot({ onFailure }: Options): GallerySession {
     resizes.clear();
     assets.dispose();
     roomMaterials.clear();
-    glazed.clear();
     key.shadow.dispose();
     scene.clear();
     renderer.dispose();
@@ -292,6 +314,17 @@ export function boot({ onFailure }: Options): GallerySession {
         return disposed;
       },
       requestRender,
+      setPaused(value) {
+        if (paused === value) return;
+        paused = value;
+        if (paused) {
+          cancelAnimationFrame(frame);
+          frame = 0;
+        } else {
+          lastTime = 0;
+          requestRender();
+        }
+      },
       addCleanup,
       onFrame(listener) {
         frames.add(listener);
@@ -307,6 +340,7 @@ export function boot({ onFailure }: Options): GallerySession {
       },
     };
     await publishGallery(app);
+    app.addCleanup(mountQuality(app));
     if (disposed) throw new DOMException("Gallery was disposed", "AbortError");
     // Compile shader programs without stalling the first visible frame.
     await renderer.compileAsync(scene, camera);
