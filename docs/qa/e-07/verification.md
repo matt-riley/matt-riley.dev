@@ -7,10 +7,10 @@ The focused real-gallery tests verify the shader-uploaded two-second microphone 
 A read-only subscription to the existing built `onExhibitsReady` API captured `registry.app.camera` after the first enhancement frame, without production debug hooks. The Human Error pan was measured at these settled logical positions:
 
 | Progress | Active stop | Camera x | Quaternion y |
-| --- | --- | --- | --- |
-| 6.65 | 7 | 9.4817 | -0.0304 |
-| 7.00 | 7 | 10.0000 | 0.0817 |
-| 7.35 | 7 | 10.5233 | 0.2068 |
+| -------- | ----------- | -------- | ------------ |
+| 6.65     | 7           | 9.4817   | -0.0304      |
+| 7.00     | 7           | 10.0000  | 0.0817       |
+| 7.35     | 7           | 10.5233  | 0.2068       |
 
 Camera position and rotation change across all three anchors. Initial diagnostic captures taken before the first enhancement frame had been reset to the fragment's centre; waiting for that frame resolves the diagnostic ambiguity.
 
