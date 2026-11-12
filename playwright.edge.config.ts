@@ -5,6 +5,7 @@ export default defineConfig({
   testDir: "./tests",
   testMatch: "deployment-edge.ts",
   workers: 1,
+  outputDir: "test-results/workers-edge",
   timeout: 60_000,
   reporter: "list",
   use: {
