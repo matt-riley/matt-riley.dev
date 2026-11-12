@@ -46,6 +46,7 @@ export function mountDrawers(registry: ExhibitRegistry) {
           link.addEventListener("pointerleave", idle);
           link.addEventListener("focus", active);
           link.addEventListener("blur", idle);
+          if (link.matches(":hover, :focus")) active();
           cleanups.push(() => {
             link.removeEventListener("pointerenter", active);
             link.removeEventListener("pointerleave", idle);
