@@ -74,7 +74,15 @@ https://registry.khronos.org/webgl/specs/latest/1.0/#5.2 .
 
 Hosted Linux evidence before this guard: three home audits scored .74 with
 1.53–1.54s total blocking time; shader/first-frame tasks took ~1.2s and ~.4s.
-Hardware-backed local audits scored .96–.98. Integration tests explicitly
-remove only that context attribute in their fixture, retaining real Three.js,
+Local audits also used SwiftShader and scored .96–.98 on this faster CPU. Integration tests explicitly
+remove that context attribute and override only the reported unmasked renderer name in their fixture, retaining real Three.js,
 real software contexts, rendering, model loads and disposal coverage; network
 gate tests separately verify the unmodified performance-caveat fallback.
+
+Some Chromium software contexts still succeed with the standard caveat flag.
+The same production probe therefore also declines explicitly reported SwiftShader,
+llvmpipe, softpipe, software rasterizer and Microsoft Basic Render drivers. If
+renderer information is unavailable, it allows the context and lets the runtime
+frame-rate guard decide. This conservatively keeps CPU-only visitors in the
+complete catalogue even when a fast CPU could have run the gallery adequately.
+Native capability details are attached to browser validation reports.
