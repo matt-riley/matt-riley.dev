@@ -57,10 +57,22 @@ an old snapshot fresh.
 
 ## Concrete approval and verification sequence
 
+**Method approval is not launch approval.** Builds are currently enabled and
+production follows `main`; after Git repair, the next main write can deploy
+without another prompt. The coordinating agent must halt main merges/writes
+before repair and throughout hosted-preview review, and resume production main
+writes only after Matt explicitly approves launch. Alternatively, Matt can keep
+builds disabled until final review and approve their re-enablement separately.
+Agents must not toggle that dashboard setting. Complete local/device previews
+before OAuth repair where possible; do not depend on a broken connection as a
+production safety boundary. If repair itself proposes a build, Matt should hold
+it until the agreed launch decision.
+
 1. Review this PR's exact green commit: check, lint, build, browser tests,
    `pnpm test:edge` and performance audits. The source remains assets-only.
 2. Matt approves preserving Workers Builds plus the 06:00 UTC deploy-hook plan.
-   Matt configures the Node build version and repairs the disconnected GitHub
+   With main writes halted and the production-build policy confirmed, Matt
+   configures the Node build version and repairs the disconnected GitHub
    integration; agents do not reconnect it.
 3. After repair, push the reviewed branch and inspect its non-production Workers
    Builds result. The configured version command uploads a version rather than
