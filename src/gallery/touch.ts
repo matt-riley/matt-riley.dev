@@ -1,6 +1,7 @@
 import { gsap } from "gsap";
 import { Box3, Color, Raycaster, Vector2, Vector3 } from "three";
 import type { ExhibitRecord, ExhibitRegistry } from "./exhibits";
+import { screenHitArea } from "./hit-area";
 
 interface Pick {
   record: ExhibitRecord;
@@ -71,12 +72,36 @@ export function mountTouch(registry: ExhibitRegistry) {
     let nearest: Pick | undefined;
     let distance = Infinity;
     for (const record of registry.atStop(app.activeStop)) {
-      if (
-        !record.root.visible ||
-        !ray.ray.intersectBox(registry.bounds(record), hit)
-      )
-        continue;
-      const depth = hit.distanceTo(ray.ray.origin);
+      if (!record.root.visible) continue;
+      let screenPart: string | undefined;
+      let screenDistance = Infinity;
+      let screenDepth = Infinity;
+      for (const [name, part] of record.parts) {
+        const minimum = registry.partHitArea(record.id, name);
+        if (minimum === undefined) continue;
+        const box = new Box3().setFromObject(part);
+        const area = screenHitArea(
+          box,
+          app.camera,
+          bounds.width,
+          bounds.height,
+          minimum,
+        );
+        if (!area) continue;
+        const x = event.clientX - bounds.left,
+          y = event.clientY - bounds.top;
+        if (x < area.left || x > area.right || y < area.top || y > area.bottom)
+          continue;
+        const distance = (x - area.centreX) ** 2 + (y - area.centreY) ** 2;
+        if (distance < screenDistance) {
+          screenPart = name;
+          screenDistance = distance;
+          screenDepth = box.getCenter(new Vector3()).distanceTo(ray.ray.origin);
+        }
+      }
+      const worldHit = ray.ray.intersectBox(registry.bounds(record), hit);
+      if (!worldHit && !screenPart) continue;
+      const depth = screenPart ? screenDepth : hit.distanceTo(ray.ray.origin);
       if (
         nearest &&
         (record.pickPriority < nearest.record.pickPriority ||
@@ -85,7 +110,8 @@ export function mountTouch(registry: ExhibitRegistry) {
       )
         continue;
       distance = depth;
-      nearest = { record };
+      nearest = { record, ...(screenPart ? { part: screenPart } : {}) };
+      if (screenPart) continue;
       let partDistance = Infinity;
       for (const [name, part] of record.parts) {
         const box = new Box3().setFromObject(part);
