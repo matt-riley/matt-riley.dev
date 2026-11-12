@@ -77,3 +77,30 @@ with Meshopt decoding, rather than a Blender still. Its contract and world-space
 bounds were also checked in the viewer.
 
 ![Sample GLB viewed in Three.js](sample-preview.png)
+
+## B-02 look-development studies (pending approval)
+
+The render-only `scenes/keyframe.py` builds a gallery corner, a 0.45m square × 1m
+plinth with 3mm bevels, and an open cantilever toolbox with two swung-out trays.
+Only the small drawer handle is glazed. It does not export a web model.
+
+```sh
+/Applications/Blender.app/Contents/MacOS/Blender --background --python-exit-code 1 --python blender/scenes/keyframe.py -- --only all
+node blender/contact-sheet.mjs
+```
+
+Use `--only day`, `after-hours`, `close-up` or `variants` to rerender one part.
+The three stills are 2400×1600, Cycles CPU, 32 samples with denoising, seed 7.
+Variants are 800×480, 16 samples; the labelled contact sheet is 2400×1600.
+Exact lighting and material parameters are recorded beside the stills in
+`renders/keyframe/parameters.json`. Intermediate variant tiles go to ignored
+`out/keyframe-variants/`.
+
+Rows P1/P2/P3 compare porcelain roughness 0.75/0.85/0.95. Columns G1/G2/G3 compare
+orange glaze sRGB #DF6D17/#E8741A/#EF7B20. The three main stills use the centre
+P2/G2 baseline; they are proposals, not an approved selection. No shared material
+factory values are changed before Matt's decision on the Notion task.
+
+Asset builds skip render-only modules and optimize only the asset names recorded
+by Blender in the ignored build manifest. This keeps `pnpm assets` independent of
+look-development render generation.
