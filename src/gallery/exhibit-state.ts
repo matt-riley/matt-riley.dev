@@ -7,6 +7,7 @@ type Mount = (registry: ExhibitRegistry) => MountResult | Promise<MountResult>;
 interface Subscription {
   mount: Mount;
   release?: Cleanup;
+  registry?: ExhibitRegistry;
 }
 const subscriptions = new Set<Subscription>();
 let current: ExhibitRegistry | undefined;
@@ -33,13 +34,20 @@ async function mountSubscription(
   }
   let done = false;
   const release = () => {
-    if (!done) {
-      done = true;
-      cleanup();
+    try {
+      if (!done) {
+        done = true;
+        cleanup();
+      }
+    } finally {
+      if (subscription.release === release) {
+        subscription.release = undefined;
+        subscription.registry = undefined;
+      }
     }
-    if (subscription.release === release) subscription.release = undefined;
   };
   subscription.release = release;
+  subscription.registry = registry;
 }
 
 export function onExhibitsReady(mount: Mount): Cleanup {
@@ -52,19 +60,26 @@ export function onExhibitsReady(mount: Mount): Cleanup {
   };
 }
 
+export function clearExhibits(registry: ExhibitRegistry) {
+  if (current === registry) current = undefined;
+  for (const subscription of subscriptions) {
+    if (subscription.registry === registry) {
+      try {
+        subscription.release?.();
+      } catch {
+        /* Release every adapter even if one fails. */
+      }
+    }
+  }
+}
+
 export async function publishExhibits(registry: ExhibitRegistry) {
+  if (current && current !== registry) clearExhibits(current);
   current = registry;
   await Promise.all(
     [...subscriptions].map((subscription) =>
       mountSubscription(subscription, registry),
     ),
   );
-  return () => {
-    if (current !== registry) return;
-    current = undefined;
-    for (const subscription of subscriptions) {
-      subscription.release?.();
-      subscription.release = undefined;
-    }
-  };
+  return () => clearExhibits(registry);
 }
