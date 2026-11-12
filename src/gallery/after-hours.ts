@@ -45,28 +45,41 @@ export function mountAfterHours(app: GalleryApp) {
     museumTorchDirection: { value: direction },
   };
   const roomMaterials = new Map<MeshBasicMaterial, () => void>();
+  function bindRoomMaterial(material: MeshBasicMaterial) {
+    if (roomMaterials.has(material)) return;
+    const colour = material.color.clone();
+    material.color.set(0xffffff);
+    const restore = bindNightShader(material, uniforms);
+    roomMaterials.set(material, () => {
+      restore();
+      material.color.copy(colour);
+    });
+  }
   app.room.traverse((object) => {
     if (!(object instanceof Mesh)) return;
     for (const material of Array.isArray(object.material)
       ? object.material
-      : [object.material]) {
+      : [object.material])
       if (
-        !(material instanceof MeshBasicMaterial) ||
-        !(
-          material.userData.baked_lightmap || object.name === "portrait_plane"
-        ) ||
-        roomMaterials.has(material)
+        material instanceof MeshBasicMaterial &&
+        (material.userData.baked_lightmap || object.name === "portrait_plane")
       )
-        continue;
-      const colour = material.color.clone();
-      material.color.set(0xffffff);
-      const restore = bindNightShader(material, uniforms);
-      roomMaterials.set(material, () => {
-        restore();
-        material.color.copy(colour);
-      });
-    }
+        bindRoomMaterial(material);
   });
+  const portrait = app.room.getObjectByName("portrait_plane");
+  let portraitMaterial =
+    portrait instanceof Mesh ? portrait.material : undefined;
+  function refreshPortraitMaterial() {
+    if (!(portrait instanceof Mesh) || portrait.material === portraitMaterial)
+      return;
+    portraitMaterial = portrait.material;
+    // E-07 streams its photograph later and replaces this material. Bind that
+    // new identity before the frame can reveal an un-dimmed portrait at night.
+    for (const material of Array.isArray(portrait.material)
+      ? portrait.material
+      : [portrait.material])
+      if (material instanceof MeshBasicMaterial) bindRoomMaterial(material);
+  }
   function collectGlazes(object: Object3D | undefined) {
     const materials = new Set<MeshStandardMaterial>();
     object?.traverse((child) => {
@@ -107,6 +120,7 @@ export function mountAfterHours(app: GalleryApp) {
   let last = performance.now();
   let previousStep = night() ? 1 : 0;
   function apply(now: number, delta: number) {
+    refreshPortraitMaterial();
     const state = sweep.sample(now);
     uniforms.museumFrom.value = state.from;
     uniforms.museumTo.value = state.to;
