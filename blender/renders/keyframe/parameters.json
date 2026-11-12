@@ -1,0 +1,77 @@
+{
+  "engine": "CYCLES",
+  "fallback": "EEVEE if Cycles cannot be enabled; reported by scene.reset",
+  "resolution": [
+    2400,
+    1600
+  ],
+  "samples": 32,
+  "denoise": true,
+  "seed": 7,
+  "exposure": -0.5,
+  "baseline": {
+    "porcelain_roughness": 0.85,
+    "glaze_colour": "#E8741A",
+    "glaze_roughness": 0.15,
+    "clearcoat": 1
+  },
+  "porcelain_roughness_rows": [
+    0.75,
+    0.85,
+    0.95
+  ],
+  "glaze_colour_columns": [
+    "#DF6D17",
+    "#E8741A",
+    "#EF7B20"
+  ],
+  "variant_resolution": [
+    800,
+    480
+  ],
+  "variant_samples": 16,
+  "variant_view": "close-up",
+  "day": {
+    "world_strength": 0.16,
+    "skylight_watts": 420,
+    "skylight_size_m": 2.5,
+    "bounce_watts": 45
+  },
+  "after_hours": {
+    "world_strength": 0.001,
+    "torch_watts": 35,
+    "torch_cone_degrees": 28,
+    "glaze_emission": 0.12
+  },
+  "status": "Matt approved P2/G2 in the Codex chat: porcelain roughness 0.85, glaze #E8741A. Other variants remain unapproved.",
+  "camera": {
+    "day_and_after_hours": {
+      "location": [
+        1.5,
+        -2.7,
+        2.0
+      ],
+      "target": [
+        0,
+        0,
+        0.72
+      ],
+      "lens_mm": 45
+    },
+    "close_up": {
+      "location": [
+        0.56,
+        -0.85,
+        1.58
+      ],
+      "target": [
+        0,
+        -0.025,
+        1.15
+      ],
+      "lens_mm": 60
+    }
+  },
+  "room_roughness": 0.5,
+  "porcelain_still_subsurface_weight": 0.025
+}

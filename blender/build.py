@@ -2,6 +2,7 @@
 
 import argparse
 import importlib.util
+import json
 from pathlib import Path
 import sys
 
@@ -19,12 +20,22 @@ def main():
         scenes = [path for path in scenes if path.stem == args.only]
     if not scenes:
         parser.error(f"No scene scripts found for {args.only or 'all scenes'}")
+    built = []
     for path in scenes:
         spec = importlib.util.spec_from_file_location(f"scene_{path.stem}", path)
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
+        if not hasattr(module, "build"):
+            if args.only:
+                parser.error(f"{path.stem} is render-only; run that Python script directly")
+            print(f"Skipping render-only scene: {path.stem}")
+            continue
         output = ROOT / "out" / f"{path.stem}.glb"
         module.build(output)
+        built.append(path.stem)
+    if not built:
+        parser.error("No asset scenes selected")
+    (ROOT / "out/manifest.json").write_text(json.dumps({"scenes": built}) + "\n")
 
 
 if __name__ == "__main__":
