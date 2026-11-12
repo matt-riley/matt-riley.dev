@@ -19,8 +19,22 @@ function webgl2() {
   if (supported !== undefined) return supported;
   try {
     const probe = document.createElement("canvas");
-    const gl = probe.getContext("webgl2");
+    const gl = probe.getContext("webgl2", {
+      failIfMajorPerformanceCaveat: true,
+    });
     supported = Boolean(gl);
+    const information = gl?.getExtension("WEBGL_debug_renderer_info");
+    if (information && typeof gl?.getParameter === "function") {
+      const renderer = String(
+        gl.getParameter(information.UNMASKED_RENDERER_WEBGL),
+      );
+      if (
+        /swiftshader|llvmpipe|softpipe|software rasterizer|microsoft basic render/i.test(
+          renderer,
+        )
+      )
+        supported = false;
+    }
     gl?.getExtension("WEBGL_lose_context")?.loseContext();
     probe.width = probe.height = 0;
   } catch {

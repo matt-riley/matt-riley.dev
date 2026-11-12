@@ -32,6 +32,8 @@ export interface ExhibitRecord {
   basePosition: Vector3;
   owned: boolean;
   draggable: boolean;
+  pickPriority: number;
+  pickBounds?: () => Box3;
 }
 
 export class ExhibitRegistry {
@@ -40,6 +42,12 @@ export class ExhibitRegistry {
   readonly controls = new Map<string, HTMLElement>();
   readonly handlers = new Map<string, (event: CustomEvent) => void>();
   private ended = false;
+  private windowStop = 0;
+  private windowRadius = Infinity;
+  private recordMounts = new Map<
+    (record: ExhibitRecord) => (() => void) | undefined,
+    Map<string, () => void>
+  >();
   get disposed() {
     return this.ended;
   }
@@ -88,7 +96,14 @@ export class ExhibitRegistry {
       basePosition: root.position.clone(),
       owned,
       draggable: true,
+      pickPriority: 0,
     });
+    const record = this.records.get(id);
+    if (record)
+      for (const [mount, releases] of this.recordMounts) {
+        const cleanup = mount(record);
+        if (cleanup) releases.set(id, cleanup);
+      }
     this.app.requestRender();
   }
 
@@ -110,6 +125,90 @@ export class ExhibitRegistry {
     }
   }
 
+  registerExhibit(
+    id: string,
+    stop: string,
+    index: number,
+    root: Object3D,
+    owned = false,
+  ) {
+    if (this.ended || this.records.has(id))
+      throw new Error(`Cannot register exhibit ${id}`);
+    this.add(id, stop, index, root, owned);
+    const record = this.records.get(id);
+    if (!record) throw new Error(`Exhibit registration failed: ${id}`);
+    return { record, dispose: () => this.unregisterRecord(record) };
+  }
+
+  private unregisterRecord(record: ExhibitRecord) {
+    if (this.records.get(record.id) !== record) return;
+    for (const releases of this.recordMounts.values()) {
+      releases.get(record.id)?.();
+      releases.delete(record.id);
+    }
+    record.parts.forEach(releasePart);
+    if (record.owned) {
+      record.root.removeFromParent();
+      this.app.assets.release?.(record.id);
+    }
+    this.records.delete(record.id);
+    this.app.requestRender();
+  }
+
+  /** Model adapters mount again when Low quality reloads an exhibit. */
+  onRecord(mount: (record: ExhibitRecord) => (() => void) | undefined) {
+    if (this.ended) return () => {};
+    const releases = new Map<string, () => void>();
+    this.recordMounts.set(mount, releases);
+    for (const record of this.records.values()) {
+      const cleanup = mount(record);
+      if (cleanup) releases.set(record.id, cleanup);
+    }
+    return () => {
+      releases.forEach((cleanup) => {
+        cleanup();
+      });
+      releases.clear();
+      this.recordMounts.delete(mount);
+    };
+  }
+
+  private removeRecord(id: string) {
+    const record = this.records.get(id);
+    if (!record?.owned) return;
+    this.unregisterRecord(record);
+  }
+
+  async setWindow(stop: number, radius: number) {
+    this.windowStop = stop;
+    this.windowRadius = radius;
+    for (const record of this.records.values())
+      if (Math.abs(record.index - stop) > radius) this.removeRecord(record.id);
+    const order = [...modelSpecs].sort(
+      (a, b) => Math.abs(a.index - stop) - Math.abs(b.index - stop),
+    );
+    for (const spec of order) {
+      if (this.ended) return;
+      if (
+        this.records.has(spec.id) ||
+        Math.abs(spec.index - this.windowStop) > this.windowRadius
+      )
+        continue;
+      const asset = await this.app.assets.get(spec.id);
+      if (this.ended) return;
+      if (Math.abs(spec.index - this.windowStop) > this.windowRadius) {
+        this.app.assets.release?.(spec.id);
+        continue;
+      }
+      if (this.records.has(spec.id)) continue;
+      const anchor = this.app.room.getObjectByName(`anchor_${spec.id}`);
+      if (!anchor) throw new Error(`Missing room anchor: anchor_${spec.id}`);
+      anchor.add(asset.scene);
+      this.add(spec.id, spec.stop, spec.index, asset.scene, true);
+    }
+    this.app.requestRender();
+  }
+
   atStop(index: number) {
     return [...this.records.values()].filter(
       (record) => record.index === index,
@@ -118,7 +217,7 @@ export class ExhibitRegistry {
 
   controlFor(record: ExhibitRecord, part?: string) {
     return (
-      (part && this.controls.get(`${record.id}:${part}`)) ||
+      this.controls.get(`${record.id}:${part ?? ""}`) ||
       record.section.querySelector<HTMLElement>(
         `[data-model="${record.id}"] [data-touch], [data-model="${record.id}"][data-touch]`,
       ) ||
@@ -152,13 +251,29 @@ export class ExhibitRegistry {
   }
 
   bounds(record: ExhibitRecord) {
+    if (record.pickBounds) return record.pickBounds();
     record.root.updateWorldMatrix(true, true);
     return new Box3().setFromObject(record.root);
+  }
+
+  setPickBounds(id: string, resolver: () => Box3) {
+    const record = this.records.get(id);
+    if (!record) return () => {};
+    const previous = record.pickBounds;
+    record.pickBounds = resolver;
+    return () => {
+      record.pickBounds = previous;
+    };
   }
 
   dispose() {
     if (this.ended) return;
     this.ended = true;
+    for (const releases of this.recordMounts.values())
+      releases.forEach((cleanup) => {
+        cleanup();
+      });
+    this.recordMounts.clear();
     for (const record of this.records.values()) {
       record.parts.forEach(releasePart);
       if (record.owned) record.root.removeFromParent();

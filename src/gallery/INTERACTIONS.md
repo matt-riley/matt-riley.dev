@@ -29,6 +29,8 @@ run independently in catalogue view. A feature's visual adapter can use:
   that exhibit has its own behaviour. The handler receives the DOM event.
 - `registry.setDraggable(id, false)` to keep an intentionally static exhibit
   from rotating. Its returned cleanup restores the previous setting.
+- `registry.setPickBounds(id, resolver)` to include room-owned geometry in an
+  exhibit's bounds without reparenting it, such as the empty Absent plinth.
 - `animatePart(part, fraction, options)` to tween a bound part along its authored
   axis/range. Ranges can be reversed or centred: drum-pad fraction **0** is down
   and **1** is neutral; a microphone with symmetric limits rests at **0.5**.
@@ -43,3 +45,24 @@ can override its section's announcement.
 When every model is mounted, `html[data-exhibits="ready"]` describes that view
 state. It is removed on session cleanup. The one-time touch hint uses only
 `sessionStorage`; no visitor state leaves the browser.
+
+## Low-quality model lifetime
+
+Model-specific adapters use `registry.onRecord(record => cleanup | undefined)`.
+It mounts immediately for existing records and again when a model is reloaded.
+The returned cleanup runs before unloading that record and at session disposal;
+unsubscribing also releases every record binding owned by that subscription.
+Keep room-owned geometry, DOM handlers, and camera resolvers session-owned.
+Look up current records rather than retaining old model roots in DOM callbacks.
+
+On Low, `registry.setWindow(stop, 3)` removes more distant model records and
+releases their AssetStore geometry/material/texture ownership. Moving back into
+range reloads the GLB and remounts its record adapters. The room and its rope are
+never unloaded; their stable anchors preserve placement.
+
+Auxiliary models use `registerExhibit(id, stop, index, root, owned = false)`,
+returning `{record, dispose}`. A cat can set `record.draggable = false` and
+`record.pickPriority = 100`, then update its `stop`/`index` as it relocates.
+`setControl(id, "", button)` connects its default hit to the same DOM control;
+`setTouchHandler` continues to handle its documented touch event. Disposing the
+registration removes record bindings; an unowned root remains its caller's job.
