@@ -34,7 +34,12 @@ const exhibits = defineCollection({
     lines: z.array(text).min(1).optional(),
     items: z
       .array(
-        z.object({ label: text, href: href.optional(), note: text.optional() }),
+        z.object({
+          label: text,
+          href: href.optional(),
+          note: text.optional(),
+          medium: text.optional(),
+        }),
       )
       .optional(),
     draft: z.boolean().default(true),
