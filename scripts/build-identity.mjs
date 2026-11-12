@@ -73,7 +73,16 @@ const text = await sharp({
   .toBuffer();
 const image = await sharp(source)
   .composite([{ input: text, left: 64, top: 164 }])
-  .png({ palette: true, colours: 256, effort: 10 })
+  .removeAlpha()
+  .png({
+    palette: true,
+    quality: 95,
+    colours: 256,
+    dither: 0.1,
+    compressionLevel: 9,
+    adaptiveFiltering: true,
+    effort: 10,
+  })
   .toBuffer();
 if (image.length >= 200_000)
   throw new Error(`Share image exceeds 200KB: ${image.length} bytes.`);
