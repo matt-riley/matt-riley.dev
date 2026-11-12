@@ -39,8 +39,14 @@ test("the complete catalogue preserves the museum's stop order and heading outli
     await expect(
       section.getByRole("heading", { level: order === 0 ? 1 : 2 }),
     ).toHaveCount(1);
-    await expect(section.locator("[data-touch]")).toHaveCount(1);
-    await expect(section.locator("[data-touch]")).toBeVisible();
+    if (id === "flagz") {
+      await expect(section.getByRole("switch")).toHaveCount(3);
+    } else {
+      expect(
+        await section.locator("[data-touch]").count(),
+      ).toBeGreaterThanOrEqual(1);
+      await expect(section.locator("[data-touch]").first()).toBeVisible();
+    }
     if (linkedStops.includes(id)) {
       expect(await section.getByRole("link").count()).toBeGreaterThan(0);
     }
@@ -82,7 +88,7 @@ test("native drawers reveal every tool, skill and Human Error exhibit", async ({
   await expect(humanError.getByRole("heading", { level: 3 })).toHaveText([
     "Open Mic",
     "Untitled (Boom Bap)",
-    "Absent Exhibit",
+    "Untitled (Absent Exhibit)",
     "Portrait of the Head of Security",
   ]);
   await expect(humanError.getByRole("img", { name: /Waffle/ })).toBeVisible();

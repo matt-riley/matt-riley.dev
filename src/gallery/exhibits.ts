@@ -40,6 +40,7 @@ export class ExhibitRegistry {
   readonly records = new Map<string, ExhibitRecord>();
   readonly ready: Promise<void>;
   readonly controls = new Map<string, HTMLElement>();
+  private readonly hitAreas = new Map<string, { minimumPixels: number }>();
   readonly handlers = new Map<string, (event: CustomEvent) => void>();
   private ended = false;
   private windowStop = 0;
@@ -233,6 +234,21 @@ export class ExhibitRegistry {
     };
   }
 
+  setPartHitArea(id: string, part: string, minimumPixels = 44) {
+    if (!Number.isFinite(minimumPixels) || minimumPixels <= 0)
+      throw new RangeError("Touch hit area must be positive CSS pixels");
+    const key = `${id}:${part}`;
+    const entry = { minimumPixels };
+    this.hitAreas.set(key, entry);
+    return () => {
+      if (this.hitAreas.get(key) === entry) this.hitAreas.delete(key);
+    };
+  }
+
+  partHitArea(id: string, part: string) {
+    return this.hitAreas.get(`${id}:${part}`)?.minimumPixels;
+  }
+
   setTouchHandler(id: string, handler: (event: CustomEvent) => void) {
     this.handlers.set(id, handler);
     return () => {
@@ -280,6 +296,7 @@ export class ExhibitRegistry {
     }
     this.records.clear();
     this.controls.clear();
+    this.hitAreas.clear();
     this.handlers.clear();
   }
 }

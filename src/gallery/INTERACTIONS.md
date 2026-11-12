@@ -25,6 +25,9 @@ run independently in catalogue view. A feature's visual adapter can use:
 - `registry.records.get(id)` to find its root and `parts` map.
 - `registry.setControl(id, "touch_part", realHTMLElement)` to map a particular
   picked part to a DOM control (for example a real flagz setting button).
+- `registry.setPartHitArea(id, "touch_part", 44)` opts a specific part into a
+  minimum CSS-pixel hit rectangle. Areas are clipped to the canvas; overlapping
+  part areas choose the nearest projected centre. Placards and links remain native.
 - `registry.setTouchHandler(id, handler)` to replace the default small hop once
   that exhibit has its own behaviour. The handler receives the DOM event.
 - `registry.setDraggable(id, false)` to keep an intentionally static exhibit
