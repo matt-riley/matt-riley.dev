@@ -35,7 +35,11 @@ jobs:
       - run: pnpm check
       - run: pnpm lint
       - run: pnpm build
-      - run: pnpm test
+      - run: pnpm test --grep-invert "actual oscillator deadlines"
+      - name: Verify audio-clock timing in isolation
+        run: pnpm exec playwright test tests/drum-browser.spec.ts --project=desktop-chromium --workers=1 --grep "actual oscillator deadlines" --output=test-results/audio-clock
+        env:
+          PLAYWRIGHT_HTML_OUTPUT_DIR: playwright-audio-clock-report
       - run: pnpm test:edge
       - run: pnpm perf
         env:
@@ -49,6 +53,7 @@ jobs:
           include-hidden-files: true
           path: |
             playwright-report/
+            playwright-audio-clock-report/
             test-results/
             .lighthouseci/
           if-no-files-found: ignore
