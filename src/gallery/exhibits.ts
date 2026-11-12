@@ -32,6 +32,7 @@ export interface ExhibitRecord {
   basePosition: Vector3;
   owned: boolean;
   draggable: boolean;
+  pickPriority: number;
   pickBounds?: () => Box3;
 }
 
@@ -95,6 +96,7 @@ export class ExhibitRegistry {
       basePosition: root.position.clone(),
       owned,
       draggable: true,
+      pickPriority: 0,
     });
     const record = this.records.get(id);
     if (record)
@@ -123,8 +125,39 @@ export class ExhibitRegistry {
     }
   }
 
+  registerExhibit(
+    id: string,
+    stop: string,
+    index: number,
+    root: Object3D,
+    owned = false,
+  ) {
+    if (this.ended || this.records.has(id))
+      throw new Error(`Cannot register exhibit ${id}`);
+    this.add(id, stop, index, root, owned);
+    const record = this.records.get(id);
+    if (!record) throw new Error(`Exhibit registration failed: ${id}`);
+    return { record, dispose: () => this.unregisterRecord(record) };
+  }
+
+  private unregisterRecord(record: ExhibitRecord) {
+    if (this.records.get(record.id) !== record) return;
+    for (const releases of this.recordMounts.values()) {
+      releases.get(record.id)?.();
+      releases.delete(record.id);
+    }
+    record.parts.forEach(releasePart);
+    if (record.owned) {
+      record.root.removeFromParent();
+      this.app.assets.release?.(record.id);
+    }
+    this.records.delete(record.id);
+    this.app.requestRender();
+  }
+
   /** Model adapters mount again when Low quality reloads an exhibit. */
   onRecord(mount: (record: ExhibitRecord) => (() => void) | undefined) {
+    if (this.ended) return () => {};
     const releases = new Map<string, () => void>();
     this.recordMounts.set(mount, releases);
     for (const record of this.records.values()) {
@@ -143,14 +176,7 @@ export class ExhibitRegistry {
   private removeRecord(id: string) {
     const record = this.records.get(id);
     if (!record?.owned) return;
-    for (const releases of this.recordMounts.values()) {
-      releases.get(id)?.();
-      releases.delete(id);
-    }
-    record.parts.forEach(releasePart);
-    record.root.removeFromParent();
-    this.records.delete(id);
-    this.app.assets.release?.(id);
+    this.unregisterRecord(record);
   }
 
   async setWindow(stop: number, radius: number) {
@@ -191,7 +217,7 @@ export class ExhibitRegistry {
 
   controlFor(record: ExhibitRecord, part?: string) {
     return (
-      (part && this.controls.get(`${record.id}:${part}`)) ||
+      this.controls.get(`${record.id}:${part ?? ""}`) ||
       record.section.querySelector<HTMLElement>(
         `[data-model="${record.id}"] [data-touch], [data-model="${record.id}"][data-touch]`,
       ) ||
