@@ -1,7 +1,10 @@
 import { spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { create } from "fontkit";
+import sharp from "sharp";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const output = join(root, "blender/out/identity");
@@ -11,16 +14,7 @@ if (
   (args.length && !["--copy-only", "--icons-only"].includes(args[0]))
 )
   throw new Error("Usage: pnpm assets:identity [-- --copy-only|--icons-only]");
-mkdirSync(join(output, "font-cache"), { recursive: true });
-// Keep font registration reproducible and its cache inside ignored build output.
-const xml = (value) => value.replaceAll("&", "&amp;").replaceAll("<", "&lt;");
-const config = join(output, "fonts.conf");
-writeFileSync(
-  config,
-  `<?xml version="1.0"?><!DOCTYPE fontconfig SYSTEM "fonts.dtd"><fontconfig><cachedir>${xml(join(output, "font-cache"))}</cachedir></fontconfig>`,
-);
-process.env.FONTCONFIG_FILE = config;
-const { default: sharp } = await import("sharp");
+mkdirSync(output, { recursive: true });
 const favicon = readFileSync(join(root, "public/favicon.svg"));
 for (const [name, size] of [
   ["apple-touch-icon", 180],
@@ -60,19 +54,41 @@ const fontfile = join(
   root,
   "node_modules/@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2",
 );
-const text = await sharp({
-  text: {
-    text: '<span foreground="#17171a">Matt Riley makes\nsmall useful things.\nPlease touch.</span>',
-    font: "Bricolage Grotesque Bold 56",
-    fontfile,
-    rgba: true,
-    spacing: 7,
-  },
-})
-  .png()
-  .toBuffer();
+const fontBytes = readFileSync(fontfile);
+const face = create(fontBytes);
+if (!face.familyName.includes("Bricolage Grotesque"))
+  throw new Error(`Unexpected identity font: ${face.familyName}`);
+const font = face.getVariation({ wght: 700 });
+const scale = 56 / font.unitsPerEm;
+const lines = ["Matt Riley makes", "small useful things.", "Please touch."];
+const paths = [];
+for (const [row, line] of lines.entries()) {
+  const run = font.layout(line);
+  let advance = 0;
+  for (const [index, glyph] of run.glyphs.entries()) {
+    const position = run.positions[index];
+    const x = 64 + (advance + position.xOffset) * scale;
+    const y =
+      164 + font.capHeight * scale + row * 64 - position.yOffset * scale;
+    paths.push(
+      `<path transform="translate(${x} ${y}) scale(${scale} ${-scale})" d="${glyph.path.toSVG()}"/>`,
+    );
+    advance += position.xAdvance;
+  }
+  if (advance * scale > 600)
+    throw new Error("Share-image text overlaps the cat.");
+}
+// Outlines come directly from the bundled font. No OS font discovery/fallback
+// or SVG embedded-font support is involved in Sharp's rasterisation.
+const text = Buffer.from(
+  `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630"><g fill="#17171a">${paths.join("")}</g></svg>`,
+);
+writeFileSync(
+  join(output, "typography.json"),
+  `${JSON.stringify({ family: face.familyName, weight: 700, pixelSize: 56, lines, font_sha256: createHash("sha256").update(fontBytes).digest("hex") }, null, 2)}\n`,
+);
 const image = await sharp(source)
-  .composite([{ input: text, left: 64, top: 164 }])
+  .composite([{ input: text, left: 0, top: 0 }])
   .removeAlpha()
   .png({
     palette: true,

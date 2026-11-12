@@ -13,7 +13,7 @@ from pathlib import Path
 import sys
 
 import bpy
-from mathutils import Vector
+from mathutils import Matrix, Vector
 
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
@@ -108,7 +108,11 @@ def assemble(raw):
         if stop == 7:
             # Runtime rotates around glTF Y by pi: Blender's equivalent is Z.
             # The cat pointedly looks away from the fallen porcelain fragments.
-            pose.rotation_euler.rotate_axis("Z", math.pi)
+            # Imported nodes can retain QUATERNION rotation mode. Apply a world
+            # matrix rotation about the pivot instead of writing ignored Euler data.
+            centre = marker.matrix_world.translation
+            turn = Matrix.Translation(centre) @ Matrix.Rotation(math.pi, 4, "Z") @ Matrix.Translation(-centre)
+            pose.matrix_world = turn @ pose.matrix_world
     for obj in cat_objects:
         obj.hide_render = True
     # The original approved photograph is the only photographic texture; UV0 is

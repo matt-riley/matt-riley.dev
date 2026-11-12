@@ -35,7 +35,7 @@ pnpm assets:identity
 
 `pnpm assets:stills` renders 36 day/night, wide/square photographs from the raw GLBs, validates the complete set and copies them to `src/assets/catalogue/`. Blender cannot import the Meshopt web derivatives. Astro generates responsive AVIF/WebP derivatives at build time; mobile photographs must remain below 90KB. See [catalogue photography](blender/CATALOGUE.md) for constrained render/resume commands. Existing complete renders can be copied with `pnpm assets:stills -- --copy-only`.
 
-`pnpm assets:identity` renders the sitting cat share image with `blender/render_og.py`, composites the bundled Bricolage Grotesque text using Sharp, and creates the Apple/manifest icons from `public/favicon.svg`. `-- --copy-only` reuses the existing share render; `-- --icons-only` rebuilds only icons. The final 1200×630 PNG must be below 200KB. Render intermediates and font caches stay in ignored output.
+`pnpm assets:identity` renders the sitting cat share image with `blender/render_og.py`, extracts the bundled Bricolage Grotesque glyph outlines with Fontkit and composites them using Sharp, and creates the Apple/manifest icons from `public/favicon.svg`. `-- --copy-only` reuses the existing share render; `-- --icons-only` rebuilds only icons. The final 1200×630 PNG must be below 200KB. Render intermediates and font provenance stay in ignored output.
 
 Material factories, export axes, pivot metadata, room anchors and budgets are documented in [the asset pipeline](blender/README.md). The approved P2/G2 porcelain/glaze palette is shared by every source. Generated source PNGs and optimised GLBs are checked in; local builds and CI do not need Blender unless changing assets.
 
