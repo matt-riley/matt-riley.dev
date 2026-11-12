@@ -3,6 +3,7 @@
 import argparse
 import importlib.util
 import json
+import re
 from pathlib import Path
 import sys
 
@@ -30,9 +31,12 @@ def main():
                 parser.error(f"{path.stem} is render-only; run that Python script directly")
             print(f"Skipping render-only scene: {path.stem}")
             continue
-        output = ROOT / "out" / f"{path.stem}.glb"
+        name = getattr(module, "MODEL_ID", path.stem)
+        if not re.fullmatch(r"[A-Za-z0-9_-]+", name) or name in built:
+            parser.error(f"Invalid or duplicate model ID: {name}")
+        output = ROOT / "out" / f"{name}.glb"
         module.build(output)
-        built.append(path.stem)
+        built.append(name)
     if not built:
         parser.error("No asset scenes selected")
     (ROOT / "out/manifest.json").write_text(json.dumps({"scenes": built}) + "\n")
