@@ -8,7 +8,7 @@ accession: "MR.2026.001"
 links: []
 touchLabel: "Touch the rope"
 touchResult: "The rope swings aside."
-draft: true
+draft: false
 ---
 
 Small useful things, collected in one room. The rope is unhooked.
