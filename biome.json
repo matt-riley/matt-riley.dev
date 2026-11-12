@@ -29,5 +29,13 @@
     "rules": {
       "preset": "recommended"
     }
-  }
+  },
+  "overrides": [
+    {
+      "includes": ["src/content/exhibits/**/*.md"],
+      "formatter": {
+        "enabled": false
+      }
+    }
+  ]
 }
