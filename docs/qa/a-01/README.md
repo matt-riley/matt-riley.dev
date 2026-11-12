@@ -10,7 +10,7 @@
   while at Human Error; no console or page errors occurred.
 - `torch-medium.trace.json.gz`: six-second trace, native full Chromium
   (`channel: chromium`), 960×600 viewport, DPR1, Medium selected by 4-core/4GB
-  capability values, after-hours, no software-capability override. A bounded
+  capability values, after-hours with a continuously moving pointer, no software-capability override. The actual gallery WebGL context and a bounded
   renderer probe of that Chromium configuration identified **ANGLE Metal Renderer:
   Apple M5**, vendor Google Inc. (Apple). 361 frames: mean 60.002fps, median
   16.7ms, p95 16.8ms. Actual tier remained Medium; no page errors.
@@ -25,4 +25,6 @@
 
 The native trace was isolated from other browser and Blender work. GPU-slot
 ownership returned to the parent after the trace; no browser context was retained.
-The complete nine-stop keyboard lighting walkthrough remains to be recorded.
+The first nine-stop keyboard pass exposed native focus scrolling from Human
+Error to Gift Shop. A shared Day/Night one-shot focus alignment fixes that rail
+mismatch; the corrected walkthrough is queued.
