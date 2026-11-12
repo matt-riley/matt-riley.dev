@@ -21,10 +21,6 @@ const exhibits = await Promise.all(entries.map(async (exhibit) => ({ exhibit, ..
       <Exhibit exhibit={exhibit} dossier={dossier}>
         <Content />
         {exhibit.data.id === "acquisitions" && <SplitFlap dossier={dossier} />}
-        <Fragment slot="after">
-          {exhibit.data.id === "entrance" && <p class="opening-hours" data-opening-hours>{site.openingHours.open}</p>}
-
-        </Fragment>
       </Exhibit>
     ))}
   </div>
