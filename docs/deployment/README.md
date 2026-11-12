@@ -1,54 +1,87 @@
-# Deployment proposal — awaiting Matt
+# Deployment proposal — preserve Workers Builds
 
-The repository currently defines manual Wrangler deployment (`pnpm deploy`) to
-Workers Assets worker `matt-riley-dev`. No repository deployment workflow was
-present when this task began. Cloudflare dashboard build integration and the
-active account/domain bindings could not be confirmed without authenticated
-account access. Do not enable a second deployer until Matt confirms that state.
-This change does not deploy, upload a remote version, create secrets, or enable
-a schedule.
+## Verified current configuration
 
-## Proposed method
+An authenticated, read-only Cloudflare dashboard inspection by the coordinating
+agent on 12 November 2026 found the existing `matt-riley-dev` Worker configured
+with **Workers Builds**, repository `matt-riley/matt-riley.dev`, production branch
+`main`, root `/`, non-production branch builds enabled, and builds not disabled.
+Commands are:
 
-Use the checked-in Wrangler configuration and a single GitHub Actions production
-workflow. After approval, copy `daily-rebuild.yml.example` into
-`.github/workflows/daily-rebuild.yml`, configure the production environment, and
-set `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` there. Scope the token to the
-confirmed account's Workers deployment permissions. The workflow's built-in
-GitHub token is read-only and is used only during build-time GitHub fetching;
-none of these credentials enters browser output. Keep environment protection if
-manual approval of each run is wanted; otherwise approve scheduled deployment
-explicitly. Disable any conflicting dashboard auto-build first.
+- Build: `pnpm run build`
+- Production deploy: `npx wrangler deploy`
+- Non-production version: `npx wrangler versions upload`
 
-The proposed daily schedule is **06:00 UTC**; GitHub schedules may run late.
-`workflow_dispatch` provides an immediate rebuild. This reuses the existing
-all-or-nothing GitHub fallback: API failure still emits the complete archived
-dossier, honestly labelled with its original snapshot date. A new deployment
-does not make an old archived snapshot fresh. A deterministic fallback rehearsal
-uses `GITHUB_DATA=fallback pnpm build`; never enable that override in the ordinary
-production workflow.
+The dashboard warns: **“This project is disconnected from your Git account.
+This may cause deployments to fail.”** Its active version was `bc90bcdc`, labelled
+as a Build from about two months earlier. There were no build variables/secrets
+or deploy hooks. A build-token label existed; its value was not opened. These
+findings supersede the earlier unauthenticated repository-only investigation,
+which could establish manual commands but could not confirm dashboard builds.
+No dashboard setting, connection, hook, secret or production deployment changed.
 
-## Review before production
+## Proposed method — awaiting Matt
 
-1. `pnpm install --frozen-lockfile`, `pnpm check`, `pnpm lint`, `pnpm build`,
-   `pnpm test`, `pnpm test:edge`, and `pnpm perf` must pass on the exact reviewed commit.
-2. `pnpm exec wrangler deploy --dry-run` validates the asset-only upload. The
-   configuration intentionally has no `main`; unknown routes use `404-page`.
-3. After Matt authorizes a remote preview and account selection:
-   `pnpm exec wrangler versions upload --preview-alias s04-review` creates a
-   version without promoting production. Version URLs must be enabled on the
-   confirmed worker (`preview_urls`); existing dashboard settings are preserved
-   by omitting that property here. Use the URL returned by Wrangler; never guess
-   its hostname. Restrict preview access through the account if needed.
-4. On that hosted preview, inspect `/`, an emitted `/_astro/` script and the room
-   URL from `src/gallery/manifest.json`. Check CSP, immutable cache headers, 404
-   routing, and the browser console in Gallery and Catalogue. Local Workers
-   checks alone do not prove hosted headers or account settings.
-5. Review the exact assets and approve production deployment. Run the approved
-   workflow manually once, verify the returned deployment version and production
-   page, then allow the schedule. Confirm the next scheduled run and rendered
-   GitHub provenance date. Rehearse fallback as a preview before scheduling an
-   actual fallback production run; that last run needs explicit authorization.
+**Preserve the existing Workers Builds deployer.** Matt should repair its GitHub
+connection using the dashboard OAuth flow and confirm repository access. Keep
+the current build/deploy/version commands and branch settings. Do not introduce
+a second Wrangler deployer in GitHub Actions.
+
+For a daily rebuild at **06:00 UTC**, Matt can create a Workers Builds deploy hook
+for production branch `main`, put its full URL in the GitHub production environment
+secret `CLOUDFLARE_DEPLOY_HOOK_URL`, and approve activating the inactive
+`daily-rebuild.yml.example` template. The template only POSTs to that secret URL;
+Workers Builds performs the build and deployment with its existing token.
+No extra Cloudflare API-token value needs to enter GitHub Actions. The hook URL
+is itself a bearer credential: agents must not view, paste, log, or commit it.
+GitHub schedules can run late; `workflow_dispatch` requests an immediate rebuild.
+
+Matt should separately add a build-time secret `GITHUB_TOKEN` in Workers Builds
+if authenticated GitHub API capacity is wanted. That is where the actual build
+runs; the hook workflow's GitHub token does not reach Cloudflare automatically.
+Use a minimally scoped token for the public read requests. No credential values
+are supplied or handled by this change. Environment protection may require Matt
+to approve each scheduled request; choose that policy explicitly when enabling.
+
+A successful hook request is **not** proof that its build or deployment finished.
+Record the matching Workers Builds result, deployed version/commit and visible
+GitHub provenance. API failures keep the existing all-or-nothing archived dossier,
+honestly labelled with the archive's original date. A new deployment does not make
+an old snapshot fresh.
+
+## Concrete approval and verification sequence
+
+1. Review this PR's exact green commit: check, lint, build, browser tests,
+   `pnpm test:edge` and performance audits. The source remains assets-only.
+2. Matt approves preserving Workers Builds plus the 06:00 UTC deploy-hook plan.
+   Matt repairs the disconnected GitHub integration; agents do not reconnect it.
+3. After repair, push the reviewed branch and inspect its non-production Workers
+   Builds result. The configured version command uploads a version rather than
+   promoting production. Open the preview URL returned by that build. Confirm
+   version URLs are enabled on the actual worker; omission of `preview_urls` in
+   this repo preserves the existing account setting. Never guess the hostname.
+   Manual `wrangler versions upload --preview-alias s04-review` remains a
+   separately authorized fallback, not a new production deploy method.
+4. On that **hosted** preview, `curl -I` HTML, a `/_astro/` script, and the room URL
+   from `src/gallery/manifest.json`. Verify CSP/immutable headers, 404 routing and
+   clean Gallery/Catalogue consoles. Local Workers tests do not prove account or
+   hosted behavior. The local version-upload dry-run did not upload anything.
+5. Matt creates the main-branch deploy hook and stores its URL directly as the
+   protected GitHub secret above; Matt configures build-time `GITHUB_TOKEN` in
+   Workers Builds. No agent needs to receive either value.
+6. Only after approval, copy the template into `.github/workflows/daily-rebuild.yml`.
+   Use `workflow_dispatch` once and verify both request acceptance and the actual
+   Workers Builds build/deployment/provenance. Then verify the next scheduled run.
+7. Rehearse an API-failure/fallback build on a non-production branch using its
+   build environment (for example `GITHUB_DATA=fallback`), then remove that test
+   override. A fallback **production scheduled** run needs separate explicit
+   approval and verified restoration afterwards; do not intentionally break a
+   production token or connection to test it.
+
+For local preparation, `GITHUB_DATA=fallback pnpm build` is deterministic and
+`pnpm exec wrangler deploy --dry-run` checks asset-only upload configuration.
+`pnpm deploy` remains an available manual command, but using it would bypass the
+established Builds pipeline and requires a concrete deployment approval.
 
 ## Artifact contracts
 
@@ -79,4 +112,5 @@ actual emitted output rather than source-size estimates.
 
 Sources: [Workers limits](https://developers.cloudflare.com/workers/platform/limits/),
 [asset headers](https://developers.cloudflare.com/workers/static-assets/headers/),
-[version URLs](https://developers.cloudflare.com/workers/versions-and-deployments/version-urls/).
+[version URLs](https://developers.cloudflare.com/workers/versions-and-deployments/version-urls/),
+[Workers Builds deploy hooks](https://developers.cloudflare.com/workers/ci-cd/builds/deploy-hooks/).
