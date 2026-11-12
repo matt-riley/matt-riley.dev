@@ -2,6 +2,7 @@
 id: "tools"
 order: 1
 title: "mattriley.tools"
+alt: "An open porcelain cantilever toolbox with raised trays and an orange drawer handle on a square plinth."
 dates: "2026 to ongoing"
 medium: "Command-line tools, porcelain, a drawer handle."
 accession: "MR.2026.002"

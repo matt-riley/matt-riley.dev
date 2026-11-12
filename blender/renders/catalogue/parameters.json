@@ -1,0 +1,36 @@
+{
+  "sources_sha256": {
+    "room.glb": "b38a442082189570a25e12eb5da1ddefa3c150f4b6c131aa7b6a8f2e2f5f4fb2",
+    "tools.glb": "d4608f809292606abbd7ad9a2e323b99b8b6742225647f20f1cd04840cadc63a",
+    "flagz.glb": "61c985062d841d4509f31bdab15d8e89adbdb56b82158a3e66638039f73ad3e3",
+    "waffle-agent.glb": "39827f40c88e9c802934d7c3d234d4aa14c6204bd4e99bae9f5a7c369e6c4e6a",
+    "agent-skills.glb": "cdb6e6effe0c6da89dc34feb390a0d35328e13c4e37201570d836cfe726e9ae9",
+    "waystone.glb": "b3e2d866edf931675c90b549d44be01a3df8aff2759712784bfe06da1004edfb",
+    "open-mic.glb": "ad36556269ad4e5549c73ae28971efb4f6647d2b8bd15c6ff647de5eb3e8d5d8",
+    "boom-bap.glb": "e99427d1f9f3f546b675f844332dfe5fde0d3c7e4e0da82cd1ae057471605f26",
+    "absent.glb": "93de37c7acc1b1e39c63788fa48b20e7b556a937f6dcdb8f10437eebbca87bcb",
+    "gift-shop.glb": "93b1d0a303e3f191fb6131ca48c14a2d619b93ad69a9e3572da1977706529f79",
+    "cat.glb": "5e3be012631002bd0aa6b9e60114c162ea5f7befd0517fb73ed55825691633d4"
+  },
+  "vertical_fov_degrees": 35,
+  "samples": 8,
+  "denoise": true,
+  "seed": 7,
+  "exposure": -0.5,
+  "view_transform": "AgX",
+  "day": "B-02 approved 420W skylight/45W bounce/world0.16",
+  "night": "B-02 approved 35W torch/28deg cone/world0.001/glaze emission0.12",
+  "room": "Original shared surface colours, path-traced rather than double-lighting the runtime atlas",
+  "portrait": "Original waffle-portrait.jpg on B-03 portrait_plane UV0",
+  "cats": "First numeric cat marker per stop; corresponding named static pose",
+  "crops": {
+    "wide": [
+      2400,
+      1600
+    ],
+    "square": [
+      1600,
+      1600
+    ]
+  }
+}
