@@ -100,8 +100,12 @@ test.describe("the real gallery figurine", () => {
         );
       }
       await page.waitForTimeout(1200);
+      const screenshot = test
+        .info()
+        .outputPath(`${id}-${index}-${Date.now()}.png`);
+      await page.screenshot({ path: screenshot });
       await test.info().attach(`${index}-${id}`, {
-        body: await page.screenshot(),
+        path: screenshot,
         contentType: "image/png",
       });
     }
