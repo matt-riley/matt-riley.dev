@@ -1,0 +1,71 @@
+---
+import { drumRows, encodePattern, presetPattern } from "../scripts/drum-pattern";
+const initial = presetPattern("Head nod");
+---
+<div class="drum-machine" data-drum-machine>
+  <div class="drum-toolbar">
+    <button class="touch-control" type="button" data-drum-play aria-pressed="false" disabled>Play</button>
+    <button class="touch-control" type="button" data-drum-clear disabled>Clear</button>
+    <label>Pattern<select data-drum-preset disabled><option value="custom" disabled>Custom pattern</option><option selected>Head nod</option><option>Late bus</option><option>Sunday</option></select></label>
+    <label>Selected row<select data-drum-row-select disabled>{drumRows.map(row => <option>{row}</option>)}</select></label>
+  </div>
+  <div class="drum-consent" data-drum-consent role="group" aria-labelledby="drum-consent-label" hidden>
+    <p id="drum-consent-label">This one makes noise. Turn sound on?</p>
+    <button class="touch-control" type="button" data-drum-yes>Turn sound on</button>
+    <button class="touch-control" type="button" data-drum-no>Keep sound off</button>
+  </div>
+  <div class="drum-timing">
+    <label for="drum-tempo">Tempo <output data-drum-tempo-value>88 BPM</output></label>
+    <input id="drum-tempo" data-drum-tempo type="range" min="70" max="110" step="1" value="88" aria-valuetext="88 beats per minute" disabled />
+    <label for="drum-swing">Swing <output data-drum-swing-value>58%</output></label>
+    <input id="drum-swing" data-drum-swing type="range" min="50" max="66" step="1" value="58" aria-valuetext="58 percent" disabled />
+  </div>
+  <p class="drum-help mono" id="drum-help">Sixteen steps. Arrow keys move; Space switches a step.</p>
+  <div class="drum-scroll">
+    <div class="drum-grid" role="grid" aria-label="Drum pattern" aria-describedby="drum-help">
+      {drumRows.map((row, rowIndex) => (
+        <div class="drum-row" role="row">
+          <span class="drum-row-name mono" role="rowheader">{row}</span>
+          {Array.from({ length: 16 }, (_, step) => (
+            <div class="drum-cell" role="gridcell" data-bar-end={(step + 1) % 4 === 0 ? "" : undefined}>
+              <button type="button" class="mono" data-drum-step={step} data-drum-row={rowIndex} aria-label={`${row}, step ${step + 1}`} aria-pressed={Boolean(initial.rows[rowIndex] & (1 << step))} tabindex={rowIndex === 0 && step === 0 ? 0 : -1} disabled>{step + 1}</button>
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+  </div>
+  <div class="drum-foot mono">
+    <p data-drum-status aria-live="polite" aria-atomic="true">Not playing.</p>
+    <a data-drum-share href={`#boom=${encodePattern(initial)}`}>Pattern link ↗</a>
+  </div>
+</div>
+<script>
+  import "../scripts/drum-gate";
+</script>
+<style>
+  .drum-machine { margin-block-start: var(--space-6); min-width: 0; }
+  .drum-toolbar { display: flex; flex-wrap: wrap; align-items: end; gap: var(--space-3); }
+  .drum-toolbar .touch-control, .drum-consent .touch-control { margin: 0; }
+  .drum-toolbar label { display: grid; gap: .25rem; font-size: .75rem; }
+  select { min-height: 44px; max-width: 100%; font: inherit; color: var(--ink); background: var(--plinth); border: 1px solid var(--rule); }
+  .drum-timing { margin-block: var(--space-4); display: grid; grid-template-columns: 1fr; gap: .35rem; }
+  .drum-timing label { display: flex; justify-content: space-between; font-size: .8rem; }
+  input { width: 100%; min-height: 44px; accent-color: var(--glaze-ink); }
+  .drum-help { font-size: .65rem; margin-block: var(--space-4) var(--space-3); }
+  .drum-scroll { width: 100%; max-width: 100%; overflow-x: auto; padding: .25rem; scrollbar-gutter: stable; }
+  .drum-grid { width: max-content; }
+  .drum-row { display: grid; grid-template-columns: 4.5rem repeat(16, 3rem); align-items: center; gap: .25rem; }
+  .drum-row + .drum-row { margin-block-start: .25rem; }
+  .drum-row-name { position: sticky; left: 0; z-index: 1; align-self: stretch; display: grid; align-items: center; background: var(--plinth); font-size: .65rem; }
+  .drum-cell { padding-inline-end: .25rem; }
+  .drum-cell[data-bar-end] { border-inline-end: 1px solid var(--ink-soft); }
+  .drum-machine :is(button, input, select) { scroll-margin-block: calc(var(--header-height, 4.5rem) + 1rem) 1rem; }
+  .drum-cell button { scroll-margin-inline: 5rem .5rem; display: block; width: 44px; min-height: 44px; padding: .25rem; border: 1px solid var(--rule); background: var(--plinth); color: var(--ink); font-size: .65rem; cursor: pointer; }
+  .drum-cell button[aria-pressed="true"] { box-shadow: inset 0 -4px var(--glaze-ink); border-color: var(--glaze-ink); }
+  .drum-cell button[data-playhead] { outline: 2px solid var(--ink); outline-offset: -3px; }
+  .drum-consent { margin-block: var(--space-4); padding: var(--space-4); border: 1px solid var(--rule); display: flex; flex-wrap: wrap; gap: var(--space-3); }
+  .drum-consent p { flex-basis: 100%; }
+  .drum-consent[hidden] { display: none; }
+  .drum-foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-3); font-size: .65rem; margin-block-start: var(--space-4); }
+</style>
