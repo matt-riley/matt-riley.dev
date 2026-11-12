@@ -99,7 +99,11 @@ test.describe("the real gallery figurine", () => {
           "sleep",
         );
       }
-      await page.waitForTimeout(400);
+      await page.waitForTimeout(1200);
+      await test.info().attach(`${index}-${id}`, {
+        body: await page.screenshot(),
+        contentType: "image/png",
+      });
     }
   });
 

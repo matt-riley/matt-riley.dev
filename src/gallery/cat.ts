@@ -188,18 +188,32 @@ export async function mountCat(
     tipTimer = setTimeout(hideTip, 2200);
     app.requestRender();
   };
+  let previousStop = app.activeStop;
+  let direction = 1;
   const stopFrame = app.onFrame((delta) => {
     registration.record.index = app.activeStop;
+    if (app.activeStop !== previousStop) {
+      direction = Math.sign(app.activeStop - previousStop);
+      previousStop = app.activeStop;
+    }
+    // Wait ahead of the visitor when possible. In particular, the Human Error
+    // plinth must already be occupied before its neighbour enters the view:
+    // moving a visible cat between those adjacent exhibits would break the gag.
+    const destination =
+      app.activeStop >= 7
+        ? app.activeStop
+        : Math.max(0, Math.min(8, app.activeStop + direction));
     if (
       get("cat") === "on" &&
       root.visible &&
       spot.stop !== app.activeStop &&
+      spot.stop !== destination &&
       !visible()
     ) {
       // The previous figurine is outside an expanded frustum before either
       // position or pose changes. A gentle arrival avoids a visible pop if a
       // native hash jump put the destination directly in the new view.
-      place(choose(app.activeStop));
+      place(choose(destination));
       if (visible()) {
         alpha = 0;
         opacity(0);
