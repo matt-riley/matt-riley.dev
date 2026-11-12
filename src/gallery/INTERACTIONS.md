@@ -8,7 +8,8 @@ text, links and controls, and vertical panning remains native.
 `ExhibitRegistry` mounts the nine object files on their named room anchors. It
 also exposes the room's entrance rope. Records contain the original section,
 model root, authored base position, glazed materials and named `touch_*` parts.
-The floor fragments have no touch parts and deliberately do not pick or hop.
+The floor fragments have no animated touch parts; their bounds still map to the
+Human Error control until its exhibit adapter supplies a specific behaviour.
 Models load nearest-stop-first through the session's asset store. The store owns
 GPU resources; the registry removes its roots and releases part tweens on cleanup.
 
