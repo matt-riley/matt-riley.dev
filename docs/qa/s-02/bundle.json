@@ -15,10 +15,10 @@
     {
       "route": "/",
       "htmlGzipBytes": 12492,
-      "eagerGzipBytes": 13880,
+      "eagerGzipBytes": 13878,
       "inlineGzipBytes": 346,
-      "eagerExternalGzipBytes": 13534,
-      "lazyGzipBytes": 220068,
+      "eagerExternalGzipBytes": 13532,
+      "lazyGzipBytes": 220048,
       "eagerFiles": [
         "_astro/Base.astro_astro_type_script_index_0_lang.mL1lMMMQ.js",
         "_astro/DrumMachine.astro_astro_type_script_index_0_lang.BaZNgQ25.js",
@@ -28,7 +28,7 @@
         "_astro/SplitFlap.astro_astro_type_script_index_0_lang.BS9iTDJ0.js",
         "_astro/drum-gate.DzOBl1qi.js",
         "_astro/exhibit-state.Vu76ickP.js",
-        "_astro/index.astro_astro_type_script_index_0_lang.C2SmG4ck.js",
+        "_astro/index.astro_astro_type_script_index_0_lang.CkvZOB7b.js",
         "_astro/preload-helper.DHhhL8Zf.js",
         "_astro/settings.Dzwo62uw.js"
       ]
@@ -60,9 +60,9 @@
   ],
   "distinctLazy": {
     "count": 18,
-    "gzipBytes": 220068,
+    "gzipBytes": 220048,
     "files": [
-      "_astro/boot.DYEbCxg2.js",
+      "_astro/boot.BtXqazBb.js",
       "_astro/cat.i13T_YHq.js",
       "_astro/drawers.DItqnJOY.js",
       "_astro/drums.fcpxKThN.js",
@@ -71,7 +71,7 @@
       "_astro/gift-shop.BhFuDppU.js",
       "_astro/human-error.CaMhE63A.js",
       "_astro/marker.DCAL4_h8.js",
-      "_astro/mount-exhibits.BNuw1T4V.js",
+      "_astro/mount-exhibits.D5KCd8t_.js",
       "_astro/parts.DR9imlAz.js",
       "_astro/qa-status.SLuV4Gv-.js",
       "_astro/rail-state.BvORoK6X.js",

@@ -103,10 +103,7 @@ export function boot({ onFailure }: Options): GallerySession {
   function prepare(asset: GLTF, id: AssetId) {
     asset.scene.traverse((object) => {
       if (!(object instanceof Mesh)) return;
-      // Inset drum pads keep their lighting/animation but share the chassis shadow.
-      // Sixteen separate shadow draws add no visible silhouette at gallery distance.
-      object.castShadow =
-        id !== "room" && !(id === "boom-bap" && /^pad_\d+$/.test(object.name));
+      object.castShadow = id !== "room";
       object.receiveShadow = true;
       const convert = (material: Material): Material => {
         if (!(material instanceof MeshStandardMaterial)) return material;
