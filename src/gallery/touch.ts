@@ -175,6 +175,10 @@ export function mountTouch(registry: ExhibitRegistry) {
       drag.cancelled = true;
     if (drag.cancelled) return;
     if (!drag.moved && Math.abs(dx) > 8 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      if (!drag.pick.record.draggable) {
+        drag.cancelled = true;
+        return;
+      }
       drag.moved = true;
       interacted();
     }
