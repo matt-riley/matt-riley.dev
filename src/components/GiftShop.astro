@@ -1,0 +1,22 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { site } from "../content/site";
+interface Props { links: CollectionEntry<"exhibits">["data"]["links"] }
+const { links } = Astro.props;
+const shelf = [
+  { kind: "work", description: "Longer notes." },
+  { kind: "tools", description: "Small web tools." },
+  { kind: "github", description: "The source." },
+];
+---
+<ul class="gift-shelf" aria-label="Gift shop shelf">
+  {links.map((link, index) => (
+    <li>
+      <a href={link.href} rel="me" data-gift-link={shelf[index].kind}>
+        <span class="gift-shelf__copy"><span class="gift-shelf__title">{link.label}<span aria-hidden="true"> ↗</span></span><span class="gift-shelf__description">{shelf[index].description}</span></span>
+        <span class="gift-shelf__price mono">Free</span>
+      </a>
+    </li>
+  ))}
+</ul>
+<p class="gift-shop-contact"><a href={site.contact.href} rel="me">{site.contact.label}<span aria-hidden="true"> ↗</span></a></p>

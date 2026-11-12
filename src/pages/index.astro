@@ -2,6 +2,7 @@
 import { getCollection, render } from "astro:content";
 import Exhibit from "../components/Exhibit.astro";
 import Header from "../components/Header.astro";
+import MuseumFooter from "../components/MuseumFooter.astro";
 import SplitFlap from "../components/SplitFlap.astro";
 import HeadOfSecurity from "../components/HeadOfSecurity.astro";
 import WaffleTerminal from "../components/WaffleTerminal.astro";
@@ -28,26 +29,20 @@ const exhibits = await Promise.all(entries.map(async (exhibit) => ({ exhibit, ..
           {exhibit.data.id === "waffle-agent" && <WaffleTerminal lines={exhibit.data.lines ?? []} />}
           {exhibit.data.id === "waystone" && <WaystoneMarker stops={entries.map(({ data }) => ({ id: data.id, title: data.title }))} />}
           {exhibit.data.id === "entrance" && <MarkerNotice />}
-          {exhibit.data.id === "gift-shop" && (
-            <div class="gift-shop-note">
-              <p><a href={site.contact.href}>{site.contact.label}<span aria-hidden="true"> ↗</span></a></p>
-              <p class="mono">{site.colophon}</p>
-            </div>
-          )}
         </Fragment>
       </Exhibit>
     ))}
   </div>
-  <nav class="museum-footer" slot="footer" aria-label="Museum information">
+  <Fragment slot="footer">
     <HeadOfSecurity />
-    <a href="#entrance">Back to the entrance ↑</a>
-    <ul><li><a href="/privacy">Privacy</a></li><li><a href="/terms">Terms</a></li></ul>
-  </nav>
+    <MuseumFooter dossier={dossier} />
+  </Fragment>
 </Base>
 
 <script>
   import "../scripts/touch";
   import "../scripts/human-error";
+  import "../scripts/gift-shop";
   import "../gallery/rail-entry";
   import "../scripts/gallery-gate";
   import "../scripts/gallery-interactions";
