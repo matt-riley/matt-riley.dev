@@ -360,7 +360,8 @@ export function mountRail(app: RailHost) {
   fine.addEventListener("change", leave);
   const offResize = app.onResize(resize);
   const offFrame = app.onFrame((delta) => {
-    if (disposed) return false;
+    if (disposed || document.documentElement.dataset.gallery !== "ready")
+      return false;
     if (measureNeeded) measure();
     if (firstFrame) {
       // Enhancement changes section heights. Preserve the visitor's logical stop.

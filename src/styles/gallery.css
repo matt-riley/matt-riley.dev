@@ -15,9 +15,6 @@
 :root[data-gallery="ready"] .gallery-layer[data-rendered="true"] {
   opacity: 1;
 }
-:root[data-gallery="ready"] .exhibit__figure {
-  opacity: 0;
-}
 body > main,
 body > footer {
   position: relative;
@@ -31,6 +28,14 @@ body > footer {
 }
 
 /* The printed catalogue owns the document; these rules only enhance a live gallery. */
+html[data-gallery="ready"] {
+  --gallery-height: 100vh;
+}
+@supports (height: 100dvh) {
+  html[data-gallery="ready"] {
+    --gallery-height: 100dvh;
+  }
+}
 html[data-gallery="ready"] main#main {
   width: 100%;
   margin: 0;
@@ -44,8 +49,7 @@ html[data-gallery="ready"] .collection {
 html[data-gallery="ready"] .exhibit {
   display: flow-root;
   position: relative;
-  min-height: 100svh;
-  min-height: 125dvh;
+  min-height: calc(var(--gallery-height) * 1.25);
   border: 0;
   padding: 0;
 }
@@ -60,12 +64,16 @@ html[data-gallery="ready"] .exhibit__label {
   top: max(
     calc(var(--header-height, 4.5rem) + 1rem),
     calc(
-      (100dvh + var(--header-height, 4.5rem) - var(--placard-height, 24rem)) /
+      (
+        var(--gallery-height) +
+        var(--header-height, 4.5rem) -
+        var(--placard-height, 24rem)
+      ) /
       2
     )
   );
   width: min(26rem, calc(100% - 3rem));
-  max-height: calc(100dvh - var(--header-height, 4.5rem) - 2rem);
+  max-height: calc(var(--gallery-height) - var(--header-height, 4.5rem) - 2rem);
   margin-block: 0;
   padding: var(--space-6);
   overflow: auto;
@@ -105,16 +113,19 @@ html[data-gallery="ready"] .placard__note {
 
 @media (max-width: 899px) {
   html[data-gallery="ready"] .exhibit {
-    min-height: 150dvh;
+    min-height: calc(var(--gallery-height) * 1.5);
   }
   html[data-gallery="ready"] .exhibit__label {
     top: max(
       calc(var(--header-height, 4.5rem) + 1rem),
-      calc(100dvh - var(--placard-height, 45dvh))
+      calc(
+        var(--gallery-height) -
+        var(--placard-height, calc(var(--gallery-height) * 0.45))
+      )
     );
     width: 100%;
     max-width: none;
-    max-height: 45dvh;
+    max-height: calc(var(--gallery-height) * 0.45);
     margin-block: 0;
     padding: var(--space-4) var(--space-6);
     border-inline: 0;
@@ -177,4 +188,11 @@ html[data-gallery="ready"] .gallery-wall-source {
 
 .gallery-projection[hidden] {
   display: none;
+}
+
+.gallery-projections {
+  display: none;
+}
+html[data-gallery="ready"] .gallery-projections {
+  display: block;
 }
