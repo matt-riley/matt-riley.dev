@@ -1,6 +1,7 @@
 ---
 import { getImage, Picture } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
+import DrumMachine from "./DrumMachine.astro";
 import portrait from "../assets/waffle-portrait.jpg";
 
 interface Props { items: NonNullable<CollectionEntry<"exhibits">["data"]["items"]> }
@@ -23,6 +24,7 @@ const galleryPortrait = await getImage({ src: portrait, width: 768, format: "web
       <h3 id={`${models[index]}-heading`}>{item.label}</h3>
       {item.medium && <p class="human-error__medium">{item.medium}</p>}
       <p data-absence-note={index === 2 ? "" : undefined}>{item.note}</p>
+      {index === 1 && <DrumMachine />}
       {index === 0 && <button class="touch-control" type="button" data-touch data-part="touch_mic" data-touch-message="The microphone nods.">Touch the microphone<span aria-hidden="true"> ↗</span></button>}
       {index === 2 && <button class="touch-control" type="button" data-touch data-touch-message="Nothing happens. That is the piece.">Touch the empty plinth<span aria-hidden="true"> ↗</span></button>}
       {(index === 0 || index === 2) && <p class="touch-result" data-touch-result aria-live="polite" aria-atomic="true"></p>}
