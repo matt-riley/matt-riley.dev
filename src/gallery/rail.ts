@@ -366,6 +366,9 @@ export function mountRail(app: RailHost) {
       return false;
     if (measureNeeded) measure();
     if (firstFrame) {
+      // Native fragment scrolling may have measured the catalogue while assets loaded.
+      // Always measure again after gallery CSS has activated.
+      measure();
       // Enhancement changes section heights. Preserve the visitor's logical stop.
       const first = Math.min(Math.floor(initialProgress), centres.length - 2);
       const position = MathUtils.lerp(
