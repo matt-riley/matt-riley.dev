@@ -8,7 +8,7 @@ medium: "Porcelain, a rope, an invitation."
 accession: "MR.2026.001"
 links: []
 touchLabel: "Touch the rope"
-touchResult: "The rope swings aside."
+touchResult: "The rope was never hooked."
 draft: false
 ---
 
