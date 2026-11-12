@@ -15,8 +15,10 @@ import {
   WebGLRenderer,
 } from "three";
 import type { GLTF } from "three/addons/loaders/GLTFLoader.js";
+import { mountAfterHours } from "./after-hours";
 import { type AssetId, AssetStore } from "./assets";
 import { batchExhibit, batchRoom } from "./batch-room";
+import { mountKeyboardFocus } from "./keyboard-focus";
 import { mountQuality } from "./quality";
 import { publishGallery } from "./state";
 import type {
@@ -342,6 +344,10 @@ export function boot({ onFailure }: Options): GallerySession {
     };
     await publishGallery(app);
     app.addCleanup(mountQuality(app));
+    if (!disposed) {
+      app.addCleanup(mountKeyboardFocus(app));
+      app.addCleanup(mountAfterHours(app));
+    }
     if (disposed) throw new DOMException("Gallery was disposed", "AbortError");
     // Compile shader programs without stalling the first visible frame.
     await renderer.compileAsync(scene, camera);

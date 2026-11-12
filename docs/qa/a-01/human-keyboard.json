@@ -1,0 +1,34 @@
+[
+  {
+    "mode": "after-hours",
+    "stop": "7 of 8, The Human Error",
+    "focus": "Inspect the human error +",
+    "scrollY": 5445,
+    "section": {
+      "x": 16,
+      "y": -75,
+      "width": 928,
+      "height": 750,
+      "top": -75,
+      "right": 944,
+      "bottom": 675,
+      "left": 16
+    }
+  },
+  {
+    "mode": "day",
+    "stop": "7 of 8, The Human Error",
+    "focus": "Inspect the human error +",
+    "scrollY": 5445,
+    "section": {
+      "x": 16,
+      "y": -75,
+      "width": 928,
+      "height": 750,
+      "top": -75,
+      "right": 944,
+      "bottom": 675,
+      "left": 16
+    }
+  }
+]
