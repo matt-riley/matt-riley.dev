@@ -53,3 +53,27 @@ test("gallery handover preserves layout and a native hash chosen while loading",
   await page.keyboard.press("PageDown");
   await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(0);
 });
+
+test("an initial Waystone fragment measures the gallery rather than the loading catalogue", async ({
+  page,
+}, info) => {
+  test.skip(
+    !["desktop-chromium", "mobile-chromium"].includes(info.project.name),
+    "Real gallery fragment geometry is covered on desktop and touch Chromium.",
+  );
+  await page.goto("/#waystone");
+  await expect(page.locator("html")).toHaveAttribute("data-gallery", "ready", {
+    timeout: 30_000,
+  });
+  await expect
+    .poll(() =>
+      page.locator("#waystone").evaluate((section) => {
+        const rect = section.getBoundingClientRect();
+        return Math.abs(rect.top + rect.height / 2 - innerHeight / 2);
+      }),
+    )
+    .toBeLessThan(2);
+  await expect(page.locator("[data-current-stop]")).toHaveText(
+    "5 of 8, waystone.nvim",
+  );
+});
