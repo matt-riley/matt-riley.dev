@@ -27,6 +27,18 @@ MODELS = ("tools", "flagz", "waffle-agent", "agent-skills", "waystone", "open-mi
 PREFERRED_CAT_MARKERS = {7: "cat_9", 8: "cat_11"}
 
 
+def cat_marker(markers, stop):
+    marker = next((obj for obj in markers if obj.name == PREFERRED_CAT_MARKERS.get(stop)), None)
+    if marker is None:
+        marker = next(obj for obj in markers if int(obj["stop"]) == stop)
+    if int(marker["stop"]) != stop:
+        raise ValueError(f"Cat marker {marker.name} belongs to the wrong stop")
+    expected = {7: "sit", 8: "sleep"}.get(stop)
+    if expected and marker["pose"] != expected:
+        raise ValueError(f"Update the raw room metadata: {marker.name} must use {expected}")
+    return marker
+
+
 def import_raw(path):
     if not path.is_file():
         raise FileNotFoundError(f"Missing raw model {path}. Run pnpm assets to build all source scenes first.")
@@ -86,11 +98,7 @@ def assemble(raw):
     poses = {obj.name: obj for obj in cat_objects if obj.name in {"cat_sit", "cat_loaf", "cat_stretch", "cat_sleep"}}
     markers = sorted((obj for obj in room_objects if obj.name.startswith("cat_") and obj.name[4:].isdigit()), key=lambda obj: int(obj.name[4:]))
     for stop in range(len(STOPS)):
-        marker = next((obj for obj in markers if obj.name == PREFERRED_CAT_MARKERS.get(stop)), None)
-        if marker is None:
-            marker = next(obj for obj in markers if int(obj["stop"]) == stop)
-        if int(marker["stop"]) != stop:
-            raise ValueError(f"Cat marker {marker.name} belongs to the wrong stop")
+        marker = cat_marker(markers, stop)
         pose = clone_pose(poses[f"cat_{marker['pose']}"])
         pose.name = f"photograph_cat_stop_{stop}"
         pose.matrix_world = marker.matrix_world.copy()
@@ -246,7 +254,9 @@ def main():
                 bpy.ops.render.render(write_still=True)
                 print(f"Catalogue {name} {mode} {crop} complete", flush=True)
     sources = {path.name: hashlib.sha256(path.read_bytes()).hexdigest() for path in [args.raw_dir / f"{name}.glb" for name in ("room", *MODELS, "cat")]}
-    (args.output_dir / "parameters.json").write_text(json.dumps({"sources_sha256": sources, "vertical_fov_degrees": 35, "samples": args.samples, "denoise": True, "seed": 7, "exposure": -0.5, "view_transform": "AgX", "day": "B-02 approved 420W skylight/45W bounce/world0.16", "night": "B-02 approved 35W torch/28deg cone/world0.001/glaze emission0.12", "room": "Original shared surface colours, path-traced rather than double-lighting the runtime atlas", "portrait": "Original waffle-portrait.jpg on B-03 portrait_plane UV0", "cats": "First numeric cat marker per stop; corresponding named static pose", "crops": {"wide": [2400,1600], "square": [1600,1600]}}, indent=2) + "\n")
+    markers = [obj for obj in nodes.values() if obj.name.startswith("cat_") and obj.name[4:].isdigit()]
+    cats = {name: {"marker": marker.name, "pose": marker["pose"], "position": list(marker.matrix_world.translation)} for stop, name in enumerate(STOPS) for marker in [cat_marker(markers, stop)]}
+    (args.output_dir / "parameters.json").write_text(json.dumps({"sources_sha256": sources, "vertical_fov_degrees": 35, "samples": args.samples, "denoise": True, "seed": 7, "exposure": -0.5, "view_transform": "AgX", "day": "B-02 approved 420W skylight/45W bounce/world0.16", "night": "B-02 approved 35W torch/28deg cone/world0.001/glaze emission0.12", "room": "Original shared surface colours, path-traced rather than double-lighting the runtime atlas", "portrait": "Original waffle-portrait.jpg on B-03 portrait_plane UV0; original aspect ratio preserved", "cats": cats, "crops": {"wide": [2400,1600], "square": [1600,1600]}}, indent=2) + "\n")
 
 
 if __name__ == "__main__":
