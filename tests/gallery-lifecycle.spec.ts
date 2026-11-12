@@ -1,4 +1,5 @@
 import { expect, type Page, test } from "@playwright/test";
+import { allowSoftwareWebGL } from "./gallery-capability";
 
 async function liveContexts(page: Page) {
   return page.evaluate(() => {
@@ -28,6 +29,7 @@ test.beforeEach(async ({ page }, info) => {
     info.project.name !== "desktop-chromium",
     "Lifecycle accounting uses Chromium's real WebGL2 contexts.",
   );
+  await allowSoftwareWebGL(page);
   await instrumentContexts(page);
 });
 
