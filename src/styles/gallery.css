@@ -186,3 +186,27 @@ html[data-gallery="ready"] .gallery-wall-source {
 html[data-gallery="ready"] .gallery-projections {
   display: block;
 }
+
+.gallery-photo-handover {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+.gallery-photo-handover img {
+  position: fixed;
+  object-fit: cover;
+}
+html[data-gallery="ready"] .gallery-photo-handover {
+  display: block;
+  animation: gallery-photo-fade 400ms forwards;
+}
+@keyframes gallery-photo-fade {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}

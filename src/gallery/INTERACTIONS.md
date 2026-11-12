@@ -59,3 +59,10 @@ On Low, `registry.setWindow(stop, 3)` removes more distant model records and
 releases their AssetStore geometry/material/texture ownership. Moving back into
 range reloads the GLB and remounts its record adapters. The room and its rope are
 never unloaded; their stable anchors preserve placement.
+
+Auxiliary models use `registerExhibit(id, stop, index, root, owned = false)`,
+returning `{record, dispose}`. A cat can set `record.draggable = false` and
+`record.pickPriority = 100`, then update its `stop`/`index` as it relocates.
+`setControl(id, "", button)` connects its default hit to the same DOM control;
+`setTouchHandler` continues to handle its documented touch event. Disposing the
+registration removes record bindings; an unowned root remains its caller's job.

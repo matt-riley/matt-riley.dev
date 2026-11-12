@@ -1,0 +1,41 @@
+{
+  "errors": [],
+  "result": [
+    {
+      "stop": "entrance",
+      "metrics": "high\n0.0 ms\n9 calls\n13338 triangles"
+    },
+    {
+      "stop": "tools",
+      "metrics": "high\n217.3 ms\n23 calls\n18306 triangles"
+    },
+    {
+      "stop": "flagz",
+      "metrics": "high\n91.2 ms\n30 calls\n19714 triangles"
+    },
+    {
+      "stop": "waffle-agent",
+      "metrics": "high\n118.8 ms\n29 calls\n23354 triangles"
+    },
+    {
+      "stop": "agent-skills",
+      "metrics": "high\n89.6 ms\n30 calls\n23024 triangles"
+    },
+    {
+      "stop": "waystone",
+      "metrics": "high\n124.1 ms\n19 calls\n14774 triangles"
+    },
+    {
+      "stop": "acquisitions",
+      "metrics": "high\n92.0 ms\n29 calls\n20902 triangles"
+    },
+    {
+      "stop": "human-error",
+      "metrics": "high\n106.6 ms\n57 calls\n38240 triangles"
+    },
+    {
+      "stop": "gift-shop",
+      "metrics": "high\n109.3 ms\n41 calls\n32454 triangles"
+    }
+  ]
+}
