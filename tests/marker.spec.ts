@@ -1,0 +1,90 @@
+import { expect, test } from "@playwright/test";
+
+test("a local marker survives into a new session, returns to its stop and clears", async ({
+  page,
+  browser,
+  javaScriptEnabled,
+}, info) => {
+  test.skip(!javaScriptEnabled, "Saving a local marker requires JavaScript.");
+  await page.addInitScript(() => localStorage.setItem("mr-view", "catalogue"));
+  const requests: string[] = [];
+  page.on("request", (request) => {
+    if (["fetch", "xhr"].includes(request.resourceType()))
+      requests.push(request.url());
+  });
+  await page.goto("/#waystone");
+  await page.locator("[data-marker-stop]").selectOption("flagz");
+  await page.locator("#waystone button[data-touch]").click();
+  await expect(page.locator("#waystone [data-touch-result]")).toHaveText(
+    "Marker left at flagz.",
+  );
+  const saved = await page.evaluate(() =>
+    JSON.parse(localStorage.getItem("mr-marker") ?? "null"),
+  );
+  expect(saved.stop).toBe("flagz");
+  expect(Number.isFinite(Date.parse(saved.at))).toBe(true);
+  expect(requests).toEqual([]);
+  await page.reload();
+  await expect(page.locator("[data-marker-notice]")).toBeHidden();
+  const context = await browser.newContext({
+    storageState: await page.context().storageState(),
+    reducedMotion:
+      info.project.name === "reduced-motion" ? "reduce" : "no-preference",
+  });
+  const returning = await context.newPage();
+  await returning.goto(new URL("/", page.url()).href);
+  await expect(returning.locator("[data-marker-notice]")).toBeVisible();
+  await expect(returning.locator("[data-marker-notice-copy]")).toContainText(
+    "You left a marker at flagz",
+  );
+  expect(await returning.evaluate(() => document.activeElement?.tagName)).toBe(
+    "BODY",
+  );
+  await returning
+    .getByRole("button", { name: "Take me there", exact: true })
+    .click();
+  await expect(returning).toHaveURL(/#flagz$/);
+  await expect(returning.locator("[data-marker-notice]")).toBeHidden();
+  await expect
+    .poll(async () =>
+      returning
+        .locator("#flagz")
+        .evaluate((node) => Math.round(node.getBoundingClientRect().top)),
+    )
+    .toBeGreaterThanOrEqual(0);
+  await returning.locator("#waystone [data-marker-clear]").click();
+  expect(
+    await returning.evaluate(() => localStorage.getItem("mr-marker")),
+  ).toBeNull();
+  await expect(returning.locator("[data-marker-current]")).toHaveText(
+    "No marker left.",
+  );
+  await context.close();
+});
+
+test("blocked storage and malformed saved markers leave the controls usable", async ({
+  page,
+  javaScriptEnabled,
+}) => {
+  test.skip(!javaScriptEnabled, "Marker controls require JavaScript.");
+  await page.addInitScript(() => {
+    localStorage.setItem("mr-view", "catalogue");
+    localStorage.setItem("mr-marker", '{"stop":"unknown","at":"bad"}');
+    const original = Storage.prototype.setItem;
+    Storage.prototype.setItem = function (key, value) {
+      if (key === "mr-marker")
+        throw new DOMException("Unavailable", "SecurityError");
+      return original.call(this, key, value);
+    };
+  });
+  await page.goto("/#waystone");
+  await expect(page.locator("[data-marker-notice]")).toBeHidden();
+  await page.locator("[data-marker-stop]").selectOption("tools");
+  await page.locator("#waystone button[data-touch]").click();
+  await expect(page.locator("[data-marker-current]")).toContainText(
+    "marker: tools,",
+  );
+  await expect(page.locator("#waystone [data-touch-result]")).toHaveText(
+    "Marker left at mattriley.tools.",
+  );
+});

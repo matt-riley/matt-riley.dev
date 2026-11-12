@@ -3,6 +3,8 @@ import { getCollection, render } from "astro:content";
 import Exhibit from "../components/Exhibit.astro";
 import Header from "../components/Header.astro";
 import SplitFlap from "../components/SplitFlap.astro";
+import WaystoneMarker from "../components/WaystoneMarker.astro";
+import MarkerNotice from "../components/MarkerNotice.astro";
 import { site } from "../content/site";
 import { loadDossier } from "../data/github";
 import Base from "../layouts/Base.astro";
@@ -21,6 +23,8 @@ const exhibits = await Promise.all(entries.map(async (exhibit) => ({ exhibit, ..
         <Content />
         {exhibit.data.id === "acquisitions" && <SplitFlap dossier={dossier} />}
         <Fragment slot="after">
+          {exhibit.data.id === "waystone" && <WaystoneMarker stops={entries.map(({ data }) => ({ id: data.id, title: data.title }))} />}
+          {exhibit.data.id === "entrance" && <MarkerNotice />}
           {exhibit.data.id === "entrance" && <p class="opening-hours" data-opening-hours>{site.openingHours.open}</p>}
           {exhibit.data.id === "gift-shop" && (
             <div class="gift-shop-note">
@@ -43,4 +47,5 @@ const exhibits = await Promise.all(entries.map(async (exhibit) => ({ exhibit, ..
   import "../gallery/rail-entry";
   import "../scripts/gallery-gate";
   import "../scripts/gallery-interactions";
+  import "../scripts/marker";
 </script>
