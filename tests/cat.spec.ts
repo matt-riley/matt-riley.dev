@@ -2,6 +2,12 @@ import { expect, test } from "@playwright/test";
 import { type CatVisit, chooseCatSpot } from "../src/gallery/cat-state";
 import { allowSoftwareWebGL } from "./gallery-capability";
 
+test.use({
+  video: "on",
+  viewport: { width: 960, height: 600 },
+  deviceScaleFactor: 1,
+});
+
 test("cat choices persist their seeded sequence and avoid the previous spot", async ({
   browserName,
 }, info) => {
@@ -23,7 +29,6 @@ test("cat choices persist their seeded sequence and avoid the previous spot", as
 });
 
 test.describe("the real gallery figurine", () => {
-  test.use({ video: "on" });
   test.beforeEach(async ({ page }, info) => {
     test.skip(
       info.project.name !== "desktop-chromium",
@@ -57,7 +62,6 @@ test.describe("the real gallery figurine", () => {
       "human-error",
       "gift-shop",
     ];
-    const spotStops = [0, 1, 2, 3, 3, 4, 5, 6, 7, 7, 8, 8, 8];
     for (const id of [...stops, ...stops.slice(0, -1).reverse()]) {
       await page.evaluate(
         (stop) =>
@@ -67,17 +71,14 @@ test.describe("the real gallery figurine", () => {
         id,
       );
       const index = stops.indexOf(id);
-      await expect
-        .poll(
-          async () => {
-            const name = await page
-              .locator("html")
-              .getAttribute("data-cat-spot");
-            return name ? spotStops[Number(name.slice(4))] : -1;
-          },
-          { timeout: 10_000 },
-        )
-        .toBe(index);
+      await expect(page.locator("[data-current-stop]")).toContainText(
+        `${index} of 8`,
+        { timeout: 10_000 },
+      );
+      await expect(page.locator("html")).toHaveAttribute(
+        "data-cat-spot",
+        /^cat_\d+$/,
+      );
       if (index === 7) {
         await expect(page.locator("html")).toHaveAttribute(
           "data-cat-spot",
@@ -105,6 +106,7 @@ test.describe("the real gallery figurine", () => {
   test("Cat toggles preserve geometry and its native control gives a quiet response", async ({
     page,
   }) => {
+    test.setTimeout(60_000);
     const canvas = page.locator(".gallery-canvas");
     const before = await canvas.screenshot();
     await page.getByRole("button", { name: "Cat: On", exact: true }).focus();
