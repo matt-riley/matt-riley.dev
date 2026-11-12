@@ -7,9 +7,13 @@ for (const id of ["tools", "agent-skills"]) {
   );
   const summary = details?.querySelector("summary");
   if (!details || !summary) continue;
-  const original = summary.textContent?.trim() ?? "Open the drawers";
+  const label = summary.firstChild;
+  const icon = summary.querySelector("[aria-hidden]");
+  if (!label) continue;
+  const original = label.textContent?.trim() ?? "Open the drawers";
   const sync = () => {
-    summary.textContent = details.open ? "Close the drawers −" : original;
+    label.textContent = details.open ? "Close the drawers" : original;
+    if (icon) icon.textContent = details.open ? " −" : " +";
   };
   details.addEventListener("toggle", sync);
   sync();
