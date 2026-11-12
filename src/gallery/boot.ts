@@ -123,6 +123,17 @@ export function boot({ onFailure }: Options): GallerySession {
           material.roughness = 0.85;
           material.metalness = 0;
         } else if (material.name.startsWith("glaze")) {
+          if (material.name === "glaze") {
+            // Match Blender's approved AgX glaze without changing its #E8741A paint.
+            // The renderer retains ACES for the other live materials.
+            material.onBeforeCompile = (shader) => {
+              shader.fragmentShader = shader.fragmentShader.replace(
+                "#include <tonemapping_fragment>",
+                "gl_FragColor.rgb = AgXToneMapping(gl_FragColor.rgb * 3.0);",
+              );
+            };
+            material.customProgramCacheKey = () => "museum-glaze-agx";
+          }
           material.roughness = 0.15;
           material.metalness = 0;
           glazed.add(material);
