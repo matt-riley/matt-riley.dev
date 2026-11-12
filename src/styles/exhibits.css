@@ -1,0 +1,318 @@
+.museum-header,
+.museum-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-6);
+  width: min(100% - var(--space-8), 80rem);
+  margin-inline: auto;
+  padding-block: var(--space-6);
+}
+
+.museum-header {
+  border-block-end: 1px solid var(--rule);
+}
+
+.museum-wordmark {
+  font-family: var(--font-wall);
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  text-decoration: none;
+}
+
+.museum-header p,
+.placard__dates,
+.placard__medium,
+.placard__artist,
+.placard__repository,
+.exhibit__running,
+.exhibit__figure figcaption,
+.gift-shop-note .mono {
+  color: var(--ink-soft);
+}
+
+.collection > * + * {
+  margin-block-start: 0;
+}
+
+.exhibit {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-8);
+  padding-block: var(--space-16);
+  border-block-start: 1px solid var(--rule);
+  scroll-margin-block-start: var(--space-6);
+}
+
+.exhibit--entrance {
+  border: 0;
+  padding-block: var(--space-8) var(--space-24);
+}
+
+.exhibit__running {
+  letter-spacing: 0.04em;
+}
+
+.exhibit__figure {
+  margin: 0;
+}
+
+.exhibit__placeholder {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: var(--plinth);
+  border: 1px solid var(--rule);
+}
+
+.exhibit__figure figcaption {
+  margin-block-start: var(--space-3);
+}
+
+.placard > * + * {
+  margin-block-start: var(--space-3);
+}
+
+.placard__artist {
+  font-size: 1rem;
+}
+
+.placard h2 {
+  margin-block: var(--space-3) var(--space-6);
+  overflow-wrap: anywhere;
+}
+
+.placard h2 em {
+  font-style: italic;
+}
+
+.placard__dates + .placard__medium {
+  margin-block-start: 0;
+}
+
+.placard__accession {
+  margin-block-start: var(--space-6);
+}
+
+.placard__note {
+  margin-block-start: var(--space-6);
+  max-width: 42ch;
+}
+
+.placard__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3) var(--space-6);
+  margin-block-start: var(--space-6);
+  padding: 0;
+  list-style: none;
+}
+
+.touch-control {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-6);
+  min-height: 44px;
+  margin-block-start: var(--space-8);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--rule);
+  border-radius: 0;
+  background: var(--plinth);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: var(--text-meta);
+  line-height: 1.5;
+  text-align: start;
+  cursor: pointer;
+  list-style: none;
+}
+
+.touch-control::-webkit-details-marker {
+  display: none;
+}
+
+.touch-control:hover,
+.touch-control:focus-visible {
+  border-color: var(--glaze-ink);
+}
+
+.touch-control span {
+  color: var(--glaze-ink);
+}
+
+.touch-result {
+  min-height: 3em;
+  max-width: 45ch;
+  margin-block-start: var(--space-3);
+  color: var(--ink-soft);
+  font-size: 1rem;
+}
+
+.exhibit__items {
+  padding-block-start: var(--space-6);
+}
+
+.item-list,
+.human-error {
+  padding: 0;
+  list-style: none;
+}
+
+.item-list li {
+  padding-block: var(--space-4);
+  border-block-start: 1px solid var(--rule);
+}
+
+.item-list p {
+  margin-block-start: var(--space-2);
+  color: var(--ink-soft);
+  font-size: 1rem;
+}
+
+.exhibit--entrance .placard__artist {
+  margin-block-end: var(--space-6);
+}
+
+.exhibit--entrance h1 {
+  max-width: 13ch;
+}
+
+.exhibit--entrance h1 em {
+  display: block;
+  font-style: normal;
+}
+
+.exhibit--entrance .placard__note {
+  max-width: 38ch;
+  margin-block-start: var(--space-8);
+}
+
+.opening-hours {
+  margin-block-start: var(--space-6);
+  color: var(--ink-soft);
+  font-style: italic;
+}
+
+.human-error {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-8);
+}
+
+.human-error h3 {
+  margin-block-start: var(--space-4);
+  font-size: 1.5rem;
+  line-height: 1.15;
+}
+
+.human-error p {
+  margin-block-start: var(--space-3);
+  font-size: 1rem;
+}
+
+.human-error__study {
+  aspect-ratio: 4 / 3;
+  background: var(--plinth);
+  border: 1px solid var(--rule);
+}
+
+.portrait-frame {
+  padding: var(--space-3);
+  border: 1px solid var(--ink-soft);
+  background: var(--plinth);
+}
+
+.portrait-frame img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: contain;
+}
+
+.gift-shop-note > * + * {
+  margin-block-start: var(--space-6);
+}
+
+.gift-shop-note {
+  padding-block-start: var(--space-4);
+}
+
+.museum-footer {
+  border-block-start: 1px solid var(--rule);
+  padding-block: var(--space-8);
+  font-size: 1rem;
+}
+
+@media (min-width: 600px) {
+  .human-error {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 900px) {
+  .exhibit {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    gap: var(--space-8) var(--space-24);
+    padding-block: var(--space-24);
+  }
+
+  .exhibit__running {
+    grid-column: 1 / -1;
+  }
+
+  .exhibit__label {
+    align-self: center;
+  }
+
+  .exhibit--human .exhibit__label {
+    align-self: start;
+  }
+
+  .exhibit:nth-child(2n + 1):not(.exhibit--entrance) .exhibit__figure {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .exhibit:nth-child(2n + 1):not(.exhibit--entrance) .exhibit__label {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .exhibit--entrance {
+    grid-template-columns: minmax(0, 1fr);
+    padding-block: var(--space-12) var(--space-24);
+  }
+
+  .exhibit--entrance .placard {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(16rem, 1fr);
+    column-gap: var(--space-16);
+  }
+
+  .exhibit--entrance .placard__artist,
+  .exhibit--entrance h1 {
+    grid-column: 1 / -1;
+  }
+
+  .exhibit--entrance h1 {
+    max-width: 15ch;
+  }
+
+  .exhibit--entrance .placard__dates,
+  .exhibit--entrance .placard__medium,
+  .exhibit--entrance .placard__accession {
+    grid-column: 1;
+    max-width: 24ch;
+  }
+
+  .exhibit--entrance .placard__note {
+    grid-column: 2;
+    grid-row: 3 / 5;
+  }
+
+  .exhibit--entrance .opening-hours {
+    grid-column: 2;
+    grid-row: 5;
+  }
+}

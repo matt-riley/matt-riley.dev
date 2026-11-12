@@ -1,0 +1,60 @@
+---
+import type { CollectionEntry } from "astro:content";
+import type { GitHubDossier } from "../data/types";
+import Placard from "./Placard.astro";
+import HumanError from "./HumanError.astro";
+
+interface Props {
+  exhibit: CollectionEntry<"exhibits">;
+  dossier: GitHubDossier;
+}
+
+const { exhibit, dossier } = Astro.props;
+const { data } = exhibit;
+const hasItems = Boolean(data.items?.length);
+---
+
+<section
+  id={data.id}
+  class:list={["exhibit", { "exhibit--entrance": data.id === "entrance", "exhibit--human": data.id === "human-error", "exhibit--gift-shop": data.id === "gift-shop" }]}
+  data-exhibit={data.id}
+  data-draft={String(data.draft)}
+  data-touch-message={data.touchResult}
+  aria-labelledby={`${data.id}-heading`}
+>
+  <span class="exhibit__running mono" aria-hidden="true">{String(data.order).padStart(2, "0")} / {data.accession}</span>
+  {data.id !== "entrance" && (
+    <figure class="exhibit__figure" aria-label={`${data.title} exhibit photograph in preparation`}>
+      <slot name="figure"><div class="exhibit__placeholder" aria-hidden="true"></div></slot>
+      <figcaption class="mono">{data.title}</figcaption>
+    </figure>
+  )}
+  <div class="exhibit__label">
+    <Placard exhibit={exhibit} dossier={dossier}>
+      <slot />
+      <Fragment slot="after"><slot name="after" /></Fragment>
+    </Placard>
+    {hasItems ? (
+      <details class="exhibit__reveal" data-reveal>
+        <summary class="touch-control" data-touch>{data.touchLabel}<span aria-hidden="true"> +</span></summary>
+        <div class="exhibit__items">
+          <slot name="items">
+            {data.id === "human-error" ? <HumanError items={data.items ?? []} /> : (
+            <ul class="item-list">
+              {data.items?.map((item) => (
+                <li>
+                  {item.href ? <a href={item.href}>{item.label}<span aria-hidden="true"> ↗</span></a> : <span>{item.label}</span>}
+                  {item.note && <p>{item.note}</p>}
+                </li>
+              ))}
+            </ul>
+            )}
+          </slot>
+        </div>
+      </details>
+    ) : (
+      <button class="touch-control" type="button" data-touch>{data.touchLabel}<span aria-hidden="true"> ↗</span></button>
+    )}
+    <p class="touch-result" aria-live="polite" aria-atomic="true" data-touch-result></p>
+  </div>
+</section>

@@ -1,0 +1,42 @@
+---
+import type { CollectionEntry } from "astro:content";
+import type { GitHubDossier } from "../data/types";
+
+interface Props {
+  exhibit: CollectionEntry<"exhibits">;
+  dossier: GitHubDossier;
+}
+
+const { exhibit, dossier } = Astro.props;
+const { data } = exhibit;
+const repository = dossier.repositories.find((repo) => repo.name === data.repo);
+const headingId = `${data.id}-heading`;
+---
+
+<div class="placard">
+  <p class="placard__artist">Matt Riley, b. Yorkshire</p>
+  {data.id === "entrance" ? (
+    <h1 id={headingId}>Matt Riley makes small useful things. <em>Please touch.</em></h1>
+  ) : (
+    <h2 id={headingId}><em>{data.title}</em></h2>
+  )}
+  <p class="placard__dates">{data.dates}</p>
+  <p class="placard__medium">{data.medium}</p>
+  <p class="placard__accession mono">{data.accession}</p>
+  <div class="placard__note"><slot /></div>
+  {data.repo && (
+    <p class="placard__repository mono">
+      {repository ? (
+        <>{repository.stars.toLocaleString("en-GB")} stars · Updated <time datetime={repository.updatedAt}>{new Date(repository.updatedAt).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" })}</time></>
+      ) : (
+        <>Stars and update date unavailable.</>
+      )}
+    </p>
+  )}
+  {data.links.length > 0 && (
+    <ul class="placard__links" aria-label={`${data.title} links`}>
+      {data.links.map((link) => <li><a href={link.href}>{link.label}<span aria-hidden="true"> ↗</span></a></li>)}
+    </ul>
+  )}
+  <slot name="after" />
+</div>
