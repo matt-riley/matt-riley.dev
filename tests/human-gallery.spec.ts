@@ -103,3 +103,43 @@ test("the real gallery uploads a two-second microphone light and exposes its nat
     "Nothing happens. That is the piece.",
   );
 });
+
+test("the portrait stays unfetched at the entrance and starts only within two stops", async ({
+  page,
+}, info) => {
+  test.skip(
+    info.project.name !== "desktop-chromium",
+    "Actual gallery streaming is checked once",
+  );
+  test.setTimeout(60_000);
+  await allowSoftwareWebGL(page);
+  await page.addInitScript(() => {
+    localStorage.setItem("mr-view", "gallery");
+    localStorage.setItem("mr-lights", "day");
+  });
+  const images: string[] = [];
+  page.on("request", (request) => {
+    if (request.resourceType() === "image")
+      images.push(new URL(request.url()).pathname);
+  });
+  await page.goto("/");
+  await expect(page.locator("html")).toHaveAttribute("data-gallery", "ready", {
+    timeout: 30_000,
+  });
+  const portrait = await page
+    .locator("[data-portrait-src]")
+    .getAttribute("data-portrait-src");
+  if (!portrait) throw new Error("Missing portrait URL");
+  expect(images).not.toContain(portrait);
+  await page.evaluate(() => {
+    location.hash = "agent-skills";
+  });
+  await expect(page.locator("[data-current-stop]")).toContainText("4 of 8");
+  expect(images).not.toContain(portrait);
+  await page.evaluate(() => {
+    location.hash = "waystone";
+  });
+  await expect
+    .poll(() => images.includes(portrait), { timeout: 15_000 })
+    .toBe(true);
+});

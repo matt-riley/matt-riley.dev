@@ -5,6 +5,7 @@ import {
   MeshBasicMaterial,
   SpotLight,
   SRGBColorSpace,
+  type Texture,
   TextureLoader,
   Vector3,
 } from "three";
@@ -38,30 +39,55 @@ export async function mountHumanError(registry: ExhibitRegistry) {
     ?.dataset.portraitSrc;
   const plane = app.room.getObjectByName("portrait_plane");
   if (!portraitURL || !plane) return;
+  const targetPlane = plane;
+  const url = portraitURL;
 
-  const texture = await new TextureLoader().loadAsync(portraitURL);
-  if (registry.disposed) {
-    texture.dispose();
-    return;
-  }
-  texture.colorSpace = SRGBColorSpace;
-  texture.flipY = false;
-  const portrait = new MeshBasicMaterial({ map: texture, toneMapped: false });
-  portrait.name = "original-cat-portrait";
+  let disposed = false;
+  let texture: Texture | undefined;
+  let portrait: MeshBasicMaterial | undefined;
+  let portraitRequest: Promise<void> | undefined;
   const originalMaterials = new Map<Mesh, Mesh["material"]>();
   const originalScale = plane.scale.x;
-  const size = new Box3().setFromObject(plane).getSize(new Vector3());
-  const image = texture.image as { width: number; height: number };
-  // Fit the original photograph inside its frame; never crop, filter or stretch.
-  if (size.x > 0 && size.y > 0)
-    plane.scale.x *= image.width / image.height / (size.x / size.y);
-  plane.traverse((object) => {
-    if (!(object instanceof Mesh)) return;
-    originalMaterials.set(object, object.material);
-    object.material = portrait;
-  });
+  function loadPortrait() {
+    if (disposed || registry.disposed || app.activeStop < 5) return;
+    portraitRequest ??= new TextureLoader()
+      .loadAsync(url)
+      .then((loaded) => {
+        if (disposed || registry.disposed || app.disposed) {
+          loaded.dispose();
+          return;
+        }
+        texture = loaded;
+        texture.colorSpace = SRGBColorSpace;
+        texture.flipY = false;
+        const material = new MeshBasicMaterial({
+          map: texture,
+          toneMapped: false,
+        });
+        portrait = material;
+        material.name = "original-cat-portrait";
+        const size = new Box3()
+          .setFromObject(targetPlane)
+          .getSize(new Vector3());
+        const image = texture.image as { width: number; height: number };
+        // Fit the original photograph inside its frame; never crop, filter or stretch.
+        if (size.x > 0 && size.y > 0)
+          targetPlane.scale.x *= image.width / image.height / (size.x / size.y);
+        targetPlane.traverse((object) => {
+          if (!(object instanceof Mesh)) return;
+          originalMaterials.set(object, object.material);
+          object.material = material;
+        });
+        app.requestRender();
+      })
+      .catch(() => {
+        /* The DOM retains the original portrait if the optional texture fails. */
+      });
+    return portraitRequest;
+  }
 
   const releaseRecords = registry.onRecord((record) => {
+    if (record.id === "open-mic" || record.id === "absent") void loadPortrait();
     if (record.id === "absent") {
       const restoreHandler = registry.setTouchHandler("absent", () => {});
       const restoreDrag = registry.setDraggable("absent", false);
@@ -141,16 +167,27 @@ export async function mountHumanError(registry: ExhibitRegistry) {
     );
     return { target: box.getCenter(new Vector3()), bounds: box };
   });
-  app.requestRender();
-
-  return () => {
+  const offFrame = app.onFrame(() => {
+    void loadPortrait();
+    return false;
+  });
+  let unregister = () => {};
+  const cleanup = () => {
+    if (disposed) return;
+    disposed = true;
+    unregister();
+    offFrame();
     releaseRecords();
     releasePan();
     originalMaterials.forEach((material, mesh) => {
       mesh.material = material;
     });
     plane.scale.x = originalScale;
-    portrait.dispose();
-    texture.dispose();
+    portrait?.dispose();
+    texture?.dispose();
   };
+  unregister = app.addCleanup(cleanup);
+  app.requestRender();
+  if (app.activeStop >= 5) await loadPortrait();
+  return cleanup;
 }

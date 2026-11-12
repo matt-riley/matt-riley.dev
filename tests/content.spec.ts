@@ -39,10 +39,14 @@ test("the complete catalogue preserves the museum's stop order and heading outli
     await expect(
       section.getByRole("heading", { level: order === 0 ? 1 : 2 }),
     ).toHaveCount(1);
-    expect(
-      await section.locator("[data-touch]").count(),
-    ).toBeGreaterThanOrEqual(1);
-    await expect(section.locator("[data-touch]").first()).toBeVisible();
+    if (id === "flagz") {
+      await expect(section.getByRole("switch")).toHaveCount(3);
+    } else {
+      expect(
+        await section.locator("[data-touch]").count(),
+      ).toBeGreaterThanOrEqual(1);
+      await expect(section.locator("[data-touch]").first()).toBeVisible();
+    }
     if (linkedStops.includes(id)) {
       expect(await section.getByRole("link").count()).toBeGreaterThan(0);
     }
@@ -128,6 +132,6 @@ test("touches bubble to the document and announce the current result", async ({
     "entrance",
   );
   await expect(page.locator("#entrance [data-touch-result]")).toHaveText(
-    "The rope swings aside.",
+    "The rope was never hooked.",
   );
 });
