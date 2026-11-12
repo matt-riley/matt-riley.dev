@@ -1,0 +1,104 @@
+---
+import { getCollection } from "astro:content";
+
+const stops = (await getCollection("exhibits")).sort((a, b) => a.data.order - b.data.order);
+const prefix = Astro.url.pathname === "/" ? "" : "/";
+---
+
+<div class="site-header">
+  <a class="monogram" href={`${prefix}#entrance`} aria-label="MR — Museum entrance">MR</a>
+  <p class="current-stop" data-current-stop>0 of 8, {stops[0].data.title}</p>
+  <div class="header-controls" data-header-controls hidden>
+    <button class="header-control lights-control" type="button" data-setting="lights" aria-label="Lights: Day" aria-pressed="true"><span>{"Lights: "}</span><span data-state>Day</span></button>
+    <button class="header-control cat-control" type="button" data-setting="cat" aria-label="Cat: On" aria-pressed="true"><span>{"Cat: "}</span><span data-state>On</span></button>
+    <button class="header-control sound-control" type="button" data-setting="sound" aria-label="Sound: Off" aria-pressed="false"><span>{"Sound: "}</span><span data-state>Off</span></button>
+    <button class="header-control view-control" type="button" data-setting="view" aria-label="View: Gallery" aria-pressed="true" hidden><span>{"View: "}</span><span data-state>Gallery</span></button>
+  </div>
+  <details class="stop-menu" data-stop-menu>
+    <summary>Exhibits <span aria-hidden="true">↓</span></summary>
+    <nav aria-label="Exhibits">
+      <ol start="0">
+        {stops.map(({ data }) => <li><a href={`${prefix}#${data.id}`} data-stop={data.id} data-stop-order={data.order} data-stop-title={data.title}>{data.title}</a></li>)}
+      </ol>
+    </nav>
+  </details>
+</div>
+
+<script>
+  import { get, toggle, type SettingKey } from "../scripts/settings";
+
+  const controls = document.querySelector<HTMLElement>("[data-header-controls]");
+  const buttons = [...document.querySelectorAll<HTMLButtonElement>("[data-setting]")];
+  const labels = {
+    lights: { day: "Day", "after-hours": "After hours" },
+    cat: { on: "On", off: "Off" },
+    sound: { on: "On", off: "Off" },
+    view: { gallery: "Gallery", catalogue: "Catalogue" },
+  };
+  function sync() {
+    for (const button of buttons) {
+      const key = button.dataset.setting as SettingKey;
+      const value = get(key);
+      const label = (labels[key] as Record<string, string>)[value];
+      const state = button.querySelector("[data-state]");
+      if (state) state.textContent = label;
+      button.setAttribute("aria-label", `${key[0].toUpperCase()}${key.slice(1)}: ${label}`);
+      button.setAttribute("aria-pressed", String(value === (key === "lights" ? "day" : key === "view" ? "gallery" : "on")));
+      if (key === "view") button.hidden = document.documentElement.dataset.gallery !== "ready";
+    }
+  }
+  buttons.forEach(button => button.addEventListener("click", () => toggle(button.dataset.setting as SettingKey)));
+  document.addEventListener("mr:setting", sync);
+  new MutationObserver(sync).observe(document.documentElement, { attributes: true, attributeFilter: ["data-gallery"] });
+  sync();
+  if (controls) controls.hidden = false;
+
+  const menu = document.querySelector<HTMLDetailsElement>("[data-stop-menu]");
+  const stopLinks = [...document.querySelectorAll<HTMLAnchorElement>("[data-stop]")];
+  menu?.addEventListener("keydown", event => {
+    if (event.key === "Escape") {
+      menu.open = false;
+      menu.querySelector("summary")?.focus();
+    }
+  });
+  stopLinks.forEach(link => link.addEventListener("click", () => { if (menu) menu.open = false; }));
+  if ("IntersectionObserver" in window) {
+    const current = document.querySelector("[data-current-stop]");
+    const observer = new IntersectionObserver(entries => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        const link = stopLinks.find(link => link.dataset.stop === entry.target.id);
+        if (link && current) current.textContent = `${link.dataset.stopOrder} of 8, ${link.dataset.stopTitle}`;
+      }
+    }, { rootMargin: "-15% 0px -25% 0px" });
+    document.querySelectorAll("section[data-exhibit]").forEach(section => observer.observe(section));
+  }
+</script>
+
+<style>
+  :global(html:has(.site-header)) { --header-height: 4.5rem; }
+  :global(body:has(.site-header) main) { padding-block-start: calc(var(--header-height) + var(--space-12)); }
+  :global(section[id]) { scroll-margin-top: calc(var(--header-height, 0rem) + var(--space-6)); }
+  .site-header { position: fixed; inset: 0 0 auto; z-index: 50; height: var(--header-height); display: flex; align-items: center; gap: var(--space-1); padding-inline: var(--space-2); color: var(--ink); background: var(--wall); border-block-end: 1px solid var(--rule); font-family: var(--font-mono); font-size: .75rem; line-height: 1.25; }
+  .monogram { flex: 0 0 auto; font-family: var(--font-wall); font-size: 1.25rem; font-weight: 700; padding-block: var(--space-2); }
+  .current-stop { display: none; flex: 1; min-width: 0; max-width: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .header-controls { margin-inline-start: auto; }
+  .header-controls:not([hidden]) { display: flex; gap: var(--space-1); }
+  .header-control { height: 44px; padding: var(--space-1); font-size: inherit; line-height: inherit; }
+  .header-control span { display: block; white-space: nowrap; }
+  .header-control [data-state] { font-weight: 400; }
+  .lights-control { width: 7.5em; }
+  .cat-control { width: 4em; }
+  .sound-control { width: 5em; }
+  .view-control { width: 7em; }
+  .stop-menu { flex: 0 0 auto; }
+  summary { min-height: 44px; padding: var(--space-1); display: flex; align-items: center; gap: var(--space-1); cursor: pointer; }
+  .stop-menu nav { position: absolute; inset-block-start: 100%; inset-inline-end: var(--space-2); width: min(24rem, calc(100vw - var(--space-4))); max-height: 75svh; overflow: auto; padding: var(--space-6); border: 1px solid var(--rule); background: var(--plinth); }
+  .stop-menu ol { padding-inline-start: var(--space-6); }
+  .stop-menu li + li { margin-block-start: var(--space-3); }
+  .stop-menu a { display: inline-block; padding-block: var(--space-1); }
+  @media (min-width: 900px) { .site-header { gap: var(--space-6); padding-inline: var(--space-6); } .current-stop { display: block; } .header-controls { margin-inline-start: 0; } }
+  @media (max-width: 599px) { .site-header:has(.view-control:not([hidden])) { height: 7rem; } :global(html:has(.view-control:not([hidden]))) { --header-height: 7rem; } .header-controls:has(.view-control:not([hidden])) { display: grid; grid-template-columns: 1fr 1fr; } .header-controls:has(.view-control:not([hidden])) .header-control { width: 7.5em; } }
+  @media (max-width: 359px) { .site-header { font-size: .6875rem; } .lights-control { width: 7.6em; } }
+  @media (prefers-reduced-motion: no-preference) { :global(html) { scroll-behavior: smooth; } }
+</style>
