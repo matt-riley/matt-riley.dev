@@ -227,6 +227,13 @@ def main():
             continue
         if args.start_at and stop < STOPS.index(args.start_at):
             continue
+        # Runtime owns one travelling figurine. Do not accidentally photograph a
+        # second stop's cat at the edge of a wide view through the long room.
+        for obj in bpy.data.objects:
+            if obj.name.startswith("photograph_cat_stop_"):
+                hidden = obj.name != f"photograph_cat_stop_{stop}"
+                for part in (obj, *obj.children_recursive):
+                    part.hide_render = hidden
         camera.location = nodes[f"stop_{stop}_cam"].matrix_world.translation
         target = nodes[f"stop_{stop}_target"].matrix_world.translation
         focus, extent = subject_bounds(name, nodes, models)
