@@ -128,6 +128,6 @@ test("touches bubble to the document and announce the current result", async ({
     "entrance",
   );
   await expect(page.locator("#entrance [data-touch-result]")).toHaveText(
-    "The rope swings aside.",
+    "The rope was never hooked.",
   );
 });
