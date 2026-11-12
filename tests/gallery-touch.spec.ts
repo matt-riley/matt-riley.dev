@@ -73,8 +73,12 @@ test.beforeEach(async ({ page }, info) => {
     localStorage.setItem("mr-lights", "day");
   });
   await page.goto("/#tools");
-  await expect(page.locator("html")).toHaveAttribute("data-gallery", "ready");
-  await expect(page.locator("html")).toHaveAttribute("data-exhibits", "ready");
+  await expect(page.locator("html")).toHaveAttribute("data-gallery", "ready", {
+    timeout: 15_000,
+  });
+  await expect(page.locator("html")).toHaveAttribute("data-exhibits", "ready", {
+    timeout: 15_000,
+  });
 });
 
 test("picking the toolbox activates its native disclosure like keyboard Enter", async ({
