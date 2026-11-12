@@ -3,6 +3,7 @@ import type { CollectionEntry } from "astro:content";
 import type { GitHubDossier } from "../data/types";
 import Placard from "./Placard.astro";
 import HumanError from "./HumanError.astro";
+import CataloguePhoto from "./CataloguePhoto.astro";
 
 interface Props {
   exhibit: CollectionEntry<"exhibits">;
@@ -23,12 +24,10 @@ const hasItems = Boolean(data.items?.length);
   aria-labelledby={`${data.id}-heading`}
 >
   <span class="exhibit__running mono" aria-hidden="true">{String(data.order).padStart(2, "0")} / {data.accession}</span>
-  {data.id !== "entrance" && (
-    <figure class="exhibit__figure" aria-label={`${data.title} exhibit photograph in preparation`}>
-      <slot name="figure"><div class="exhibit__placeholder" aria-hidden="true"></div></slot>
-      <figcaption class="mono">{data.title}</figcaption>
-    </figure>
-  )}
+  <figure class="exhibit__figure">
+    <slot name="figure"><CataloguePhoto id={data.id} alt={data.alt} entrance={data.id === "entrance"} /></slot>
+    <figcaption class="mono">{data.title}</figcaption>
+  </figure>
   <div class="exhibit__label">
     <Placard exhibit={exhibit} dossier={dossier}>
       <slot />

@@ -2,6 +2,7 @@
 id: "tools"
 order: 1
 title: "mattriley.tools"
+alt: "An open porcelain cantilever toolbox with raised trays and an orange drawer handle on a square plinth."
 dates: "2026 to ongoing"
 medium: "Command-line tools, porcelain, a drawer handle."
 accession: "MR.2026.002"
@@ -32,7 +33,7 @@ items:
   - label: "skill-eval"
     href: "https://mattriley.tools/tools/skill-eval/"
     note: "Evaluate agent skills from the command line."
-draft: true
+draft: false
 ---
 
 A place for the tools. The tools have places to be.
