@@ -20,9 +20,11 @@ findings supersede the earlier unauthenticated repository-only investigation,
 which could establish manual commands but could not confirm dashboard builds.
 No dashboard setting, connection, hook, secret or production deployment changed.
 
-## Proposed method — awaiting Matt
+## Approved method — setup and launch pending
 
-**Preserve the existing Workers Builds deployer.** Matt should repair its GitHub
+**Preserve the existing Workers Builds deployer.** Matt approved this approach
+and the daily deploy-hook proposal in the coordinating chat. That is method
+approval, not production launch or workflow activation approval. Matt should repair its GitHub
 connection using the dashboard OAuth flow and confirm repository access. Keep
 the current build/deploy/version commands and branch settings. Do not introduce
 a second Wrangler deployer in GitHub Actions.
@@ -70,7 +72,7 @@ it until the agreed launch decision.
 
 1. Review this PR's exact green commit: check, lint, build, browser tests,
    `pnpm test:edge` and performance audits. The source remains assets-only.
-2. Matt approves preserving Workers Builds plus the 06:00 UTC deploy-hook plan.
+2. Record Matt's approved Workers Builds plus 06:00 UTC deploy-hook approach.
    With main writes halted and the production-build policy confirmed, Matt
    configures the Node build version and repairs the disconnected GitHub
    integration; agents do not reconnect it.

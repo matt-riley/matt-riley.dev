@@ -1,6 +1,7 @@
-# INACTIVE TEMPLATE. Matt must approve this plan, repair the existing Workers
-# Builds Git connection, create its main-branch deploy hook, and configure the
-# production environment secret before copying this into .github/workflows/.
+# INACTIVE TEMPLATE. The method is approved; launch and activation are not.
+# Matt must repair Workers Builds Git access, create its main-branch hook, and
+# configure the production environment secret. Activate only after preview review
+# and the separate launch/activation decision in docs/deployment/README.md.
 name: Request daily Workers rebuild
 on:
   workflow_dispatch:
