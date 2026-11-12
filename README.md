@@ -1,80 +1,64 @@
 # matt-riley.dev
 
-**Afterimage** — a single-page developer field note for matt-riley.dev, built
-with Astro and vanilla TypeScript. No React, no Tailwind, no runtime-random
-layout. The current visual contract lives in
-[brand-spec.md](brand-spec.md).
+Please Touch: The Museum of Small Useful Things. Built with Astro, strict
+TypeScript and static output for Cloudflare Workers Assets.
 
-Designed for [matt-riley.dev](https://matt-riley.dev).
+The redesign is in progress. This foundation is intentionally unstyled; catalogue
+content, gallery enhancement and interactions arrive in subsequent tasks.
+The source brief and task order live in
+[Notion](https://app.notion.com/p/416d4557a772812a906cd4d199f361a1).
 
-![Afterimage homepage preview](assets/preview.png)
+## Development
 
-## Local development
+Use Node 26 and pnpm 10.
 
 ```sh
 pnpm install
-pnpm dev        # dev server on http://localhost:4321
-pnpm build      # static build into dist/
-pnpm preview    # serve the production build
-pnpm check      # astro check (types + diagnostics)
+pnpm dev
+pnpm check
+pnpm lint
+GITHUB_DATA=fallback pnpm build
+pnpm preview
+pnpm exec wrangler deploy --dry-run
 ```
+
+`pnpm format` formats and lints supported files. Astro templates are checked by
+`pnpm check`. The preserved `src/data/` layer is excluded from Biome to keep it
+untouched during the scaffold task.
+
+`pnpm test` is reserved for the Playwright harness in F-03; no tests exist yet.
+`pnpm assets` is a placeholder until the Blender pipeline task B-01.
+
+## Structure
+
+- `blender/` — scripted scene sources and material/export helpers.
+- `scripts/` — asset build orchestration.
+- `public/models/` — optimised gallery models.
+- `src/assets/catalogue/` — catalogue still renders.
+- `src/assets/waffle-portrait.jpg` — original photograph of Waffle.
+- `src/content/exhibits/` — exhibit content collection.
+- `src/data/` — build-time GitHub dossier and atomic fallback.
+- `src/components/`, `src/layouts/`, `src/pages/` — semantic catalogue HTML.
+- `src/gallery/` — optional gallery runtime.
+- `src/scripts/` — small browser enhancements.
+- `src/styles/` — design tokens and catalogue/gallery styles.
+- `tests/` — Playwright checks.
 
 ## GitHub data
 
-The build fetches the public GitHub profile, repositories, public events, and
-releases from the five selected repositories for `matt-riley` at build time,
-then normalizes them into one typed dossier (`src/data/github.ts`). Data
-selection is atomic: if any request fails, times out, or looks malformed, the
-whole page falls back to the checked-in last-known-good snapshot in
-`src/data/fallback.ts` and the dossier is stamped `ARCHIVE PRINT` instead of
-`LIVE PRESS`.
+The build reads the public GitHub profile, repositories, events and releases for
+`matt-riley`. If any request fails or cannot be normalised, the whole dossier falls
+back to the checked-in snapshot. `GITHUB_TOKEN` optionally raises the build-time
+API limit and never reaches the browser. `GITHUB_DATA=fallback` skips fetching for
+deterministic builds.
 
-- `GITHUB_TOKEN` (optional) raises the API rate limit; it never reaches the client.
-- `GITHUB_DATA=fallback` skips the live fetch entirely for deterministic builds.
+## Deployment
 
-## Editions
-
-The `DAY / NIGHT` control switches between the warm copier-paper day edition
-and the after-hours print-room night edition. The choice persists in
-`localStorage`, respects `prefers-color-scheme` on first visit, and resolves
-before first paint.
-
-## Architecture
-
-- Astro static output with vanilla TypeScript; no React or Tailwind.
-- GSAP + ScrollTrigger provide the guarded scroll narrative while native scrolling stays in control.
-- A deterministic canvas renders the GitHub signal field; the pointer trail is
-  limited to fine pointers and has reduced-motion fallbacks.
-- The browser has no data-fetching requirement. GitHub is read at build time;
-  the checked-in snapshot takes over when the API is unavailable.
-
-## Project layout
-
-- `src/components/` — the page's semantic sections and shared chrome.
-- `src/data/` — typed GitHub normalization and fallback data.
-- `src/scripts/` — theme, navigation, tabs, canvas, and motion enhancements.
-- `src/styles/` — the Afterimage visual system and responsive rules.
-- `public/images/` — the local hero and Waffle editorial assets.
-
-## Cloudflare Workers
-
-This is configured as a static Astro build deployed to Cloudflare Workers
-Assets:
-
-- Build command: `pnpm run build`
-- Deploy command: `npx wrangler deploy` (or `pnpm run deploy` locally)
-- Build output directory: `dist`
-- Wrangler config: `wrangler.jsonc`
-- Astro mode: `output: "static"`
-- Cloudflare adapter: none required; `@astrojs/cloudflare` is for SSR runtime
-  features and would be unnecessary for this pre-rendered site.
-
-The Wrangler configuration intentionally has no `main` entry point. It uploads
-Astro's generated `dist/` directory as static assets and uses the generated
-`404.html` for missing routes.
+`wrangler.jsonc` uploads the generated `dist/` as static Workers Assets.
+`pnpm deploy` builds and deploys; it publishes the current scaffold, so review the
+build before using it. No server entry point or Cloudflare adapter is needed.
 
 ## Reuse
 
-This repository currently has no license. Public visibility does not grant
-permission to reuse the code, copy, or visual assets without the author's
-permission.
+This repository has no license. Public visibility does not grant permission to
+reuse the code, copy, or visual assets without the author's permission.
