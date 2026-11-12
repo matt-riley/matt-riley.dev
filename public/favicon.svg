@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <style>
     .ground { fill: #f4f1ea; }
-    .edge { stroke: #37352f; }
+    .edge { stroke: #17171a; }
     @media (prefers-color-scheme: dark) {
       .ground { fill: #0e0e10; }
-      .edge { stroke: #d6d0c5; }
+      .edge { stroke: #ece8df; }
     }
   </style>
   <rect class="ground" width="64" height="64" rx="12"/>

@@ -62,7 +62,7 @@ const fontfile = join(
 );
 const text = await sharp({
   text: {
-    text: '<span foreground="#20201e">Matt Riley makes\nsmall useful things.\nPlease touch.</span>',
+    text: '<span foreground="#17171a">Matt Riley makes\nsmall useful things.\nPlease touch.</span>',
     font: "Bricolage Grotesque Bold 56",
     fontfile,
     rgba: true,
