@@ -2,17 +2,17 @@
   {
     "mode": "day",
     "step": 0,
-    "meanLuma255": 165.13
+    "meanLuma255": 166.26
   },
   {
     "mode": "day",
     "step": 1,
-    "meanLuma255": 171.62
+    "meanLuma255": 171.65
   },
   {
     "mode": "day",
     "step": 2,
-    "meanLuma255": 211.88
+    "meanLuma255": 210.99
   },
   {
     "mode": "day",
@@ -37,7 +37,7 @@
   {
     "mode": "after-hours",
     "step": 2,
-    "meanLuma255": 93.69
+    "meanLuma255": 87.56
   },
   {
     "mode": "after-hours",
