@@ -85,5 +85,8 @@ const fontFaces = [
     {Astro.slots.has("header") && <header><slot name="header" /></header>}
     <main id="main" tabindex="-1"><slot name="main"><slot /></slot></main>
     {Astro.slots.has("footer") && <footer><slot name="footer" /></footer>}
+    <script>
+      import "../scripts/settings";
+    </script>
   </body>
 </html>

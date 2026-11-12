@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from "astro:content";
 import Exhibit from "../components/Exhibit.astro";
+import Header from "../components/Header.astro";
 import SplitFlap from "../components/SplitFlap.astro";
 import { site } from "../content/site";
 import { loadDossier } from "../data/github";
@@ -13,10 +14,7 @@ const exhibits = await Promise.all(entries.map(async (exhibit) => ({ exhibit, ..
 ---
 
 <Base title={site.title} description={site.description}>
-  <div class="museum-header" slot="header">
-    <a class="museum-wordmark" href="#entrance">Please Touch</a>
-    <p class="mono">The Museum of Small Useful Things</p>
-  </div>
+  <Header slot="header" />
   <div class="collection">
     {exhibits.map(({ exhibit, Content }) => (
       <Exhibit exhibit={exhibit} dossier={dossier}>
