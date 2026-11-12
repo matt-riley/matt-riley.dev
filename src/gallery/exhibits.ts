@@ -32,6 +32,7 @@ export interface ExhibitRecord {
   basePosition: Vector3;
   owned: boolean;
   draggable: boolean;
+  pickBounds?: () => Box3;
 }
 
 export class ExhibitRegistry {
@@ -152,8 +153,19 @@ export class ExhibitRegistry {
   }
 
   bounds(record: ExhibitRecord) {
+    if (record.pickBounds) return record.pickBounds();
     record.root.updateWorldMatrix(true, true);
     return new Box3().setFromObject(record.root);
+  }
+
+  setPickBounds(id: string, resolver: () => Box3) {
+    const record = this.records.get(id);
+    if (!record) return () => {};
+    const previous = record.pickBounds;
+    record.pickBounds = resolver;
+    return () => {
+      record.pickBounds = previous;
+    };
   }
 
   dispose() {

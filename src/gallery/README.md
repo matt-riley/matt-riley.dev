@@ -62,3 +62,19 @@ Measured entrance medians (sRGB bytes): baked wall 216/214/210 versus photograph
 216/212/206; glaze before 216/117/30, calibrated 233/172/125, photograph
 222/160/130. These are representative patches rather than a claim of pixel
 identity: the live rail also offsets framing to clear the HTML placard.
+
+## Slow graphics fallback
+
+The standard WebGL `failIfMajorPerformanceCaveat` flag declines contexts the
+browser considers dramatically slower than native GPU rendering. Those visitors
+keep the complete photographic catalogue and request no Three.js or models.
+This is a production capability rule, including software fallback drivers,
+not a user-agent or test-runner check. The WebGL specification defines it at
+https://registry.khronos.org/webgl/specs/latest/1.0/#5.2 .
+
+Hosted Linux evidence before this guard: three home audits scored .74 with
+1.53–1.54s total blocking time; shader/first-frame tasks took ~1.2s and ~.4s.
+Hardware-backed local audits scored .96–.98. Integration tests explicitly
+remove only that context attribute in their fixture, retaining real Three.js,
+real software contexts, rendering, model loads and disposal coverage; network
+gate tests separately verify the unmodified performance-caveat fallback.

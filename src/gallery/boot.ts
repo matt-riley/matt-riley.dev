@@ -42,7 +42,11 @@ export function boot({ onFailure }: Options): GallerySession {
   document.body.append(layer);
   let renderer: WebGLRenderer;
   try {
-    renderer = new WebGLRenderer({ canvas, antialias: true });
+    renderer = new WebGLRenderer({
+      canvas,
+      antialias: true,
+      failIfMajorPerformanceCaveat: true,
+    });
   } catch (error) {
     layer.remove();
     throw error;

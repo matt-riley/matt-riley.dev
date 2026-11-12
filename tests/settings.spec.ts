@@ -47,7 +47,9 @@ test("settings switches work by keyboard and announce their pressed state", asyn
       key === "cat" ? "false" : "true",
     );
   }
-  if (info.project.name === "reduced-motion") {
+  if (
+    (await page.locator("html").getAttribute("data-gallery")) === "unavailable"
+  ) {
     await expect(page.locator('[data-setting="view"]')).toBeHidden();
     return;
   }
