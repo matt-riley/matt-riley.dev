@@ -4,6 +4,7 @@ import Exhibit from "../components/Exhibit.astro";
 import Header from "../components/Header.astro";
 import SplitFlap from "../components/SplitFlap.astro";
 import HeadOfSecurity from "../components/HeadOfSecurity.astro";
+import WaffleTerminal from "../components/WaffleTerminal.astro";
 import { site } from "../content/site";
 import { loadDossier } from "../data/github";
 import Base from "../layouts/Base.astro";
@@ -22,6 +23,7 @@ const exhibits = await Promise.all(entries.map(async (exhibit) => ({ exhibit, ..
         <Content />
         {exhibit.data.id === "acquisitions" && <SplitFlap dossier={dossier} />}
         <Fragment slot="after">
+          {exhibit.data.id === "waffle-agent" && <WaffleTerminal lines={exhibit.data.lines ?? []} />}
           {exhibit.data.id === "gift-shop" && (
             <div class="gift-shop-note">
               <p><a href={site.contact.href}>{site.contact.label}<span aria-hidden="true"> ↗</span></a></p>
@@ -47,4 +49,5 @@ const exhibits = await Promise.all(entries.map(async (exhibit) => ({ exhibit, ..
   import "../scripts/gallery-interactions";
   import "../scripts/cat";
   import "../scripts/drawers";
+  import "../scripts/waffle-terminal";
 </script>
