@@ -26,7 +26,6 @@ test("settings switches work by keyboard and announce their pressed state", asyn
   await expect(
     page.getByRole("button", { name: "Sound: Off", exact: true }),
   ).toHaveAttribute("aria-pressed", "false");
-  await expect(page.locator('[data-setting="view"]')).toBeHidden();
   for (const [name, key] of [
     ["Cat", "cat"],
     ["Sound", "sound"],
@@ -48,10 +47,13 @@ test("settings switches work by keyboard and announce their pressed state", asyn
       key === "cat" ? "false" : "true",
     );
   }
-  // G-01 will set this contract when the gallery has actually started.
-  await page.evaluate(() => {
-    document.documentElement.dataset.gallery = "ready";
-  });
+  if (
+    (await page.locator("html").getAttribute("data-gallery")) === "unavailable"
+  ) {
+    await expect(page.locator('[data-setting="view"]')).toBeHidden();
+    return;
+  }
+  // Capable visitors can return from Catalogue without an existing renderer.
   const view = page.getByRole("button", { name: "View: Gallery", exact: true });
   await expect(view).toBeVisible();
   await view.focus();
