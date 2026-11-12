@@ -205,12 +205,6 @@
   font-size: 1rem;
 }
 
-.human-error__study {
-  aspect-ratio: 4 / 3;
-  background: var(--plinth);
-  border: 1px solid var(--rule);
-}
-
 .portrait-frame {
   padding: var(--space-3);
   border: 1px solid var(--ink-soft);
@@ -316,4 +310,23 @@
 }
 .exhibit--entrance .exhibit__figure {
   grid-row: 3;
+}
+
+.human-error__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3) var(--space-6);
+  margin-block-end: var(--space-8);
+  font-size: var(--text-meta);
+}
+.human-error__item {
+  scroll-margin-block-start: var(--space-24);
+}
+.human-error__item:focus {
+  outline: 2px solid var(--glaze-ink);
+  outline-offset: var(--space-3);
+}
+.human-error__medium,
+.human-error__interests {
+  color: var(--ink-soft);
 }

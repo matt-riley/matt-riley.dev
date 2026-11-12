@@ -1,11 +1,12 @@
 export type QualityTier = "high" | "medium" | "low" | "retreat";
 
-/** Only consecutive moving frames count; idle time cannot lower quality. */
+/** Count active moving time across short camera dwells; true idle resets the episode. */
 export class QualityMonitor {
   tier: QualityTier;
   average = 0;
   private samples: { time: number; duration: number }[] = [];
-  private slowSince: number | undefined;
+  private slowDuration = 0;
+  private lastMoving: number | undefined;
 
   constructor(concurrency = 8, memory = 8) {
     this.tier = concurrency <= 4 || memory <= 4 ? "medium" : "high";
@@ -13,10 +14,13 @@ export class QualityMonitor {
 
   sample(time: number, duration: number, moving: boolean) {
     if (!moving || duration <= 0) {
-      this.samples = [];
-      this.slowSince = undefined;
+      if (this.lastMoving !== undefined && time - this.lastMoving > 1000) {
+        this.samples = [];
+        this.slowDuration = 0;
+      }
       return false;
     }
+    this.lastMoving = time;
     this.samples.push({ time, duration });
     this.samples = this.samples.filter((sample) => time - sample.time <= 1000);
     this.average =
@@ -24,12 +28,11 @@ export class QualityMonitor {
       this.samples.length;
     const threshold = this.tier === "low" ? 33 : 20;
     if (this.tier === "retreat" || this.average <= threshold) {
-      this.slowSince = undefined;
+      this.slowDuration = 0;
       return false;
     }
-    this.slowSince ??= time;
-    if (time - this.slowSince < (this.tier === "low" ? 3000 : 2000))
-      return false;
+    this.slowDuration += duration;
+    if (this.slowDuration < (this.tier === "low" ? 3000 : 2000)) return false;
     this.tier =
       this.tier === "high"
         ? "medium"
@@ -37,7 +40,7 @@ export class QualityMonitor {
           ? "low"
           : "retreat";
     this.samples = [];
-    this.slowSince = undefined;
+    this.slowDuration = 0;
     return true;
   }
 }
