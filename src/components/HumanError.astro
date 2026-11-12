@@ -1,0 +1,25 @@
+---
+import { Picture } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import portrait from "../assets/waffle-portrait.jpg";
+
+interface Props {
+  items: NonNullable<CollectionEntry<"exhibits">["data"]["items"]>;
+}
+
+const { items } = Astro.props;
+---
+
+<ul class="human-error">
+  {items.map((item, index) => (
+    <li class="human-error__item">
+      {index === 3 ? (
+        <figure class="portrait-frame">
+          <Picture src={portrait} alt="Waffle, Matt’s orange tabby cat, looking towards the camera." widths={[320, 480, 640]} sizes="(min-width: 900px) 280px, (min-width: 600px) 40vw, 85vw" formats={["avif", "webp"]} width={480} loading="lazy" />
+        </figure>
+      ) : <div class="human-error__study" aria-hidden="true"></div>}
+      <h3>{item.label}</h3>
+      <p>{item.note}</p>
+    </li>
+  ))}
+</ul>
