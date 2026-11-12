@@ -2,6 +2,7 @@
 id: "agent-skills"
 order: 4
 title: "agent-skills"
+alt: "A two-drawer porcelain card cabinet with an open upper drawer, an orange label holder and rows of upright cards."
 dates: "2026 to ongoing"
 medium: "Markdown, instructions, a card-catalogue drawer."
 accession: "MR.2026.005"

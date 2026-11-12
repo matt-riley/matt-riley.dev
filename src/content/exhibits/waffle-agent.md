@@ -2,6 +2,7 @@
 id: "waffle-agent"
 order: 3
 title: "waffle"
+alt: "A round porcelain waffle with orange syrup on a plate, raised on a square plinth."
 dates: "2026 to ongoing"
 medium: "Go, a local agent, porcelain syrup."
 accession: "MR.2026.004"
