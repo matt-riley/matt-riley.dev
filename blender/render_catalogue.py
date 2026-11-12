@@ -107,6 +107,12 @@ def assemble(raw):
     uv.uv_map = portrait.data.uv_layers[0].name
     material.node_tree.links.new(uv.outputs["UV"], texture.inputs["Vector"])
     texture.image = bpy.data.images.load(str(ROOT.parent / "src/assets/waffle-portrait.jpg"), check_existing=True)
+    # Match E-07's original-photo proportions instead of stretching it to the
+    # room's placeholder plane. Importing the raw GLB restores Blender Z-up.
+    bpy.context.view_layer.update()
+    if portrait.dimensions.x > 0 and portrait.dimensions.z > 0:
+        image_width, image_height = texture.image.size
+        portrait.scale.x *= (image_width / image_height) / (portrait.dimensions.x / portrait.dimensions.z)
     material.node_tree.links.new(texture.outputs["Color"], shader.inputs["Base Color"])
     portrait.data.materials.clear()
     portrait.data.materials.append(material)
