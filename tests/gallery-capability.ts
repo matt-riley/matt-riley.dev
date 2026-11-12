@@ -16,8 +16,9 @@ export async function allowSoftwareWebGL(page: Page) {
             : options;
         const context = Reflect.apply(original, this, [kind, attributes]);
         if (kind === "webgl2" && context) {
-          const getParameter = context.getParameter.bind(context);
-          context.getParameter = (parameter: number) =>
+          const webgl = context as WebGL2RenderingContext;
+          const getParameter = webgl.getParameter.bind(webgl);
+          webgl.getParameter = (parameter: number) =>
             parameter === 0x9246
               ? "Explicit real WebGL integration context"
               : getParameter(parameter);
