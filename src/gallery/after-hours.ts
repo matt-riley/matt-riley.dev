@@ -225,7 +225,7 @@ export function mountAfterHours(app: GalleryApp) {
   function focus(event: FocusEvent) {
     focused =
       event.target instanceof HTMLElement &&
-      event.target.closest("[data-touch]")
+      event.target.closest("section[data-exhibit], [data-touch]")
         ? event.target
         : undefined;
     if (focused) hasPointer = false;

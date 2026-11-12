@@ -235,9 +235,13 @@ html[data-lights="after-hours"] .gallery-projection {
   border-block-start-color: var(--glaze);
 }
 
+/* Reserve its lit-label geometry before switching modes, including Catalogue. */
+.entrance-cue {
+  border: 1px solid transparent;
+  padding: 0.4rem 0.6rem;
+}
 /* Keep the scroll invitation legible even when its torch pool crosses the floor. */
 html[data-lights="after-hours"] .entrance-cue {
   background: var(--plinth);
-  border: 1px solid var(--rule);
-  padding: 0.4rem 0.6rem;
+  border-color: var(--rule);
 }
