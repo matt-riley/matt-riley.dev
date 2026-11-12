@@ -3,6 +3,7 @@ import { expect, type Page, test } from "@playwright/test";
 import { Box3, PerspectiveCamera, Vector3 } from "three";
 import { MeshoptDecoder } from "three/addons/libs/meshopt_decoder.module.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { allowSoftwareWebGL } from "./gallery-capability";
 
 // Derive the click from the shipped assets, rather than a test-only runtime hook.
 async function toolboxPoint(page: Page) {
@@ -66,13 +67,18 @@ test.beforeEach(async ({ page }, info) => {
     !["desktop-chromium", "mobile-chromium"].includes(info.project.name),
     "Real WebGL picking is checked in desktop and mobile Chromium.",
   );
+  await allowSoftwareWebGL(page);
   await page.addInitScript(() => {
     localStorage.setItem("mr-view", "gallery");
     localStorage.setItem("mr-lights", "day");
   });
   await page.goto("/#tools");
-  await expect(page.locator("html")).toHaveAttribute("data-gallery", "ready");
-  await expect(page.locator("html")).toHaveAttribute("data-exhibits", "ready");
+  await expect(page.locator("html")).toHaveAttribute("data-gallery", "ready", {
+    timeout: 15_000,
+  });
+  await expect(page.locator("html")).toHaveAttribute("data-exhibits", "ready", {
+    timeout: 15_000,
+  });
 });
 
 test("picking the toolbox activates its native disclosure like keyboard Enter", async ({
