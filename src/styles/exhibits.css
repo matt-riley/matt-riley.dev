@@ -1,3 +1,8 @@
+/* Reserve the hairline so changing lights cannot move the catalogue. */
+.exhibit__label {
+  border-block-start: 1px solid transparent;
+}
+
 .museum-header,
 .museum-footer {
   display: flex;
@@ -313,6 +318,10 @@
 }
 .exhibit--entrance .exhibit__figure {
   grid-row: 3;
+}
+
+html[data-lights="after-hours"] .exhibit__label {
+  border-block-start-color: var(--glaze);
 }
 
 .human-error__nav {

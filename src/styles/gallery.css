@@ -210,3 +210,34 @@ html[data-gallery="ready"] .gallery-photo-handover {
     opacity: 0;
   }
 }
+
+.gallery-torch-mask {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    circle 180px at var(--torch-x, 50%) var(--torch-y, 50%),
+    transparent 0,
+    rgb(4 8 16 / 0.12) 45%,
+    rgb(4 8 16 / 0.95) 100%
+  );
+}
+html[data-lights="after-hours"] .exhibit__label {
+  border-block-start: 1px solid var(--glaze);
+}
+
+/* Projected lettering remains a lit label, independent of the torch pool. */
+html[data-lights="after-hours"] .gallery-projection {
+  color: var(--ink);
+  background: var(--plinth);
+  border: 1px solid var(--rule);
+  border-block-start-color: var(--glaze);
+}
+
+/* Keep the scroll invitation legible even when its torch pool crosses the floor. */
+html[data-lights="after-hours"] .entrance-cue {
+  background: var(--plinth);
+  border: 1px solid var(--rule);
+  padding: 0.4rem 0.6rem;
+}
