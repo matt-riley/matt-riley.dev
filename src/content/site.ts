@@ -14,5 +14,5 @@ export const site = {
     href: "https://github.com/matt-riley",
   },
   colophon:
-    "Made by Matt Riley. A static catalogue, with an optional gallery. All objects, renders and sounds made for this museum.",
+    "Made in Yorkshire. Modelled in Blender, drawn with three.js, served from Cloudflare. No cookies, no tracking.",
 } as const;
