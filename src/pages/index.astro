@@ -40,6 +40,8 @@ const exhibits = await Promise.all(entries.map(async (exhibit) => ({ exhibit, ..
 </Base>
 
 <script>
+  if (new URLSearchParams(location.search).get("qa") === "1")
+    void import("../scripts/qa-status");
   import "../scripts/touch";
   import "../scripts/sound-gate";
   import "../scripts/drum-gate";

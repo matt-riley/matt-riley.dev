@@ -43,8 +43,6 @@ export class ExhibitRegistry {
   private readonly hitAreas = new Map<string, { minimumPixels: number }>();
   readonly handlers = new Map<string, (event: CustomEvent) => void>();
   private ended = false;
-  private windowStop = 0;
-  private windowRadius = Infinity;
   private nearStop = 0;
   private readonly stopStreaming: () => void;
   private recordMounts = new Map<
@@ -58,12 +56,11 @@ export class ExhibitRegistry {
   constructor(readonly app: InteractionApp) {
     const rope = app.room.getObjectByName("touch_rope");
     if (rope) this.add("entrance", "entrance", 0, rope, false);
-    this.windowStop = this.nearStop = app.activeStop;
+    this.nearStop = app.activeStop;
     let previous = app.activeStop;
     this.stopStreaming = app.onFrame(() => {
       if (this.ended || previous === app.activeStop) return false;
       previous = app.activeStop;
-      this.windowStop = previous;
       void this.loadNear(previous).catch(() => {
         if (!this.ended) set("view", "catalogue");
       });
@@ -135,8 +132,9 @@ export class ExhibitRegistry {
       const asset = await this.app.assets.get(id);
       if (this.ended) return;
       if (Math.abs(index - this.nearStop) > 2) {
-        if (Math.abs(index - this.windowStop) > this.windowRadius)
-          this.app.assets.release?.(id);
+        // No record will own this overtaken request. Release it even on High:
+        // a later Low window can only prune models that have records.
+        if (!this.records.has(id)) this.app.assets.release?.(id);
         continue;
       }
       if (this.records.has(id)) continue;
@@ -202,8 +200,6 @@ export class ExhibitRegistry {
   }
 
   async setWindow(stop: number, radius: number) {
-    this.windowStop = stop;
-    this.windowRadius = radius;
     for (const record of this.records.values())
       if (Math.abs(record.index - stop) > radius) this.removeRecord(record.id);
     await this.loadNear(stop);

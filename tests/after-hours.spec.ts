@@ -104,6 +104,19 @@ test("after-hours torch follows pointer and keyboard without darkening labels", 
     .locator("[data-portrait-src]")
     .getAttribute("data-portrait-src");
   expect(portrait).toBeTruthy();
+  const human = page.locator(
+    "#human-error > .exhibit__label > details > summary",
+  );
+  async function keyboardHuman() {
+    await human.focus();
+    await page.keyboard.press("Tab");
+    await page.keyboard.press("Shift+Tab");
+    await expect(page.locator("[data-current-stop]")).toContainText("7 of 8", {
+      timeout: 10_000,
+    });
+    await expect(human).toBeFocused();
+  }
+  await keyboardHuman();
   await page.screenshot({ path: "test-results/after-hours-late-portrait.png" });
   expect(
     await page.evaluate(
@@ -117,6 +130,7 @@ test("after-hours torch follows pointer and keyboard without darkening labels", 
     .click();
   await expect(page.locator("html")).toHaveAttribute("data-lights", "day");
   await page.waitForTimeout(1000);
+  await keyboardHuman();
   await page
     .getByRole("button", { name: "View: Gallery", exact: true })
     .click();

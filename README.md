@@ -71,9 +71,16 @@ deterministic builds.
 
 ## Deployment
 
-`wrangler.jsonc` uploads the generated `dist/` as static Workers Assets.
-`pnpm deploy` builds and deploys; it publishes the current scaffold, so review the
-build before using it. No server entry point or Cloudflare adapter is needed.
+Production is configured through Cloudflare **Workers Builds** for `main`, with
+`pnpm run build` and `npx wrangler deploy`; non-production builds use
+`npx wrangler versions upload`. An authenticated dashboard inspection found the
+GitHub connection disconnected, so Matt must repair it before relying on builds.
+`wrangler.jsonc` remains assets-only with no server entry point or adapter.
+
+See the [deployment evidence and approval plan](docs/deployment/README.md) for
+immutable assets, CSP, hosted preview checks, and the **inactive** daily deploy-hook
+proposal. No deployment method, hook, secret, or schedule is activated by this PR.
+`pnpm deploy` is a manual fallback requiring a specific deployment approval.
 
 ## Reuse
 

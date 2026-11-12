@@ -40,7 +40,13 @@ jobs:
         run: pnpm exec playwright test tests/drum-browser.spec.ts --project=desktop-chromium --workers=1 --grep "actual oscillator deadlines" --output=test-results/audio-clock
         env:
           PLAYWRIGHT_HTML_OUTPUT_DIR: playwright-audio-clock-report
-      - run: pnpm perf
+      - run: pnpm test:edge
+      - name: Verify performance three consecutive times
+        run: |
+          for attempt in 1 2 3; do
+            pnpm perf
+            mv .lighthouseci ".lighthouseci-run-${attempt}"
+          done
         env:
           # Hosted Ubuntu blocks Chromium user namespaces; audits serve only local static output.
           LHCI_COLLECT__SETTINGS__CHROME_FLAGS: "--no-sandbox"
@@ -55,4 +61,7 @@ jobs:
             playwright-audio-clock-report/
             test-results/
             .lighthouseci/
+            .lighthouseci-run-1/
+            .lighthouseci-run-2/
+            .lighthouseci-run-3/
           if-no-files-found: ignore

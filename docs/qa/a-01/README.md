@@ -10,7 +10,7 @@
   while at Human Error; no console or page errors occurred.
 - `torch-medium.trace.json.gz`: six-second trace, native full Chromium
   (`channel: chromium`), 960×600 viewport, DPR1, Medium selected by 4-core/4GB
-  capability values, after-hours, no software-capability override. A bounded
+  capability values, after-hours with a continuously moving pointer, no software-capability override. The actual gallery WebGL context and a bounded
   renderer probe of that Chromium configuration identified **ANGLE Metal Renderer:
   Apple M5**, vendor Google Inc. (Apple). 361 frames: mean 60.002fps, median
   16.7ms, p95 16.8ms. Actual tier remained Medium; no page errors.
@@ -25,4 +25,20 @@
 
 The native trace was isolated from other browser and Blender work. GPU-slot
 ownership returned to the parent after the trace; no browser context was retained.
-The complete nine-stop keyboard lighting walkthrough remains to be recorded.
+The first keyboard pass exposed native smooth focus scrolling from Human Error
+to Gift Shop. The shared Day/Night fix performs one instant window scroll to the
+focused section's center after focus settles, cancelling the browser's queued
+smooth scroll. Wheel/pointer input cancels that correction; hashes and A03's
+fragment framing are unchanged.
+
+The replay navigates section hashes, then uses native Tab/Shift+Tab within each
+visible placard. The corrected nine-stop pass now keeps each camera stop on its focused
+section. Uploaded torch directions align with each stop target (dot .979–1.000,
+inside the 22° cone). The focused Human summary stays at stop7 in both Day and
+Night; `keyboard-tour.json`, `human-keyboard.json`, `keyboard-contact.png` and the
+full screenshots record the checks. No browser/page errors occurred.
+
+`transition-contact.png` captures ten native frames across both 900ms sweeps
+while mid-scroll. `transition.json` records Gallery ready and one live canvas
+throughout; the images show no white flash. The CPU reversal test separately
+checks bounded exposure continuity on a mid-sweep reversal.
