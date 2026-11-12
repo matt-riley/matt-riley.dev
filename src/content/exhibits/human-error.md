@@ -10,7 +10,7 @@ touchLabel: "Inspect the human error"
 touchResult: "Open Mic, Untitled (Boom Bap), Absent Exhibit and the portrait are listed below."
 items:
   - label: "Open Mic"
-    note: "One-liners awaiting the artist."
+    note: "A microphone that nods in acknowledgement."
   - label: "Untitled (Boom Bap)"
     note: "Sixteen steps. Sound is off until invited."
   - label: "Absent Exhibit"
