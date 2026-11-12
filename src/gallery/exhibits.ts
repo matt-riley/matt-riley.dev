@@ -38,14 +38,17 @@ export class ExhibitRegistry {
   readonly ready: Promise<void>;
   readonly controls = new Map<string, HTMLElement>();
   readonly handlers = new Map<string, (event: CustomEvent) => void>();
-  private disposed = false;
+  private ended = false;
+  get disposed() {
+    return this.ended;
+  }
 
   constructor(readonly app: InteractionApp) {
     const rope = app.room.getObjectByName("touch_rope");
     if (rope) this.add("entrance", "entrance", 0, rope, false);
     this.ready = this.load();
     void this.ready.catch(() => {
-      if (!this.disposed) set("view", "catalogue");
+      if (!this.ended) set("view", "catalogue");
     });
   }
 
@@ -95,9 +98,9 @@ export class ExhibitRegistry {
         a.index - b.index,
     );
     for (const { id, stop, index } of order) {
-      if (this.disposed) return;
+      if (this.ended) return;
       const asset = await this.app.assets.get(id);
-      if (this.disposed) return;
+      if (this.ended) return;
       const anchor = this.app.room.getObjectByName(`anchor_${id}`);
       if (!anchor) throw new Error(`Missing room anchor: anchor_${id}`);
       anchor.add(asset.scene);
@@ -142,8 +145,8 @@ export class ExhibitRegistry {
   }
 
   dispose() {
-    if (this.disposed) return;
-    this.disposed = true;
+    if (this.ended) return;
+    this.ended = true;
     for (const record of this.records.values()) {
       record.parts.forEach(releasePart);
       if (record.owned) record.root.removeFromParent();

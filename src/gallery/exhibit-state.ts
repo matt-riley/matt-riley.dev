@@ -1,27 +1,67 @@
+// This eager subscription boundary contains no Three.js or animation imports.
 import type { ExhibitRegistry } from "./exhibits";
 
-type Mount = (registry: ExhibitRegistry) => undefined | (() => void);
+type Cleanup = () => void;
+type MountResult = Cleanup | undefined;
+type Mount = (registry: ExhibitRegistry) => MountResult | Promise<MountResult>;
+interface Subscription {
+  mount: Mount;
+  release?: Cleanup;
+}
+const subscriptions = new Set<Subscription>();
 let current: ExhibitRegistry | undefined;
-const mounts = new Map<Mount, (() => void) | undefined>();
 
-export function onExhibitsReady(mount: Mount) {
-  mounts.set(mount, current ? (mount(current) ?? undefined) : undefined);
+async function mountSubscription(
+  subscription: Subscription,
+  registry: ExhibitRegistry,
+) {
+  if (
+    registry.disposed ||
+    current !== registry ||
+    !subscriptions.has(subscription)
+  )
+    return;
+  const cleanup = await subscription.mount(registry);
+  if (typeof cleanup !== "function") return;
+  if (
+    registry.disposed ||
+    current !== registry ||
+    !subscriptions.has(subscription)
+  ) {
+    cleanup();
+    return;
+  }
+  let done = false;
+  const release = () => {
+    if (!done) {
+      done = true;
+      cleanup();
+    }
+    if (subscription.release === release) subscription.release = undefined;
+  };
+  subscription.release = release;
+}
+
+export function onExhibitsReady(mount: Mount): Cleanup {
+  const subscription: Subscription = { mount };
+  subscriptions.add(subscription);
+  if (current) void mountSubscription(subscription, current).catch(() => {});
   return () => {
-    mounts.get(mount)?.();
-    mounts.delete(mount);
+    subscriptions.delete(subscription);
+    subscription.release?.();
   };
 }
 
 export function publishExhibits(registry: ExhibitRegistry) {
   current = registry;
-  for (const mount of mounts.keys())
-    mounts.set(mount, mount(registry) ?? undefined);
+  for (const subscription of subscriptions)
+    void mountSubscription(subscription, registry).catch(() => {});
   return () => {
     if (current !== registry) return;
     current = undefined;
-    for (const [mount, cleanup] of mounts) {
-      cleanup?.();
-      mounts.set(mount, undefined);
+    for (const subscription of subscriptions) {
+      subscription.release?.();
+      subscription.release = undefined;
     }
   };
 }
