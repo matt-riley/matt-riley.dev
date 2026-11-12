@@ -42,7 +42,9 @@ test("the complete catalogue preserves the museum's stop order and heading outli
     if (id === "flagz") {
       await expect(section.getByRole("switch")).toHaveCount(3);
     } else {
-      expect(await section.locator("[data-touch]").count()).toBeGreaterThanOrEqual(1);
+      expect(
+        await section.locator("[data-touch]").count(),
+      ).toBeGreaterThanOrEqual(1);
       await expect(section.locator("[data-touch]").first()).toBeVisible();
     }
     if (linkedStops.includes(id)) {
