@@ -273,8 +273,10 @@ export function mountRail(app: RailHost) {
     goalX = 0,
     goalY = 0;
   const fine = matchMedia("(hover: hover) and (pointer: fine)");
+  const fragment = () =>
+    location.hash.startsWith("#boom=") ? "#human-error" : location.hash;
   const hashIndex = sections.findIndex(
-    (section) => `#${section.id}` === location.hash,
+    (section) => `#${section.id}` === fragment(),
   );
   const originalCentres = sections.map(
     (section) =>
@@ -335,9 +337,7 @@ export function mountRail(app: RailHost) {
     wake();
   }
   function hash() {
-    const section = sections.find(
-      (section) => `#${section.id}` === location.hash,
-    );
+    const section = sections.find((section) => `#${section.id}` === fragment());
     if (firstFrame && section) initialProgress = sections.indexOf(section);
     section?.scrollIntoView({ block: "center", behavior: "smooth" });
   }

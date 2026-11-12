@@ -220,7 +220,8 @@ export function boot({ onFailure }: Options): GallerySession {
         : [object.material]) {
         if (
           material instanceof MeshStandardMaterial &&
-          material.name.startsWith("glaze")
+          material.name.startsWith("glaze") &&
+          material.userData.touchEmissionOwned !== true
         )
           material.emissive
             .copy(material.color)
