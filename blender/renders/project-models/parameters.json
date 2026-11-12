@@ -1,0 +1,22 @@
+{
+  "canonicalMaterialReference": "B-02 P2/G2 approved by Matt in the Codex chat; blender/renders/keyframe/contact-sheet.png",
+  "porcelainRoughness": 0.85,
+  "glazeSRGB": "#E8741A",
+  "glazeRoughness": 0.15,
+  "engine": "Cycles CPU",
+  "samples": 16,
+  "denoise": true,
+  "seed": 7,
+  "exposure": -0.5,
+  "viewTransform": "AgX",
+  "resolution": [512, 512],
+  "orthographicScale": 0.66,
+  "cameraAnglesDegrees": [-35, 55, 145, 235],
+  "cameraHeight": 1.63,
+  "cameraRadius": 1.2,
+  "skylightWatts": 420,
+  "skylightSize": 2.5,
+  "warmBounceWatts": 45,
+  "worldStrength": 0.16,
+  "silhouette": "Same authored models with existing materials set to black after export, floor/plinth hidden, Standard transform and white world. No added material or model texture."
+}

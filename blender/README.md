@@ -105,3 +105,42 @@ task. The shared factories use explicit approved constants: porcelain roughness
 Asset builds skip render-only modules and optimize only the asset names recorded
 by Blender in the ignored build manifest. This keeps `pnpm assets` independent of
 look-development render generation.
+
+## Project exhibits (B-04)
+
+`tools.py`, `flagz.py`, `waffle_agent.py`, `agent_skills.py` and `waystone.py`
+author the five project exhibits. Each module exposes `create()` for review
+renders and `build(output)` for shipping GLBs. Modules whose Python filename
+uses underscores declare `MODEL_ID` so the output matches the runtime's hyphenated
+ID (`waffle-agent`, `agent-skills`). The build manifest contains output IDs, never
+assumed Python stems; invalid and duplicate IDs fail before export.
+
+```sh
+pnpm assets
+pnpm assets -- --only agent_skills
+/Applications/Blender.app/Contents/MacOS/Blender --background --python-exit-code 1 --python blender/review_models.py
+node blender/model-contact-sheets.mjs
+```
+
+The canonical material reference is the **approved B-02 P2/G2 study** in
+[`renders/keyframe/contact-sheet.png`](renders/keyframe/contact-sheet.png).
+The five four-angle contact sheets and corresponding flat black silhouettes are
+in `renders/project-models/`. `parameters.json` records their lighting, camera
+and render settings. Silhouettes alter render state only, after GLB export; they
+do not introduce another shipping material.
+
+| Exhibit | Optimised bytes | Triangles | Touch pivots |
+| --- | ---: | ---: | ---: |
+| tools | 34,404 | 4,104 | 3 |
+| flagz | 20,060 | 1,728 | 6 |
+| waffle-agent | 40,676 | 4,648 | 1 |
+| agent-skills | 40,064 | 4,824 | 9 |
+| waystone | 15,604 | 1,222 | 1 |
+
+All five are under the 120KB/15k-triangle per-model limit and fit inside a 0.5m
+cube with the root at the centre of the base. No textures or modelled lettering
+are used. The only glaze is the working part: one continuous handle, the repeated
+flag idea, a connected syrup pool, the label-holder frame, or the inlaid waymark.
+`tests/project-models.spec.ts` loads the actual compressed GLBs using Three.js
+and Meshopt, checking dimensions, materials, budgets and every required pivot's
+axis/kind/range metadata.
