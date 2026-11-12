@@ -1,6 +1,6 @@
 {
   "sources_sha256": {
-    "room.glb": "b38a442082189570a25e12eb5da1ddefa3c150f4b6c131aa7b6a8f2e2f5f4fb2",
+    "room.glb": "1f326bb342042ad4fdac8df4773f1dcd8443d428ca12d37b0ab5df3d1705560d",
     "tools.glb": "d4608f809292606abbd7ad9a2e323b99b8b6742225647f20f1cd04840cadc63a",
     "flagz.glb": "61c985062d841d4509f31bdab15d8e89adbdb56b82158a3e66638039f73ad3e3",
     "waffle-agent.glb": "39827f40c88e9c802934d7c3d234d4aa14c6204bd4e99bae9f5a7c369e6c4e6a",
@@ -21,8 +21,99 @@
   "day": "B-02 approved 420W skylight/45W bounce/world0.16",
   "night": "B-02 approved 35W torch/28deg cone/world0.001/glaze emission0.12",
   "room": "Original shared surface colours, path-traced rather than double-lighting the runtime atlas",
-  "portrait": "Original waffle-portrait.jpg on B-03 portrait_plane UV0",
-  "cats": "First numeric cat marker per stop; corresponding named static pose",
+  "portrait": "Original waffle-portrait.jpg on B-03 portrait_plane UV0; original aspect ratio preserved",
+  "cats": {
+    "entrance": {
+      "marker": "cat_0",
+      "pose": "sit",
+      "position": [
+        -12.350000381469727,
+        1.600000023841858,
+        0.0
+      ],
+      "turn_z_degrees": 0
+    },
+    "tools": {
+      "marker": "cat_1",
+      "pose": "loaf",
+      "position": [
+        -10.25,
+        1.600000023841858,
+        0.0
+      ],
+      "turn_z_degrees": 0
+    },
+    "flagz": {
+      "marker": "cat_2",
+      "pose": "sit",
+      "position": [
+        -6.449999809265137,
+        1.600000023841858,
+        0.0
+      ],
+      "turn_z_degrees": 0
+    },
+    "waffle-agent": {
+      "marker": "cat_3",
+      "pose": "stretch",
+      "position": [
+        -3.549999952316284,
+        1.600000023841858,
+        0.0
+      ],
+      "turn_z_degrees": 0
+    },
+    "agent-skills": {
+      "marker": "cat_5",
+      "pose": "loaf",
+      "position": [
+        0.25,
+        1.600000023841858,
+        0.0
+      ],
+      "turn_z_degrees": 0
+    },
+    "waystone": {
+      "marker": "cat_6",
+      "pose": "sit",
+      "position": [
+        3.0999999046325684,
+        1.600000023841858,
+        0.0
+      ],
+      "turn_z_degrees": 0
+    },
+    "acquisitions": {
+      "marker": "cat_7",
+      "pose": "sleep",
+      "position": [
+        6.449999809265137,
+        2.0,
+        0.0
+      ],
+      "turn_z_degrees": 0
+    },
+    "human-error": {
+      "marker": "cat_9",
+      "pose": "sit",
+      "position": [
+        8.699999809265137,
+        1.649999976158142,
+        1.0
+      ],
+      "turn_z_degrees": 180
+    },
+    "gift-shop": {
+      "marker": "cat_11",
+      "pose": "sleep",
+      "position": [
+        13.300000190734863,
+        1.600000023841858,
+        0.8999999761581421
+      ],
+      "turn_z_degrees": 0
+    }
+  },
   "crops": {
     "wide": [
       2400,
@@ -32,5 +123,231 @@
       1600,
       1600
     ]
+  },
+  "batch_provenance": {
+    "entrance": {
+      "source_room_sha256": "1f326bb342042ad4fdac8df4773f1dcd8443d428ca12d37b0ab5df3d1705560d"
+    },
+    "tools": {
+      "source_room_sha256": "1f326bb342042ad4fdac8df4773f1dcd8443d428ca12d37b0ab5df3d1705560d"
+    },
+    "flagz": {
+      "source_room_sha256": "1f326bb342042ad4fdac8df4773f1dcd8443d428ca12d37b0ab5df3d1705560d"
+    },
+    "waffle-agent": {
+      "source_room_sha256": "1f326bb342042ad4fdac8df4773f1dcd8443d428ca12d37b0ab5df3d1705560d"
+    },
+    "agent-skills": {
+      "source_room_sha256": "1f326bb342042ad4fdac8df4773f1dcd8443d428ca12d37b0ab5df3d1705560d"
+    },
+    "waystone": {
+      "source_room_sha256": "1f326bb342042ad4fdac8df4773f1dcd8443d428ca12d37b0ab5df3d1705560d"
+    },
+    "acquisitions": {
+      "source_room_sha256": "1f326bb342042ad4fdac8df4773f1dcd8443d428ca12d37b0ab5df3d1705560d"
+    },
+    "human-error": {
+      "source_room_sha256": "0ce5f09c395fc87d66f85876a2481e64ed2f992834223fc4a9210a04d5f9eff8"
+    },
+    "gift-shop": {
+      "source_room_sha256": "4f231aeeef34186b32586d0ece7d22c50002d159c5691fdfd427c61408103285"
+    }
+  },
+  "equivalence_proofs": [
+    {
+      "partial_sha256": "4f231aeeef34186b32586d0ece7d22c50002d159c5691fdfd427c61408103285",
+      "final_sha256": "0ce5f09c395fc87d66f85876a2481e64ed2f992834223fc4a9210a04d5f9eff8",
+      "geometry_bin_identical": true,
+      "metadata_changes": [
+        {
+          "before": {
+            "extras": {
+              "pose": "sleep",
+              "stop": 6
+            },
+            "name": "cat_7",
+            "translation": [
+              7.706666469573975,
+              0,
+              -2
+            ]
+          },
+          "after": {
+            "extras": {
+              "pose": "sleep",
+              "stop": 6
+            },
+            "name": "cat_7",
+            "translation": [
+              6.449999809265137,
+              0,
+              -2
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "previous_human_sha256": "0ce5f09c395fc87d66f85876a2481e64ed2f992834223fc4a9210a04d5f9eff8",
+      "approved_floor_sha256": "1f326bb342042ad4fdac8df4773f1dcd8443d428ca12d37b0ab5df3d1705560d",
+      "geometry_bin_identical": true,
+      "stable_human_gift_markers_identical": true,
+      "source_checkpoint": "58822e96",
+      "changed_nodes": [
+        "cat_0",
+        "cat_1",
+        "cat_2",
+        "cat_3",
+        "cat_4",
+        "cat_5",
+        "cat_6"
+      ]
+    }
+  ],
+  "photographs": {
+    "acquisitions-day-square.png": {
+      "bytes": 1621590,
+      "sha256": "0d52f4ab6b70ce9cf410078df8a35a78bfc12aad95cc341a11ab5a3878ba83c6"
+    },
+    "acquisitions-day-wide.png": {
+      "bytes": 2446485,
+      "sha256": "f55cd09c4b1e58cadc0c24136fb35fc0f2e8db9d151a86b454db1bd8ef9cc008"
+    },
+    "acquisitions-night-square.png": {
+      "bytes": 1559542,
+      "sha256": "4e7d4e189136c02a9f9dd1d7013d946f6bffc0095997d8f87ffacaa99f2db0cf"
+    },
+    "acquisitions-night-wide.png": {
+      "bytes": 2230975,
+      "sha256": "84b23b7133495d087f40ac1e43b6497ceac1a0f8e9d04d6724bd676fd274900f"
+    },
+    "agent-skills-day-square.png": {
+      "bytes": 1844648,
+      "sha256": "7453d0ee69be9f1b76d424630cd064992eab5bc16fed00b754de389976673fb9"
+    },
+    "agent-skills-day-wide.png": {
+      "bytes": 2526516,
+      "sha256": "22361edf70ea10cbee9f4315116dd27a7b6e2c338599f8c76af6af5653784979"
+    },
+    "agent-skills-night-square.png": {
+      "bytes": 1754174,
+      "sha256": "16233ccedc1ff1bbf43390c29beeb2d833dc4113484d022be4132ebb6fc465de"
+    },
+    "agent-skills-night-wide.png": {
+      "bytes": 2316874,
+      "sha256": "6b000f6c664168303b6a45a1b38016b4b2e5d528a88c6e717051ecc0d2f000ba"
+    },
+    "entrance-day-square.png": {
+      "bytes": 1667328,
+      "sha256": "f38f2fe12d909d11daef36ccbaa0181061fb2484febf018478b35bc440f48ada"
+    },
+    "entrance-day-wide.png": {
+      "bytes": 2498864,
+      "sha256": "b5f850f0becceac381d545f84f5a05fd3393294acf4caf5e364d46ba431b5e37"
+    },
+    "entrance-night-square.png": {
+      "bytes": 1632395,
+      "sha256": "cc8920e90c62f7b775a6cee636dacd069f1d7d430443764355f0daf00ee6cb73"
+    },
+    "entrance-night-wide.png": {
+      "bytes": 2453421,
+      "sha256": "fd9da2aed0dd48ede6693efc819662764ab5cc4400bc58c34eab8ce2b1b3e363"
+    },
+    "flagz-day-square.png": {
+      "bytes": 1734532,
+      "sha256": "b3e0535d41b2af2ff1270d6d6f1b0657938ded1608aeec036f7d4c2e7fb47228"
+    },
+    "flagz-day-wide.png": {
+      "bytes": 2525970,
+      "sha256": "5b40ac6ac758dc0a2c87324f87f0216a472a86e8a8124f0823b502f34ef7db6b"
+    },
+    "flagz-night-square.png": {
+      "bytes": 1698963,
+      "sha256": "16d5cb41e09a9ee3b3066ccc539a2833f9173dcc8b3a620e098f7a9ec89c1ac6"
+    },
+    "flagz-night-wide.png": {
+      "bytes": 2320925,
+      "sha256": "acbe5b7e95f41ce546561c0c3e2808e1930b5d6e4dbf91c7ce9e1fbce9b7b898"
+    },
+    "gift-shop-day-square.png": {
+      "bytes": 1647399,
+      "sha256": "cd5b480879f2ed620e3b57d341aa6b6712ed52ae5b1326fc4f33dc6054c36010"
+    },
+    "gift-shop-day-wide.png": {
+      "bytes": 2493286,
+      "sha256": "2c7161a783a5ba66902168cf05451148b4c8d09c5ea44d900ce1345c7d3f2c20"
+    },
+    "gift-shop-night-square.png": {
+      "bytes": 1639847,
+      "sha256": "d6d358ffe09de3425d8ee4b9bde1be885850e7b879730294e6ae7c6f8311f933"
+    },
+    "gift-shop-night-wide.png": {
+      "bytes": 2366270,
+      "sha256": "ccf09c9075d02075b80a5697d54a0ad8a4d9367f9e33a67d88a77a8c6a2591f1"
+    },
+    "human-error-day-square.png": {
+      "bytes": 1806687,
+      "sha256": "55d917ca9b0fb55d86e6a23586c81066c793b7bf2890546a34f2745ab5c803ff"
+    },
+    "human-error-day-wide.png": {
+      "bytes": 2630244,
+      "sha256": "3e6422b1195c3af8bb38aed9b9140f43887b54e8ecef8df3d4a9b49eff37abbd"
+    },
+    "human-error-night-square.png": {
+      "bytes": 1672052,
+      "sha256": "f8507038170e27d62a9098481f5f02d2a13d4522f3c66d9fe7cd097c22291ff9"
+    },
+    "human-error-night-wide.png": {
+      "bytes": 2365274,
+      "sha256": "45f3346ae2cdc724daeb6a154d8866a8f08c7f27a4affa7aafb433ef13990b01"
+    },
+    "tools-day-square.png": {
+      "bytes": 1757856,
+      "sha256": "bf8b2ef2990ee7cc35fb8de37d37af4197609818bf86244ed1fbaebf9b7cf074"
+    },
+    "tools-day-wide.png": {
+      "bytes": 2501096,
+      "sha256": "37c64a97ff880ef56c3b32359db89b15364305fb3bcff4ebe3007bc88e76f959"
+    },
+    "tools-night-square.png": {
+      "bytes": 1715868,
+      "sha256": "f6d77472bae2f22e958cdd66e2cff47a589f679e5d53dab9ed7da4c97b6e49ab"
+    },
+    "tools-night-wide.png": {
+      "bytes": 2340029,
+      "sha256": "ce24b6ad920d00f8f2601d4a5b84268f57d2d445b5a65c0ac53ef37a3263b7ea"
+    },
+    "waffle-agent-day-square.png": {
+      "bytes": 1765004,
+      "sha256": "355192a1caa5951178ffe21ca8800725e0505b13fd01c6ca89b31711de59d209"
+    },
+    "waffle-agent-day-wide.png": {
+      "bytes": 2503931,
+      "sha256": "1afea70f4b49d665ed420efa513810a5d49536a8cb3e3d861461cfe41be47b0a"
+    },
+    "waffle-agent-night-square.png": {
+      "bytes": 1718777,
+      "sha256": "32e9f2b3de64367a0462a3b51b0714cea8d008c5537132768bc7859c8b5b9f9f"
+    },
+    "waffle-agent-night-wide.png": {
+      "bytes": 2297538,
+      "sha256": "d04601639c993973f13ae39dcfa4471be8f2408b89c1df0cf4d622d3f5062f7b"
+    },
+    "waystone-day-square.png": {
+      "bytes": 1729467,
+      "sha256": "a6fdd5f925144265bbc54469e02f962110461e15b6dfe29e14121690943ffa15"
+    },
+    "waystone-day-wide.png": {
+      "bytes": 2510667,
+      "sha256": "768dac408b9fc54fbc83147062d18352e327eac59d69f68259b0b765db4a8f8b"
+    },
+    "waystone-night-square.png": {
+      "bytes": 1692987,
+      "sha256": "f5136ec06d618e771581c2d9458f942ac485a7f988fb6cbde12faf55ca97d92c"
+    },
+    "waystone-night-wide.png": {
+      "bytes": 2325938,
+      "sha256": "0ec014111b2ea82fc1fc5b81a58ea9f63253a7c95d837b1ce31f8e39fe346b68"
+    }
   }
 }
