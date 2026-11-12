@@ -36,7 +36,7 @@ items:
   - label: "verification-before-completion"
     href: "https://github.com/matt-riley/agent-skills/tree/main/skills/verification-before-completion"
     note: "Verify the evidence before calling work done."
-draft: true
+draft: false
 ---
 
 Instructions, filed where they can be found. This is itself an instruction.

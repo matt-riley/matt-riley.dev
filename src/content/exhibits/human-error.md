@@ -17,7 +17,7 @@ items:
     note: "Removed by the cat."
   - label: "Portrait of the Head of Security"
     note: "Waffle joined the museum as a kitten and was promoted immediately."
-draft: true
+draft: false
 ---
 
 A small room for the things that do not fit in a repository. One of them has already left.

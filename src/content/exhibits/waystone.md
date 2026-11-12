@@ -11,7 +11,7 @@ links:
     href: "https://github.com/matt-riley/waystone.nvim"
 touchLabel: "Leave a marker"
 touchResult: "Your place in the museum has been marked in this browser."
-draft: true
+draft: false
 ---
 
 A small mark for finding your way back. The stone stays here.

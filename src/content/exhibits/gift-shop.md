@@ -14,7 +14,7 @@ links:
     href: "https://github.com/matt-riley"
 touchLabel: "Browse the shelf"
 touchResult: "Links to Matt’s work, tools and GitHub are on the shelf."
-draft: true
+draft: false
 ---
 
 Everything on this shelf is a link. The brew is for display purposes.
