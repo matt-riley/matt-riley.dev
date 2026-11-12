@@ -59,8 +59,8 @@ export function requestSound(
     return Promise.resolve(mounted.engine);
   }
   if (starting) return starting;
-  const gesture =
-    navigator.userActivation?.isActive || performance.now() - lastGesture < 100;
+  // Only an actual trusted input seen by this gate can perform the first unlock.
+  const gesture = performance.now() - lastGesture < 100;
   if (!context && !gesture) {
     status();
     return Promise.resolve(undefined);
