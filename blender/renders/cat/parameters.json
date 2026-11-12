@@ -1,0 +1,34 @@
+{
+  "engine": "CYCLES",
+  "samples": 16,
+  "denoise": true,
+  "seed": 7,
+  "exposure": -0.5,
+  "world_strength": 0.16,
+  "skylight_watts": 420,
+  "skylight_size_m": 2.5,
+  "bounce_watts": 45,
+  "bounce_size_m": 2,
+  "glaze": "#E8741A",
+  "glaze_dark": "#C95F12",
+  "roughness": 0.15,
+  "views": {
+    "front": [
+      0,
+      -0.7,
+      1.13
+    ],
+    "side": [
+      0.7,
+      0,
+      1.13
+    ],
+    "three-quarter": [
+      0.46,
+      -0.58,
+      1.35
+    ]
+  },
+  "orthographic_scale_m": 0.31,
+  "status": "B-02 P2/G2 approved baseline; B-06 cat appearance remains open to Matt's veto."
+}

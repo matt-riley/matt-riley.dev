@@ -1,0 +1,50 @@
+# Gallery lifecycle
+
+The DOM remains authoritative. `gallery-gate.ts` alone decides whether to import
+this runtime. Closed gates request no Three.js code or model data.
+
+`boot({ onFailure })` returns `{ ready, dispose }` immediately, before any model
+has loaded. Disposing cancels queued/fetching models, releases decoded geometry,
+materials/textures and image bitmaps, removes listeners and canvas, disposes the
+renderer and explicitly loses its WebGL context. A parse finishing after disposal
+releases its result instead of attaching it.
+
+`ready` resolves to `GalleryApp` after the room, nearest exhibit and async plugin
+mounts are ready and one hidden frame has rendered. The gate then publishes
+`data-gallery="ready"` and requests a frame. That frame runs plugins against the
+active gallery CSS before making the canvas visible, so direct hash visits do
+not flash camera stop 0.
+
+## Plugins
+
+Import `onGalleryReady` from `state.ts` in a small eager registration module.
+Import heavy feature code dynamically inside the callback. All Three.js imports
+in the subscription boundary are types and disappear from the eager bundle.
+
+The mount may return a cleanup, or a promise of one. A late async cleanup runs
+immediately if its app has already been disposed. `addCleanup` has the same
+immediate-disposal guarantee; its return value only unregisters that cleanup.
+
+The app exposes scene, camera, room, renderer, assets, activeStop and these hooks:
+
+- `requestRender()` queues one frame, coalescing requests.
+- `onFrame((deltaSeconds, timeSeconds) => boolean)` returns an unsubscribe.
+  Return true only while animation/damping needs another frame.
+- `onResize((width, height) => void)` returns an unsubscribe.
+- `addCleanup(() => void)` registers session-owned work.
+
+`activeStop` is derived view state for the rail and picker, not a replacement for
+the HTML sections. Optional plugins must keep their DOM equivalents usable.
+
+## Asset ownership
+
+`assets.get(id)` returns a cached `Promise<GLTF>`. The room always loads first;
+remaining requests are serialized and prioritized around the nearest stop.
+`setNearestStop` reprioritizes queued work. The store captures resource ownership
+at load time, so a registry may reparent model roots without losing disposal.
+The store owns GPU-resource disposal; registries own attachment/event cleanup.
+
+The baked room map uses UV1 in an unlit, untone-mapped material. Exhibit materials
+retain approved porcelain/glaze values and use the shared hemisphere/key light.
+The gallery renders on demand, including after a resize or setting change, and
+pauses while the document is hidden.

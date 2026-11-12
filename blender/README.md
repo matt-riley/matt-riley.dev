@@ -57,6 +57,12 @@ Use the shared factories in `lib/materials.py`:
 Only the working part of an exhibit is glazed. Everything else is porcelain.
 Additional materials require a comment on the Notion brief before introduction.
 
+B-06's explicit cat-only exception makes Waffle entirely `glaze`, with four
+slightly darker tabby stripes using `glaze_dark` (`#C95F12`, the same 0.15
+roughness and clearcoat). The exception was recorded on the Notion brief before
+implementation. No other exhibit uses this material. See [the cat source and
+pose sheets](CAT.md) for the four-pose build and origin contract.
+
 ## Optimisation and budgets
 
 `pnpm assets` runs Blender into ignored `blender/out/`, then runs glTF Transform:
@@ -144,3 +150,54 @@ flag idea, a connected syrup pool, the label-holder frame, or the inlaid waymark
 `tests/project-models.spec.ts` loads the actual compressed GLBs using Three.js
 and Meshopt, checking dimensions, materials, budgets and every required pivot's
 axis/kind/range metadata.
+
+## B-03 gallery room
+
+`scenes/room.py` authors a 30m × 6m × 4m straight gallery with nine bays. Its
+single 2048px day atlas includes neutral skylight, bounce and local occlusion.
+The raw PNG and intermediate GLB are generated under ignored `blender/out/`;
+only the optimised `public/models/room.glb` is shipped. The room is the explicit
+2048px exception to the object-texture 1024px cap. Both UV sets are retained; nearby porcelain faces receive four times the linear
+UV density of the quiet room shell.
+
+```sh
+pnpm assets -- --only room
+```
+
+The map is baked with Cycles CPU, 32 samples, 4 AO subsamples, seed 11, a neutral 29m × 1.1m
+2600W skylight and world strength 0.35. HDR bake values are tone-mapped through
+AgX at exposure −1 before sRGB PNG/WebP conversion; this avoids clipping away
+the shadows. The dynamic glazed rope is excluded from the neutral light bake. Shared approved porcelain/glaze values
+are reused. Geometry includes a skirting shadow gap, continuous skylight slot,
+eight full-size plinths, title wall, unhooked touch rope, board frame, portrait
+frame/plane, gift-shop shelf and counter. Scene lights and cameras are not
+exported. Named camera positions and targets are empty nodes instead.
+
+### Lightmap transport to Three.js
+
+The glTF standard has no dedicated Three.js `lightMap` slot. The baked combined
+colour map is therefore carried by each baked material's **emissive texture on
+UV1**, with extras `baked_lightmap: true`, `baked_uv: 1`,
+`baked_transport: "emissive"`. This is a transport binding, not a glowing room.
+G-01 should move that texture into `material.lightMap`, preserve/set its
+`channel = 1`, clear `emissiveMap`, set emission to black and set the base colour
+to white (the approved surface colours are already included in the bake).
+Runtime after-hours lighting can then lower `lightMapIntensity` while the torch
+uses ordinary dynamic light. UV0 remains available for the portrait photograph.
+The rope's glaze stays a normal dynamic material and is not part of the bake.
+
+### Placement contract
+
+- `stop_0_cam` through `stop_8_cam` sit at exported eye height Y=1.5m. Targets
+  have matching names. `placard_side` alternates left/right and `fov` is 35°.
+- Object anchors: `anchor_tools`, `anchor_flagz`, `anchor_waffle-agent`,
+  `anchor_agent-skills`, `anchor_waystone`, `anchor_open-mic`, `anchor_boom-bap`,
+  `anchor_absent`, `anchor_gift-shop`.
+- The room owns the full-size empty Absent Exhibit plinth, its dust and its
+  shallow pressed pawprint. **`anchor_absent` is on the floor beside it**:
+  B-05 supplies only the floor fragments, keeping that object within its 0.5m
+  asset bounds. This follows the brief's pieces-on-the-floor visitor journey.
+- At least ten `cat_<n>` nodes include a valid `pose` and `stop` extra. The
+  runtime relocates its single figurine between these nodes only off-screen.
+- `portrait_plane` is a named mesh with a normalised UV0 portrait surface.
+- `touch_rope` has its pivot at the attached post and exports hinge metadata.

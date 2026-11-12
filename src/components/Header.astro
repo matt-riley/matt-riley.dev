@@ -44,7 +44,7 @@ const prefix = Astro.url.pathname === "/" ? "" : "/";
       if (state) state.textContent = label;
       button.setAttribute("aria-label", `${key[0].toUpperCase()}${key.slice(1)}: ${label}`);
       button.setAttribute("aria-pressed", String(value === (key === "lights" ? "day" : key === "view" ? "gallery" : "on")));
-      if (key === "view") button.hidden = document.documentElement.dataset.gallery !== "ready";
+      if (key === "view") button.hidden = document.documentElement.dataset.gallery === "unavailable" || location.pathname !== "/";
     }
   }
   buttons.forEach(button => button.addEventListener("click", () => toggle(button.dataset.setting as SettingKey)));
@@ -98,7 +98,7 @@ const prefix = Astro.url.pathname === "/" ? "" : "/";
   .stop-menu li + li { margin-block-start: var(--space-3); }
   .stop-menu a { display: inline-block; padding-block: var(--space-1); }
   @media (min-width: 900px) { .site-header { gap: var(--space-6); padding-inline: var(--space-6); } .current-stop { display: block; } .header-controls { margin-inline-start: 0; } }
-  @media (max-width: 599px) { .site-header:has(.view-control:not([hidden])) { height: 7rem; } :global(html:has(.view-control:not([hidden]))) { --header-height: 7rem; } .header-controls:has(.view-control:not([hidden])) { display: grid; grid-template-columns: 1fr 1fr; } .header-controls:has(.view-control:not([hidden])) .header-control { width: 7.5em; } }
+  @media (max-width: 599px) { .site-header { height: 7rem; } :global(html:has(.site-header)) { --header-height: 7rem; } .header-controls:not([hidden]) { display: grid; grid-template-columns: 1fr 1fr; } .header-controls .header-control { width: 7.5em; } }
   @media (max-width: 359px) { .site-header { font-size: .6875rem; } .lights-control { width: 7.6em; } }
   @media (prefers-reduced-motion: no-preference) { :global(html) { scroll-behavior: smooth; } }
 </style>
