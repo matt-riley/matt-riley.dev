@@ -14,6 +14,26 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
+  @supports (interpolate-size: allow-keywords) {
+    html:not([data-gallery="ready"]) :is(#tools, #agent-skills) details {
+      interpolate-size: allow-keywords;
+    }
+    html:not([data-gallery="ready"])
+      :is(#tools, #agent-skills)
+      details::details-content {
+      block-size: 0;
+      overflow: clip;
+      transition:
+        block-size 180ms ease-out,
+        content-visibility 180ms;
+      transition-behavior: allow-discrete;
+    }
+    html:not([data-gallery="ready"])
+      :is(#tools, #agent-skills)
+      details[open]::details-content {
+      block-size: auto;
+    }
+  }
   html:not([data-gallery="ready"])
     :is(#tools, #agent-skills)
     details[open]

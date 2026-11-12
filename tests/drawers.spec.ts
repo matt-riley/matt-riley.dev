@@ -1,4 +1,53 @@
+import { readFileSync } from "node:fs";
 import { expect, test } from "@playwright/test";
+import { MeshoptDecoder } from "three/addons/libs/meshopt_decoder.module.js";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { animatePart, bindPart, releasePart } from "../src/gallery/parts";
+
+test("rapid reversal of every authored drawer part settles fully closed", async ({
+  browserName,
+}, info) => {
+  test.skip(
+    browserName !== "chromium" || info.project.name !== "desktop-chromium",
+    "The authored range helper is shared across browsers.",
+  );
+  for (const id of ["tools", "agent-skills"]) {
+    const bytes = readFileSync(`public/models/${id}.glb`);
+    const model = await new GLTFLoader()
+      .setMeshoptDecoder(MeshoptDecoder)
+      .parseAsync(
+        bytes.buffer.slice(
+          bytes.byteOffset,
+          bytes.byteOffset + bytes.byteLength,
+        ),
+        "",
+      );
+    const names =
+      id === "tools"
+        ? ["touch_tray_left", "touch_tray_right", "touch_drawer"]
+        : ["touch_drawer"];
+    for (const name of names) {
+      const object = model.scene.getObjectByName(name);
+      if (!object) throw new Error(`Missing ${id}:${name}`);
+      const part = bindPart(object, () => {});
+      const transform =
+        part.userData.kind === "hinge" ? part.rotation : part.position;
+      const base = transform[part.userData.axis];
+      for (let cycle = 0; cycle < 6; cycle++) {
+        animatePart(part, cycle % 2, { duration: 0.1 });
+        await new Promise((resolve) => setTimeout(resolve, 12));
+      }
+      await new Promise<void>((resolve) =>
+        animatePart(part, 0, { duration: 0.05, onComplete: resolve }),
+      );
+      expect(transform[part.userData.axis]).toBeCloseTo(
+        base + part.userData.range[0],
+        6,
+      );
+      releasePart(part);
+    }
+  }
+});
 
 test("both native drawer lists remain independent and keyboard reachable", async ({
   page,
