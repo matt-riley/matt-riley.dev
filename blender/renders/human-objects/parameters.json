@@ -1,0 +1,24 @@
+{
+  "lighting": "B-02 approved P2/G2 day key frame",
+  "porcelain_roughness": 0.85,
+  "glaze_colour": "#E8741A",
+  "room_roughness": 0.5,
+  "exposure": -0.5,
+  "world_strength": 0.16,
+  "skylight_watts": 420,
+  "skylight_size_m": 2.5,
+  "bounce_watts": 45,
+  "samples": 16,
+  "seed": 7,
+  "frame_resolution": [
+    640,
+    640
+  ],
+  "angles_degrees": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "absent_placement": "floor fragments; B-03 supplies full-size plinth dusting and pawprint"
+}
