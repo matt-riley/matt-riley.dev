@@ -1,4 +1,4 @@
-import type { MeshBasicMaterial, Vector3 } from "three";
+import type { MeshBasicMaterial, MeshStandardMaterial, Vector3 } from "three";
 
 export interface NightUniforms {
   museumFrom: { value: number };
@@ -64,4 +64,10 @@ export function bindNightShader(
     material.customProgramCacheKey = originalKey;
     material.needsUpdate = true;
   };
+}
+
+/** Touch-owned flashes take priority, including ownership assigned after collection. */
+export function applyNightGlow(material: MeshStandardMaterial, glow: number) {
+  if (!material.userData.touchEmissionOwned)
+    material.emissive.copy(material.color).multiplyScalar(glow);
 }

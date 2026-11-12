@@ -12,7 +12,11 @@ import {
 } from "three";
 import { onExhibitsReady } from "./exhibit-state";
 import type { ExhibitRegistry } from "./exhibits";
-import { bindNightShader, type NightUniforms } from "./night-shader";
+import {
+  applyNightGlow,
+  bindNightShader,
+  type NightUniforms,
+} from "./night-shader";
 import { NightSweep } from "./night-sweep";
 import type { GalleryApp } from "./types";
 
@@ -89,7 +93,8 @@ export function mountAfterHours(app: GalleryApp) {
         : [child.material])
         if (
           material instanceof MeshStandardMaterial &&
-          material.name === "glaze"
+          material.name === "glaze" &&
+          !material.userData.touchEmissionOwned
         )
           materials.add(material);
     });
@@ -191,11 +196,9 @@ export function mountAfterHours(app: GalleryApp) {
       (reduced.matches
         ? 0.024
         : 0.024 * (0.86 + Math.sin((now * Math.PI) / 3000) * 0.14));
-    for (const material of ropeGlazes)
-      material.emissive.copy(material.color).multiplyScalar(glow);
+    for (const material of ropeGlazes) applyNightGlow(material, glow);
     for (const materials of recordGlazes.values())
-      for (const material of materials)
-        material.emissive.copy(material.color).multiplyScalar(glow);
+      for (const material of materials) applyNightGlow(material, glow);
     return state.moving || (state.amount > 0 && !reduced.matches);
   }
   function setting(event: Event) {
