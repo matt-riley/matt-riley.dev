@@ -2,6 +2,7 @@
 id: "flagz"
 order: 2
 title: "flagz"
+alt: "A sloping porcelain control panel with three orange flags on a square plinth."
 dates: "2026 to ongoing"
 medium: "Go, feature flags, restraint."
 accession: "MR.2026.003"

@@ -6,6 +6,31 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
 // Derive the click from the shipped assets, rather than a test-only runtime hook.
 async function toolboxPoint(page: Page) {
+  if ((page.viewportSize()?.width ?? 0) < 900) {
+    // The mobile rail reframes around the placard. Discover its visible hand
+    // cursor in the clear display area, then tap that same real screen point.
+    const area = await page.evaluate(() => {
+      const header = document.querySelector(".site-header");
+      const label = document.querySelector("#tools .exhibit__label");
+      if (!header || !label)
+        throw new Error("Missing gallery framing elements");
+      return {
+        top: header.getBoundingClientRect().bottom + 16,
+        bottom: label.getBoundingClientRect().top - 16,
+        width: innerWidth,
+      };
+    });
+    for (let y = area.top; y < area.bottom; y += 20) {
+      for (let x = 24; x < area.width - 24; x += 20) {
+        await page.mouse.move(x, y);
+        if (await page.evaluate(() => document.body.style.cursor === "pointer"))
+          return { x, y };
+      }
+    }
+    throw new Error(
+      "The mobile toolbox has no pickable area above its placard",
+    );
+  }
   const bytes = readFileSync("public/models/tools.glb");
   const model = await new GLTFLoader()
     .setMeshoptDecoder(MeshoptDecoder)
@@ -79,4 +104,69 @@ test("horizontal object dragging does not activate its disclosure", async ({
   await page.mouse.move(point.x + 70, point.y + 2, { steps: 8 });
   await page.mouse.up();
   await expect(page.locator("#tools details")).not.toHaveAttribute("open");
+});
+
+test("a vertical touchscreen gesture over the exhibit keeps native scrolling", async ({
+  page,
+}, info) => {
+  test.skip(
+    info.project.name !== "mobile-chromium",
+    "Real Chromium touchscreen gesture",
+  );
+  const point = await toolboxPoint(page);
+  const start = await page.evaluate(() => scrollY);
+  const session = await page.context().newCDPSession(page);
+  await session.send("Input.dispatchTouchEvent", {
+    type: "touchStart",
+    touchPoints: [{ x: point.x, y: point.y }],
+  });
+  for (let step = 1; step <= 8; step++) {
+    await session.send("Input.dispatchTouchEvent", {
+      type: "touchMove",
+      touchPoints: [{ x: point.x, y: point.y - step * 16 }],
+    });
+  }
+  await session.send("Input.dispatchTouchEvent", {
+    type: "touchEnd",
+    touchPoints: [],
+  });
+  await expect
+    .poll(() => page.evaluate(() => scrollY))
+    .toBeGreaterThan(start + 50);
+  await expect(page.locator("#tools details")).not.toHaveAttribute("open");
+});
+
+test("gallery placard text remains selectable and links receive clicks", async ({
+  page,
+}, info) => {
+  test.skip(
+    info.project.name !== "desktop-chromium",
+    "Desktop text selection and link activation",
+  );
+  const text = page.locator("#tools .placard__note");
+  await expect(text).toBeVisible();
+  expect(
+    await text.evaluate((node) => getComputedStyle(node).userSelect),
+  ).not.toBe("none");
+  const selected = await text.evaluate((node) => {
+    const range = document.createRange();
+    range.selectNodeContents(node);
+    const selection = window.getSelection();
+    selection?.removeAllRanges();
+    selection?.addRange(range);
+    return selection?.toString();
+  });
+  expect(selected).toContain("A place for the tools");
+  const link = page.locator("#tools .placard a").first();
+  const href = await link.getAttribute("href");
+  if (!href) throw new Error("Missing placard destination");
+  await page.route(href, (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: "text/html",
+      body: "<title>Destination</title>",
+    }),
+  );
+  await link.click();
+  await expect(page).toHaveURL(href);
 });

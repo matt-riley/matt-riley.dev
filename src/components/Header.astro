@@ -41,10 +41,15 @@ const prefix = Astro.url.pathname === "/" ? "" : "/";
       const value = get(key);
       const label = (labels[key] as Record<string, string>)[value];
       const state = button.querySelector("[data-state]");
-      if (state) state.textContent = label;
-      button.setAttribute("aria-label", `${key[0].toUpperCase()}${key.slice(1)}: ${label}`);
-      button.setAttribute("aria-pressed", String(value === (key === "lights" ? "day" : key === "view" ? "gallery" : "on")));
-      if (key === "view") button.hidden = document.documentElement.dataset.gallery === "unavailable" || location.pathname !== "/";
+      if (state && state.textContent !== label) state.textContent = label;
+      const ariaLabel = `${key[0].toUpperCase()}${key.slice(1)}: ${label}`;
+      const pressed = String(value === (key === "lights" ? "day" : key === "view" ? "gallery" : "on"));
+      if (button.getAttribute("aria-label") !== ariaLabel) button.setAttribute("aria-label", ariaLabel);
+      if (button.getAttribute("aria-pressed") !== pressed) button.setAttribute("aria-pressed", pressed);
+      if (key === "view") {
+        const hidden = document.documentElement.dataset.gallery === "unavailable" || location.pathname !== "/";
+        if (button.hidden !== hidden) button.hidden = hidden;
+      }
     }
   }
   buttons.forEach(button => button.addEventListener("click", () => toggle(button.dataset.setting as SettingKey)));
