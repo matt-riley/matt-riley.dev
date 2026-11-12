@@ -65,6 +65,20 @@ for (const view of ["catalogue", "gallery"] as const) {
             for (const element of details)
               (element as HTMLDetailsElement).open = open;
           }, open);
+          // Audit the resting text colours after disclosure fades finish.
+          // Perpetual cursor effects keep running normally.
+          await section.evaluate(async (element) => {
+            await Promise.all(
+              element
+                .getAnimations({ subtree: true })
+                .filter(
+                  (animation) =>
+                    animation.effect?.getComputedTiming().iterations !==
+                    Infinity,
+                )
+                .map((animation) => animation.finished.catch(() => {})),
+            );
+          });
           const results = await new AxeBuilder({ page }).analyze();
           expect(
             results.violations,
