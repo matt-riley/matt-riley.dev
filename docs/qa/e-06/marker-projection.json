@@ -4,11 +4,7 @@
     {
       "marker": 0,
       "stop": 0,
-      "blenderPosition": [
-        -12.35,
-        1.6,
-        0
-      ],
+      "blenderPosition": [-12.35, 1.6, 0],
       "rectangle": {
         "left": 696.9503173317652,
         "right": 745.4530215559819,
@@ -29,11 +25,7 @@
     {
       "marker": 1,
       "stop": 1,
-      "blenderPosition": [
-        -10.25,
-        1.6,
-        0
-      ],
+      "blenderPosition": [-10.25, 1.6, 0],
       "rectangle": {
         "left": 389.35211291076945,
         "right": 445.975409774412,
@@ -65,11 +57,7 @@
     {
       "marker": 2,
       "stop": 2,
-      "blenderPosition": [
-        -6.45,
-        1.6,
-        0
-      ],
+      "blenderPosition": [-6.45, 1.6, 0],
       "rectangle": {
         "left": 630.762550227291,
         "right": 695.2364841527212,
@@ -101,11 +89,7 @@
     {
       "marker": 3,
       "stop": 3,
-      "blenderPosition": [
-        -3.55,
-        1.6,
-        0
-      ],
+      "blenderPosition": [-3.55, 1.6, 0],
       "rectangle": {
         "left": 397.81613497785276,
         "right": 453.90609278079694,
@@ -137,11 +121,7 @@
     {
       "marker": 4,
       "stop": 3,
-      "blenderPosition": [
-        -3.55,
-        2,
-        0
-      ],
+      "blenderPosition": [-3.55, 2, 0],
       "rectangle": {
         "left": 405.65287253236187,
         "right": 456.25161226335103,
@@ -173,11 +153,7 @@
     {
       "marker": 5,
       "stop": 4,
-      "blenderPosition": [
-        0.25,
-        1.6,
-        0
-      ],
+      "blenderPosition": [0.25, 1.6, 0],
       "rectangle": {
         "left": 514.0245902255878,
         "right": 570.6478870892308,
@@ -209,11 +185,7 @@
     {
       "marker": 6,
       "stop": 5,
-      "blenderPosition": [
-        3.1,
-        1.6,
-        0
-      ],
+      "blenderPosition": [3.1, 1.6, 0],
       "rectangle": {
         "left": 393.58415421408506,
         "right": 449.94077964000496,
@@ -245,11 +217,7 @@
     {
       "marker": 7,
       "stop": 6,
-      "blenderPosition": [
-        6.45,
-        2,
-        0
-      ],
+      "blenderPosition": [6.45, 2, 0],
       "rectangle": {
         "left": 491.79503592875477,
         "right": 542.3937725189573,
