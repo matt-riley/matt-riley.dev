@@ -5,6 +5,7 @@ const terminal = section?.querySelector<HTMLElement>("[data-terminal]");
 const output = terminal?.querySelector<HTMLElement>("[data-terminal-output]");
 const result = section?.querySelector<HTMLElement>("[data-touch-result]");
 if (section && terminal && output && result) {
+  result.classList.add("sr-only");
   const lines: string[] = JSON.parse(terminal.dataset.lines ?? "[]");
   const motion = matchMedia("(prefers-reduced-motion: reduce)");
   let line = 0,
