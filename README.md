@@ -26,7 +26,24 @@ pnpm exec wrangler deploy --dry-run
 `pnpm check`. The preserved `src/data/` layer is excluded from Biome to keep it
 untouched during the scaffold task.
 
-`pnpm test` is reserved for the Playwright harness in F-03; no tests exist yet.
+`pnpm test` builds with `GITHUB_DATA=fallback` and tests the production preview in
+Chromium, WebKit, a mobile viewport, reduced motion and JavaScript-disabled mode.
+Install the browser binaries first with `pnpm exec playwright install chromium webkit`.
+Every generated HTML route is smoke-tested; axe audits every route in both light
+modes in the four JavaScript-enabled projects (axe itself requires JavaScript).
+The JavaScript-disabled project checks the unenhanced HTML and navigation.
+
+`pnpm perf` audits the homepage, privacy and terms with Lighthouse's mobile settings
+and enforces the brief's score, LCP and CLS thresholds. Run a fallback build first.
+It uses Playwright Chromium or the standard macOS Chrome installation; `CHROME_PATH`
+can select another executable.
+Reports stay in ignored `playwright-report/`, `test-results/` and `.lighthouseci/`.
+
+The build-budget tests follow initial module imports and module preloads, including
+inline JavaScript, and exclude dynamic imports until requested. No-model builds
+explicitly skip the model-size check; once models exist their combined size must
+be below 1.5MB. GitHub CI runs install, checks, build, tests and performance audits;
+it never runs Blender.
 `pnpm assets` is a placeholder until the Blender pipeline task B-01.
 
 ## Structure

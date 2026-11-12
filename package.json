@@ -13,7 +13,8 @@
     "lint": "biome check .",
     "format": "biome check --write .",
     "test": "playwright test",
-    "assets": "node scripts/build-assets.mjs"
+    "assets": "node scripts/build-assets.mjs",
+    "perf": "node scripts/run-perf.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.4.1",
