@@ -21,6 +21,7 @@ for (const gate of [
   "catalogue",
   "no-webgl",
   "major-performance-caveat",
+  "software-renderer",
 ] as const) {
   test(`${gate} requests neither the WebGL renderer nor gallery models`, async ({
     page,
@@ -44,6 +45,21 @@ for (const gate of [
           value: { saveData: true, addEventListener() {} },
           configurable: true,
         });
+      if (gate === "software-renderer") {
+        Object.defineProperty(HTMLCanvasElement.prototype, "getContext", {
+          value(kind: string) {
+            if (kind !== "webgl2") return null;
+            return {
+              getExtension: (name: string) =>
+                name === "WEBGL_debug_renderer_info"
+                  ? { UNMASKED_RENDERER_WEBGL: 0x9246 }
+                  : { loseContext() {} },
+              getParameter: () =>
+                "ANGLE (Google, SwiftShader Device, SwiftShader driver)",
+            };
+          },
+        });
+      }
       if (gate === "no-webgl" || gate === "major-performance-caveat") {
         const original = HTMLCanvasElement.prototype.getContext;
         Object.defineProperty(HTMLCanvasElement.prototype, "getContext", {
@@ -116,4 +132,33 @@ test("a capable visitor who saved Catalogue can still choose Gallery", async ({
   await expect(view).toHaveAttribute("aria-pressed", "false");
   await expect(view).toHaveAccessibleName("View: Catalogue");
   await expect(page.locator("canvas.gallery-canvas")).toHaveCount(0);
+});
+
+test("native graphics capability is preserved in validation evidence", async ({
+  page,
+}, info) => {
+  test.skip(
+    info.project.name !== "desktop-chromium",
+    "One native Chromium report is sufficient.",
+  );
+  const capability = await page.evaluate(() => {
+    const context = document
+      .createElement("canvas")
+      .getContext("webgl2", { failIfMajorPerformanceCaveat: true });
+    if (!context) return { available: false };
+    const extension = context.getExtension("WEBGL_debug_renderer_info");
+    const report = {
+      available: true,
+      renderer: context.getParameter(
+        extension?.UNMASKED_RENDERER_WEBGL ?? context.RENDERER,
+      ),
+      attributes: context.getContextAttributes(),
+    };
+    context.getExtension("WEBGL_lose_context")?.loseContext();
+    return report;
+  });
+  await info.attach("native-graphics-capability.json", {
+    body: JSON.stringify(capability, null, 2),
+    contentType: "application/json",
+  });
 });

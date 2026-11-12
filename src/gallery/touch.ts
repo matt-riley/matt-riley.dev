@@ -77,7 +77,13 @@ export function mountTouch(registry: ExhibitRegistry) {
       )
         continue;
       const depth = hit.distanceTo(ray.ray.origin);
-      if (depth >= distance) continue;
+      if (
+        nearest &&
+        (record.pickPriority < nearest.record.pickPriority ||
+          (record.pickPriority === nearest.record.pickPriority &&
+            depth >= distance))
+      )
+        continue;
       distance = depth;
       nearest = { record };
       let partDistance = Infinity;

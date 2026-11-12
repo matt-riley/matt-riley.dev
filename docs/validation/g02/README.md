@@ -6,10 +6,11 @@ first-frame measurement correction changes initial native-fragment timing only;
 these centered-stop framing screenshots remain representative.
 
 - `all-stops-contact.webp`: all nine stops, 360×800 left and 1280×800 right.
-- Individual `360-*.webp` and `1280-*.webp`: original viewport captures.
+- `all-stops-large-contact.webp`: all nine stops at 768×1024 and 1920×1080.
+- Individual `<width>-*.webp`: original viewport captures at all four widths.
 - `768-resize-waystone.webp` and `1920-resize-waystone.webp`: the same live session
   resized to 768×1024 and 1920×1080, with framing recomputed.
-- `geometry.json`: measured card/projection rectangles and native stop counter.
+- `geometry.json` and `geometry-large.json`: measured card/projection rectangles and native stop counter.
 - `idle-trace.json.gz`: Chrome DevTools trace, 5 seconds after native scrolling and
   camera damping settle, categories `devtools.timeline,v8.execute,blink.user_timing`.
   Gunzip and load in Chrome DevTools Performance. Test-only instrumentation counted
@@ -19,3 +20,6 @@ The canvas is pointer-transparent; wheel, touch, keys and scrollbar remain nativ
 No wheel/key/touch cancellation, scroll spacers, or scroll snapping is installed.
 Mobile cards cap their height at 45% of the viewport and scroll their own text
 natively when it overflows. At the centered stop, no card covers its exhibit.
+
+Native browser scrollbar drag moved scrollY 0→4859 and correctly announced Waystone.
+Browser find of the Waystone curator text reached the same stop at 360 and 1280px.
