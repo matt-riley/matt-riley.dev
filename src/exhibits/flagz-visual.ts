@@ -26,8 +26,9 @@ export function mountFlagz(registry: ExhibitRegistry) {
       registry.setDraggable(record.id, false),
       registry.setTouchHandler(record.id, () => {}),
     );
-    function sync(animate: boolean) {
+    function sync(animate: boolean, changedKey?: (typeof keys)[number]) {
       for (const key of keys) {
+        if (changedKey && changedKey !== key) continue;
         const fraction = get(key) === (key === "lights" ? "day" : "on") ? 1 : 0;
         for (const prefix of ["touch_switch", "touch_flag"]) {
           const name = `${prefix}_${key}`,
@@ -44,7 +45,10 @@ export function mountFlagz(registry: ExhibitRegistry) {
         }
       }
     }
-    const changed = () => sync(true);
+    const changed = (event: Event) => {
+      const key = (event as CustomEvent).detail?.key;
+      if (keys.some((candidate) => candidate === key)) sync(true, key);
+    };
     document.addEventListener("mr:setting", changed);
     sync(false);
     return () => {
