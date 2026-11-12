@@ -69,13 +69,17 @@ export function mountDrumPads(
         }
       }
       for (const [step, list] of materials)
-        for (const material of list)
+        for (const material of list) {
+          // The gallery lighting pass also visits glaze clones. Restore the
+          // instrument colour along with its pattern/playhead state.
+          material.emissive.setHex(0xe8741a);
           material.emissiveIntensity =
             state.playhead === step
               ? 0.22
               : state.pattern.rows[state.selectedRow] & (1 << step)
                 ? 0.025
                 : 0;
+        }
       if (app.activeStop === 7) app.requestRender();
     }
     function pulse(step: number) {
@@ -101,6 +105,12 @@ export function mountDrumPads(
       )
         pulse(step);
     };
+    const setting = (event: Event) => {
+      if ((event as CustomEvent).detail?.key === "lights") update();
+    };
+    // Boot installs its lighting listener before publishing gallery readiness,
+    // so this listener restores feature-owned emission after the shared pass.
+    document.addEventListener("mr:setting", setting);
     document.addEventListener("mr:drum-state", update);
     document.addEventListener("mr:touch", touched);
     document.addEventListener("mr:drum-step", stepped);
@@ -121,6 +131,7 @@ export function mountDrumPads(
       releaseTouch = registry.setTouchHandler(record.id, () => {});
     update();
     return () => {
+      document.removeEventListener("mr:setting", setting);
       document.removeEventListener("mr:drum-state", update);
       document.removeEventListener("mr:touch", touched);
       document.removeEventListener("mr:drum-step", stepped);

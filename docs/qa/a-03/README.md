@@ -28,7 +28,11 @@ hidden state and travelling more than one stop away cancel future voices.
 - Four CPU checks pass: strict 15-character sharing codec, thirty seconds of
   simulated wake jitter, late-wake recovery, and real Three.js pad objects.
   Pad checks verify row mapping, 3mm bounded dip/exact return, 44px target binding,
-  independent material clones and full cleanup on record unload.
+  independent material clones and full cleanup on record unload. The regression
+  applies the shared Day/After-hours/Day glaze-lighting mutation and verifies
+  selected/playhead colour and intensity are restored; unload removes the
+  settings subscription. This check first failed with black emission, then
+  passed after the adapter reasserted its owned colour on Lights updates.
 - Native offline hat-choke/limiter tests and open-panel axe checks run in CI.
 
 Patterns “Head nod”, “Late bus” and “Sunday” are original patterns for this site.
