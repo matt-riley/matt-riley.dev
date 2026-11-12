@@ -1,0 +1,38 @@
+:root {
+  color-scheme: light;
+  --wall: #f4f1ea;
+  --plinth: #fbfaf6;
+  --ink: #17171a;
+  --ink-soft: #5e5b55;
+  --rule: #d9d4c8;
+  --glaze: #e8741a;
+  --glaze-ink: #b4530b;
+  --font-wall: "Bricolage Grotesque Variable", "Wall Fallback", sans-serif;
+  --font-body: "Newsreader Variable", "Body Fallback", serif;
+  --font-mono: "Commit Mono", "Mono Fallback", monospace;
+  --text-wall: clamp(3rem, 1.25rem + 8vw, 9rem);
+  --text-title: clamp(2rem, 1.2rem + 3vw, 4rem);
+  --text-body: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+  --text-meta: clamp(0.75rem, 0.72rem + 0.12vw, 0.875rem);
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-24: 6rem;
+  --measure: 62ch;
+}
+
+:root[data-lights="after-hours"] {
+  color-scheme: dark;
+  --wall: #0e0e10;
+  --plinth: #1a1a1d;
+  --ink: #ece8df;
+  --ink-soft: #a29e95;
+  --rule: #2c2c31;
+  --glaze: #ff8a2b;
+  --glaze-ink: #ff8a2b;
+}
