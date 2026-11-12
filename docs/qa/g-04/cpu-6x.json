@@ -1,0 +1,15 @@
+{
+  "viewport": [960, 600],
+  "devicePixelRatio": 1,
+  "cpuThrottle": 6,
+  "isolated": true,
+  "state": {
+    "tiers": ["high", "medium", "low", "retreat"],
+    "view": "catalogue",
+    "saved": "gallery",
+    "quality": "retreat",
+    "note": "Switched to the catalogue to keep things smooth.",
+    "canvases": 0
+  },
+  "errors": []
+}
