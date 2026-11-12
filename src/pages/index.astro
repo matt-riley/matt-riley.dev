@@ -3,6 +3,7 @@ import { getCollection, render } from "astro:content";
 import Exhibit from "../components/Exhibit.astro";
 import Header from "../components/Header.astro";
 import SplitFlap from "../components/SplitFlap.astro";
+import HeadOfSecurity from "../components/HeadOfSecurity.astro";
 import { site } from "../content/site";
 import { loadDossier } from "../data/github";
 import Base from "../layouts/Base.astro";
@@ -33,6 +34,7 @@ const exhibits = await Promise.all(entries.map(async (exhibit) => ({ exhibit, ..
     ))}
   </div>
   <nav class="museum-footer" slot="footer" aria-label="Museum information">
+    <HeadOfSecurity />
     <a href="#entrance">Back to the entrance ↑</a>
     <ul><li><a href="/privacy">Privacy</a></li><li><a href="/terms">Terms</a></li></ul>
   </nav>
@@ -43,4 +45,5 @@ const exhibits = await Promise.all(entries.map(async (exhibit) => ({ exhibit, ..
   import "../gallery/rail-entry";
   import "../scripts/gallery-gate";
   import "../scripts/gallery-interactions";
+  import "../scripts/cat";
 </script>
