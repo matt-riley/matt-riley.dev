@@ -88,7 +88,10 @@ export class ExhibitRegistry {
         parts.set(object.name, bindPart(object, this.app.requestRender));
       const mesh = object as Mesh;
       if (!mesh.isMesh) return;
-      mesh.castShadow = mesh.receiveShadow = true;
+      // Inset pads share the chassis silhouette instead of sixteen shadow draws.
+      // Their individual materials, receiving shadows and touch pivots remain live.
+      mesh.castShadow = !(id === "boom-bap" && /^pad_\d+$/.test(mesh.name));
+      mesh.receiveShadow = true;
       const materials = Array.isArray(mesh.material)
         ? mesh.material
         : [mesh.material];
