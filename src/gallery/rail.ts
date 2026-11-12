@@ -6,6 +6,7 @@ import {
   type PerspectiveCamera,
   Vector3,
 } from "three";
+import { resolveStopTarget } from "./rail-state";
 
 interface Stop {
   camera: Vector3;
@@ -252,7 +253,7 @@ export function mountRail(app: RailHost) {
       scrollY +
       section.getBoundingClientRect().height / 2,
   );
-  const initialProgress =
+  let initialProgress =
     hashIndex >= 0
       ? hashIndex
       : nativeProgress(scrollY + innerHeight / 2, originalCentres);
@@ -308,6 +309,7 @@ export function mountRail(app: RailHost) {
     const section = sections.find(
       (section) => `#${section.id}` === location.hash,
     );
+    if (firstFrame && section) initialProgress = sections.indexOf(section);
     section?.scrollIntoView({ block: "center", behavior: "smooth" });
   }
   const boardChanges = new MutationObserver(() => {
@@ -364,6 +366,9 @@ export function mountRail(app: RailHost) {
       return false;
     if (measureNeeded) measure();
     if (firstFrame) {
+      // Native fragment scrolling may have measured the catalogue while assets loaded.
+      // Always measure again after gallery CSS has activated.
+      measure();
       // Enhancement changes section heights. Preserve the visitor's logical stop.
       const first = Math.min(Math.floor(initialProgress), centres.length - 2);
       const position = MathUtils.lerp(
@@ -392,8 +397,24 @@ export function mountRail(app: RailHost) {
       pointerY = goalY;
     }
     const sample = rail.sample(progress);
+    const first = Math.min(Math.floor(sample.position), bounds.length - 2);
+    const fraction = sample.position - first;
+    frameBox.min.copy(bounds[first].min).lerp(bounds[first + 1].min, fraction);
+    frameBox.max.copy(bounds[first].max).lerp(bounds[first + 1].max, fraction);
+    const adaptation = resolveStopTarget(Math.round(progress), {
+      sectionProgress: MathUtils.clamp(
+        progress - Math.round(progress) + 0.5,
+        0,
+        1,
+      ),
+      defaultTarget: sample.target.clone(),
+      defaultBounds: frameBox.clone(),
+      room: app.room,
+    });
+    if (adaptation?.bounds) frameBox.copy(adaptation.bounds);
+
     app.camera.position.copy(sample.camera);
-    app.camera.lookAt(sample.target);
+    app.camera.lookAt(adaptation?.target ?? sample.target);
     app.camera.rotateY(-pointerX * MathUtils.degToRad(1.5));
     app.camera.rotateX(-pointerY * MathUtils.degToRad(1.5));
     app.activeStop = Math.round(goal);
@@ -420,10 +441,6 @@ export function mountRail(app: RailHost) {
             top: header + 16,
             bottom: height - 16,
           };
-    const first = Math.min(Math.floor(sample.position), bounds.length - 2);
-    const fraction = sample.position - first;
-    frameBox.min.copy(bounds[first].min).lerp(bounds[first + 1].min, fraction);
-    frameBox.max.copy(bounds[first].max).lerp(bounds[first + 1].max, fraction);
     app.camera.fov = baseFov;
     app.camera.clearViewOffset();
     app.camera.updateMatrixWorld(true);

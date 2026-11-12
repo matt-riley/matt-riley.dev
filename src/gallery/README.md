@@ -48,3 +48,33 @@ The baked room map uses UV1 in an unlit, untone-mapped material. Exhibit materia
 retain approved porcelain/glaze values and use the shared hemisphere/key light.
 The gallery renders on demand, including after a resize or setting change, and
 pauses while the document is hidden.
+
+## Photograph colour calibration
+
+The renderer uses ACES, while the approved Blender photographs use AgX. The
+orange glaze alone uses Three's AgX shader with a display-light scale of 3;
+its GLB base colour remains #E8741A. Dark cat stripe glaze is excluded. This
+approximates Blender's soft glaze highlights without a white environment map,
+extra textures, or a palette change. The baked room remains unlit and is not
+re-exposed: it already contains Blender's display transform.
+
+Measured entrance medians (sRGB bytes): baked wall 216/214/210 versus photograph
+216/212/206; glaze before 216/117/30, calibrated 233/172/125, photograph
+222/160/130. These are representative patches rather than a claim of pixel
+identity: the live rail also offsets framing to clear the HTML placard.
+
+## Slow graphics fallback
+
+The standard WebGL `failIfMajorPerformanceCaveat` flag declines contexts the
+browser considers dramatically slower than native GPU rendering. Those visitors
+keep the complete photographic catalogue and request no Three.js or models.
+This is a production capability rule, including software fallback drivers,
+not a user-agent or test-runner check. The WebGL specification defines it at
+https://registry.khronos.org/webgl/specs/latest/1.0/#5.2 .
+
+Hosted Linux evidence before this guard: three home audits scored .74 with
+1.53–1.54s total blocking time; shader/first-frame tasks took ~1.2s and ~.4s.
+Hardware-backed local audits scored .96–.98. Integration tests explicitly
+remove only that context attribute in their fixture, retaining real Three.js,
+real software contexts, rendering, model loads and disposal coverage; network
+gate tests separately verify the unmodified performance-caveat fallback.
