@@ -49,7 +49,15 @@ function hideCue() {
   window.removeEventListener("touchmove", intendScroll);
   window.removeEventListener("keydown", scrollKey);
   window.removeEventListener("pointerdown", scrollPointer);
+  window.removeEventListener("hashchange", hashCue);
 }
+function hashCue() {
+  if (location.hash && location.hash !== "#entrance") {
+    intendScroll();
+    hideCue();
+  }
+}
+window.addEventListener("hashchange", hashCue);
 window.addEventListener("wheel", intendScroll, { passive: true });
 window.addEventListener("touchmove", intendScroll, { passive: true });
 window.addEventListener("keydown", scrollKey);

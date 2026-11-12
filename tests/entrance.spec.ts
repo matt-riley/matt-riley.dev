@@ -173,3 +173,19 @@ test("the rope adapter damps to rest, repeats without drift and releases its fra
     releases: 3,
   });
 });
+
+test("the quiet entrance cue follows native navigation and then gets out of the way", async ({
+  page,
+}, info) => {
+  test.skip(
+    info.project.name !== "desktop-chromium",
+    "One native anchor check covers the cue.",
+  );
+  await page.addInitScript(() => localStorage.setItem("mr-view", "catalogue"));
+  await page.goto("/");
+  const cue = page.locator("[data-scroll-cue]");
+  await expect(cue).toBeVisible();
+  await cue.click();
+  await expect(page).toHaveURL(/#tools$/);
+  await expect(cue).toBeHidden();
+});
