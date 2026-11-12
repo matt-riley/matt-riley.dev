@@ -15,12 +15,46 @@ window.addEventListener("pagehide", () => clearTimeout(minute));
 updateHours();
 
 const cue = document.querySelector<HTMLElement>("[data-scroll-cue]");
-function hideCue() {
-  if (scrollY <= 0) return;
-  if (cue) cue.hidden = true;
-  window.removeEventListener("scroll", hideCue);
+let scrollIntent = Boolean(location.hash && location.hash !== "#entrance");
+const intendScroll = () => {
+  scrollIntent = true;
+};
+function scrollKey(event: KeyboardEvent) {
+  if (
+    [
+      "Space",
+      " ",
+      "PageDown",
+      "PageUp",
+      "ArrowDown",
+      "ArrowUp",
+      "Home",
+      "End",
+    ].includes(event.key) &&
+    !(
+      event.target instanceof Element &&
+      event.target.closest("button,input,textarea,select,[contenteditable]")
+    )
+  )
+    intendScroll();
 }
-window.addEventListener("scroll", hideCue, { passive: true });
+function scrollPointer(event: PointerEvent) {
+  if (event.clientX >= innerWidth - 20) intendScroll();
+}
+function hideCue() {
+  if (!scrollIntent) return;
+  if (cue) cue.hidden = true;
+  window.removeEventListener("scroll", hideCue, true);
+  window.removeEventListener("wheel", intendScroll);
+  window.removeEventListener("touchmove", intendScroll);
+  window.removeEventListener("keydown", scrollKey);
+  window.removeEventListener("pointerdown", scrollPointer);
+}
+window.addEventListener("wheel", intendScroll, { passive: true });
+window.addEventListener("touchmove", intendScroll, { passive: true });
+window.addEventListener("keydown", scrollKey);
+window.addEventListener("pointerdown", scrollPointer, { passive: true });
+window.addEventListener("scroll", hideCue, { passive: true, capture: true });
 hideCue();
 if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
   try {
