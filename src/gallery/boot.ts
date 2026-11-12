@@ -16,6 +16,7 @@ import {
 } from "three";
 import type { GLTF } from "three/addons/loaders/GLTFLoader.js";
 import { type AssetId, AssetStore } from "./assets";
+import { batchExhibit, batchRoom } from "./batch-room";
 import { mountQuality } from "./quality";
 import { publishGallery } from "./state";
 import type {
@@ -83,6 +84,7 @@ export function boot({ onFailure }: Options): GallerySession {
   let enabled = false;
   let paused = false;
   let frame = 0;
+  let nextContinuous = false;
   let lastTime = 0;
   let app: GalleryApp | undefined;
 
@@ -153,22 +155,27 @@ export function boot({ onFailure }: Options): GallerySession {
         ? object.material.map(convert)
         : convert(object.material);
     });
+    if (id === "room") batchRoom(asset.scene);
+    else if (id !== "cat") batchExhibit(asset.scene);
   }
   const assets = new AssetStore(prepare);
 
   function requestRender() {
     if (disposed || !enabled || paused || frame || document.hidden) return;
+    nextContinuous = false;
     frame = requestAnimationFrame(draw);
   }
   function draw(time: number) {
     frame = 0;
+    const continuous = nextContinuous;
+    nextContinuous = false;
     if (disposed || document.hidden || root.dataset.gallery !== "ready") return;
     const delta = lastTime ? Math.min((time - lastTime) / 1000, 0.05) : 0;
     lastTime = time;
     let again = false;
     try {
       for (const listener of frames)
-        if (listener(delta, time / 1000)) again = true;
+        if (listener(delta, time / 1000, continuous)) again = true;
       if (disposed) return;
       if (app) {
         const target = app.room.getObjectByName(
@@ -179,7 +186,10 @@ export function boot({ onFailure }: Options): GallerySession {
       }
       renderer.render(scene, camera);
       layer.dataset.rendered = "true";
-      if (again) requestRender();
+      if (again) {
+        requestRender();
+        nextContinuous = true;
+      }
     } catch {
       dispose();
       onFailure();
@@ -296,6 +306,7 @@ export function boot({ onFailure }: Options): GallerySession {
       },
       requestRender,
       setPaused(value) {
+        if (paused === value) return;
         paused = value;
         if (paused) {
           cancelAnimationFrame(frame);
