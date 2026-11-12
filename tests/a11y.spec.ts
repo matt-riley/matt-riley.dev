@@ -79,6 +79,11 @@ for (const view of ["catalogue", "gallery"] as const) {
                 .map((animation) => animation.finished.catch(() => {})),
             );
           });
+          if (view === "gallery")
+            await expect(page.locator("html")).toHaveAttribute(
+              "data-gallery",
+              "ready",
+            );
           const results = await new AxeBuilder({ page }).analyze();
           expect(
             results.violations,
