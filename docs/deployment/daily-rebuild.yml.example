@@ -1,0 +1,27 @@
+# INACTIVE TEMPLATE. Matt must approve this plan, repair the existing Workers
+# Builds Git connection, create its main-branch deploy hook, and configure the
+# production environment secret before copying this into .github/workflows/.
+name: Request daily Workers rebuild
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 6 * * *"
+permissions: {}
+concurrency:
+  group: production-rebuild-hook
+  cancel-in-progress: false
+jobs:
+  request-build:
+    runs-on: ubuntu-latest
+    environment: production
+    timeout-minutes: 5
+    steps:
+      - name: Request the existing production Workers Builds pipeline
+        env:
+          CLOUDFLARE_DEPLOY_HOOK_URL: ${{ secrets.CLOUDFLARE_DEPLOY_HOOK_URL }}
+        run: |
+          test -n "$CLOUDFLARE_DEPLOY_HOOK_URL"
+          curl --fail --silent --show-error --request POST \
+            --connect-timeout 10 --max-time 60 --output /dev/null \
+            --url "$CLOUDFLARE_DEPLOY_HOOK_URL"
+          echo "Rebuild request accepted; verify its build and deployment in Workers Builds."

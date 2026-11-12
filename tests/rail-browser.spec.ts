@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { modelURL } from "../src/gallery/model-files";
 import { allowSoftwareWebGL } from "./gallery-capability";
 
 test.beforeEach(async ({ page }, info) => {
@@ -112,7 +113,7 @@ test("the last painted photograph fades at its original rectangle and releases i
       attributeFilter: ["data-gallery"],
     });
   });
-  await page.route("**/models/room.glb", async (route) => {
+  await page.route(`**${modelURL("room")}`, async (route) => {
     await page
       .locator('#entrance [data-photo-mode="day"] img')
       .evaluate(async (image) => {

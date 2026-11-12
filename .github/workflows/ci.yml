@@ -40,6 +40,7 @@ jobs:
         run: pnpm exec playwright test tests/drum-browser.spec.ts --project=desktop-chromium --workers=1 --grep "actual oscillator deadlines" --output=test-results/audio-clock
         env:
           PLAYWRIGHT_HTML_OUTPUT_DIR: playwright-audio-clock-report
+      - run: pnpm test:edge
       - run: pnpm perf
         env:
           # Hosted Ubuntu blocks Chromium user namespaces; audits serve only local static output.
