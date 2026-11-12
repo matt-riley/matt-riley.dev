@@ -1,4 +1,5 @@
 import { expect, type Page, test } from "@playwright/test";
+import { modelURL } from "../src/gallery/model-files";
 import { allowSoftwareWebGL } from "./gallery-capability";
 
 async function liveContexts(page: Page) {
@@ -80,11 +81,11 @@ test("switching off during an unfinished room fetch disposes immediately", async
   const blocked = new Promise<void>((resolve) => {
     release = resolve;
   });
-  await page.route("**/models/room.glb", async (route) => {
+  await page.route(`**${modelURL("room")}`, async (route) => {
     await blocked;
     await route.continue().catch(() => {});
   });
-  const loading = page.waitForRequest("**/models/room.glb");
+  const loading = page.waitForRequest(`**${modelURL("room")}`);
   await page.goto("/");
   await loading;
   await expect.poll(() => liveContexts(page)).toBe(1);

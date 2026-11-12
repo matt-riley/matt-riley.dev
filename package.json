@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "node scripts/model-artifacts.mjs manifest && astro build && node scripts/build-headers.mjs && node scripts/model-artifacts.mjs package",
     "preview": "astro preview",
     "deploy": "pnpm run build && wrangler deploy",
     "check": "astro check",
@@ -15,7 +15,8 @@
     "test": "playwright test",
     "assets": "node scripts/build-assets.mjs",
     "perf": "node scripts/run-perf.mjs",
-    "assets:stills": "node scripts/build-stills.mjs"
+    "assets:stills": "node scripts/build-stills.mjs",
+    "preview:edge": "wrangler dev --local --ip 127.0.0.1"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.4.1",

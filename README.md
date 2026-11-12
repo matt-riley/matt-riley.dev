@@ -72,8 +72,9 @@ deterministic builds.
 ## Deployment
 
 `wrangler.jsonc` uploads the generated `dist/` as static Workers Assets.
-`pnpm deploy` builds and deploys; it publishes the current scaffold, so review the
-build before using it. No server entry point or Cloudflare adapter is needed.
+`pnpm deploy` builds and deploys the reviewed output. No server entry point or
+Cloudflare adapter is needed. See [deployment proposal and verification](docs/deployment/README.md)
+for hashed assets, CSP, preview review, and the inactive daily rebuild template.
 
 ## Reuse
 
