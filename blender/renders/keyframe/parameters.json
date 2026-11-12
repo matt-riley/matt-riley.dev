@@ -43,7 +43,7 @@
     "torch_cone_degrees": 28,
     "glaze_emission": 0.12
   },
-  "status": "Draft studies; no material variant has been approved by Matt.",
+  "status": "Matt approved P2/G2 in the Codex chat: porcelain roughness 0.85, glaze #E8741A. Other variants remain unapproved.",
   "camera": {
     "day_and_after_hours": {
       "location": [

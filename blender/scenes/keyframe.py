@@ -171,7 +171,7 @@ def main():
         "variant_resolution": [800, 480], "variant_samples": 16, "variant_view": "close-up",
         "day": {"world_strength": 0.16, "skylight_watts": 420, "skylight_size_m": 2.5, "bounce_watts": 45},
         "after_hours": {"world_strength": 0.001, "torch_watts": 35, "torch_cone_degrees": 28, "glaze_emission": 0.12},
-        "status": "Draft studies; no material variant has been approved by Matt."
+        "status": "Matt approved P2/G2 in the Codex chat: porcelain roughness 0.85, glaze #E8741A. Other variants remain unapproved."
     }
     args.output_dir.mkdir(parents=True, exist_ok=True)
     (args.output_dir / "parameters.json").write_text(json.dumps(parameters, indent=2) + "\n")

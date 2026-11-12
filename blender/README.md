@@ -78,7 +78,7 @@ bounds were also checked in the viewer.
 
 ![Sample GLB viewed in Three.js](sample-preview.png)
 
-## B-02 look-development studies (pending approval)
+## B-02 look-development studies (P2/G2 approved)
 
 The render-only `scenes/keyframe.py` builds a gallery corner, a 0.45m square × 1m
 plinth with 3mm bevels, and an open cantilever toolbox with two swung-out trays.
@@ -98,8 +98,9 @@ Exact lighting and material parameters are recorded beside the stills in
 
 Rows P1/P2/P3 compare porcelain roughness 0.75/0.85/0.95. Columns G1/G2/G3 compare
 orange glaze sRGB #DF6D17/#E8741A/#EF7B20. The three main stills use the centre
-P2/G2 baseline; they are proposals, not an approved selection. No shared material
-factory values are changed before Matt's decision on the Notion task.
+P2/G2 baseline, approved by Matt in the Codex chat and recorded on the Notion
+task. The shared factories use explicit approved constants: porcelain roughness
+0.85 and glaze #E8741A. The remaining variants are retained for comparison.
 
 Asset builds skip render-only modules and optimize only the asset names recorded
 by Blender in the ignored build manifest. This keeps `pnpm assets` independent of
