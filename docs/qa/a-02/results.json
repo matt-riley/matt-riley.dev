@@ -1,0 +1,12 @@
+{
+  "capturedAt": "2026-11-12T17:29:11.700Z",
+  "passed": 11,
+  "skipped": 14,
+  "failed": 0,
+  "flaky": 0,
+  "peak": [
+    "0.19297 linear / -14.29 dBFS"
+  ],
+  "unminifiedModuleGzipBytes": 2507,
+  "finalSampleCeiling": 0.45
+}
