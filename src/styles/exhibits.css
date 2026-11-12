@@ -102,6 +102,17 @@
   list-style: none;
 }
 
+.placard__links a,
+.item-list a,
+.gift-shop-contact a,
+.museum-footer a,
+.human-error__nav a,
+.drum-foot a {
+  display: inline-block;
+  min-width: 24px;
+  min-height: 24px;
+}
+
 .touch-control {
   display: inline-flex;
   align-items: baseline;

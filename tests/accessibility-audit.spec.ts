@@ -144,7 +144,7 @@ test("standalone touch targets are at least 24px and primary controls are 44px",
   });
   const targets = await page
     .locator(
-      "button,summary,select,input,.placard__links a,.item-list a,.gift-shelf a,.gift-shop-contact a,.museum-footer a,.stop-menu a,.monogram",
+      "button,summary,select,input,.placard__links a,.item-list a,.gift-shelf a,.gift-shop-contact a,.museum-footer a,.stop-menu a,.monogram,.human-error__nav a,.drum-foot a",
     )
     .evaluateAll((elements) =>
       elements.flatMap((element) => {
@@ -224,6 +224,8 @@ for (const view of ["catalogue", "gallery"] as const) {
       expect(focus.outline, `Tab ${step}: ${focus.name}`).not.toBe("none");
       if (focus.stop) {
         reached.add(focus.stop);
+        if (focus.stop !== "entrance")
+          await expect(page.locator("[data-scroll-cue]")).toBeHidden();
         journey.push({ stop: focus.stop, name: focus.name, tag: focus.tag });
         if (focus.tag === "SUMMARY" || focus.tag === "BUTTON")
           await page.keyboard.press("Enter");

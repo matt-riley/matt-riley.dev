@@ -115,7 +115,7 @@ const prefix = Astro.url.pathname === "/" ? "" : "/";
   .stop-menu nav { position: absolute; inset-block-start: 100%; inset-inline-end: var(--space-2); width: min(24rem, calc(100vw - var(--space-4))); max-height: 75svh; overflow: auto; padding: var(--space-6); border: 1px solid var(--rule); background: var(--plinth); }
   .stop-menu ol { padding-inline-start: var(--space-6); }
   .stop-menu li + li { margin-block-start: var(--space-3); }
-  .stop-menu a { display: inline-block; padding-block: var(--space-1); }
+  .stop-menu a { display: inline-block; min-height: 24px; padding-block: var(--space-1); }
   @media (min-width: 900px) { .site-header { gap: var(--space-6); padding-inline: var(--space-6); } .current-stop { display: block; } .header-controls { margin-inline-start: 0; } }
   @media (max-width: 599px) { .site-header { height: 7rem; } :global(html:has(.site-header)) { --header-height: 7rem; } .header-controls:not([hidden]) { display: grid; grid-template-columns: 1fr 1fr; } .header-controls .header-control { width: 7.5em; } }
   @media (max-width: 359px) { .site-header { font-size: .6875rem; } .lights-control { width: 7.6em; } }
