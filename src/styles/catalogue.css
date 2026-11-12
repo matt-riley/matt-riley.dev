@@ -122,12 +122,24 @@ button {
 }
 
 :focus-visible {
-  outline: 2px solid var(--glaze);
+  outline: 2px solid var(--glaze-ink);
   outline-offset: 3px;
 }
 
 main:focus {
   outline: none;
+}
+
+@media (forced-colors: active) {
+  :focus-visible {
+    outline: 2px solid Highlight;
+  }
+
+  button,
+  summary,
+  select {
+    border-color: ButtonText;
+  }
 }
 
 img,
