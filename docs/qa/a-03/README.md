@@ -31,7 +31,9 @@ hidden state and travelling more than one stop away cancel future voices.
   independent material clones and full cleanup on record unload. The regression
   applies the shared Day/After-hours/Day glaze-lighting mutation and verifies
   selected/playhead colour and intensity are restored; unload removes the
-  settings subscription. This check first failed with black emission, then
+  settings subscription. Pad clones retain their glaze names for calibration
+  and declare `userData.touchEmissionOwned=true`; generic boot and A-01 glow
+  lighting must skip that ownership flag, including per-frame updates. This check first failed with black emission, then
   passed after the adapter reasserted its owned colour on Lights updates.
 - Native offline hat-choke/limiter tests and open-panel axe checks run in CI.
 

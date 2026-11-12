@@ -118,7 +118,8 @@ test("drum pads follow the selected row, dip within their range and release clon
           : [mesh.material])
           if (
             material instanceof MeshStandardMaterial &&
-            material.name.startsWith("glaze")
+            material.name.startsWith("glaze") &&
+            material.userData.touchEmissionOwned !== true
           )
             material.emissive
               .copy(material.color)
@@ -140,6 +141,11 @@ test("drum pads follow the selected row, dip within their range and release clon
         (part) => (part.children[0] as Mesh).material as MeshStandardMaterial,
       );
     expect(materials[0]).not.toBe(glaze);
+    expect(
+      materials.every(
+        (material) => material.userData.touchEmissionOwned === true,
+      ),
+    ).toBe(true);
     expect(materials[0].emissiveIntensity).toBe(0.025);
     expect(materials[1].emissiveIntensity).toBe(0);
     expect(hitAreas.size).toBe(16);
@@ -159,6 +165,15 @@ test("drum pads follow the selected row, dip within their range and release clon
       );
       expect(materials[1].emissive.getHex()).toBe(0xe8741a);
       expect(materials[1].emissiveIntensity).toBe(0.025);
+      expect(materials[5].emissive.getHex()).toBe(0xe8741a);
+      expect(materials[5].emissiveIntensity).toBe(0.22);
+      // A-01 repeats its generic glaze pass per frame, with no settings event
+      // for the adapter to repair afterward. Ownership must preserve emission.
+      for (let frame = 0; frame < 3; frame++)
+        syncLights(
+          new CustomEvent("mr:setting", { detail: { key: "lights", value } }),
+        );
+      expect(materials[1].emissive.getHex()).toBe(0xe8741a);
       expect(materials[5].emissive.getHex()).toBe(0xe8741a);
       expect(materials[5].emissiveIntensity).toBe(0.22);
     }

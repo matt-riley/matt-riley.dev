@@ -37,7 +37,11 @@ export function mountDrumPads(
         if (!mesh.isMesh) return;
         const original = mesh.material,
           list = Array.isArray(original) ? original : [original];
-        const copies = list.map((material) => material.clone());
+        const copies = list.map((material) => {
+          const clone = material.clone();
+          clone.userData.touchEmissionOwned = true;
+          return clone;
+        });
         originals.push({ mesh, material: original });
         clones.push(...copies);
         mesh.material = Array.isArray(original) ? copies : copies[0];

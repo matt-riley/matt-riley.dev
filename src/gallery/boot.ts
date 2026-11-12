@@ -129,7 +129,10 @@ export function boot({ onFailure }: Options): GallerySession {
         if (material.name === "porcelain") {
           material.roughness = 0.85;
           material.metalness = 0;
-        } else if (material.name.startsWith("glaze")) {
+        } else if (
+          material.name.startsWith("glaze") &&
+          material.userData.touchEmissionOwned !== true
+        ) {
           if (material.name === "glaze") {
             // Match Blender's approved AgX glaze without changing its #E8741A paint.
             // The renderer retains ACES for the other live materials.
@@ -218,7 +221,8 @@ export function boot({ onFailure }: Options): GallerySession {
         : [object.material]) {
         if (
           material instanceof MeshStandardMaterial &&
-          material.name.startsWith("glaze")
+          material.name.startsWith("glaze") &&
+          material.userData.touchEmissionOwned !== true
         )
           material.emissive
             .copy(material.color)
