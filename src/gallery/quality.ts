@@ -42,7 +42,6 @@ export function mountQuality(app: GalleryApp) {
   let windowStop = -1;
   let ended = false;
   let previous = 0;
-  let wasMoving = false;
   const position = new Vector3();
   const orientation = new Quaternion();
   let debug: HTMLPreElement | undefined;
@@ -159,20 +158,23 @@ export function mountQuality(app: GalleryApp) {
       registry = undefined;
     };
   });
-  const releaseFrame = app.onFrame(() => {
+  const releaseFrame = app.onFrame((_delta, _time, continuous) => {
     const now = performance.now();
     const moving =
       position.distanceToSquared(app.camera.position) > 1e-9 ||
       orientation.angleTo(app.camera.quaternion) > 1e-5;
-    if (previous && monitor.sample(now, now - previous, moving && wasMoving))
+    if (previous && monitor.sample(now, now - previous, moving && continuous))
       applyTier();
     previous = now;
-    wasMoving = moving;
     position.copy(app.camera.position);
     orientation.copy(app.camera.quaternion);
     updateWindow();
-    if (debug)
+    if (debug) {
+      debug.dataset.geometries = String(app.renderer.info.memory.geometries);
+      debug.dataset.textures = String(app.renderer.info.memory.textures);
+      debug.dataset.records = String(registry?.records.size ?? 0);
       debug.textContent = `${monitor.tier}\n${monitor.average.toFixed(1)} ms\n${app.renderer.info.render.calls} calls\n${app.renderer.info.render.triangles} triangles`;
+    }
     return false;
   });
   const pause = () =>
