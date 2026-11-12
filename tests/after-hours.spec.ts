@@ -131,9 +131,22 @@ test("after-hours torch follows pointer and keyboard without darkening labels", 
   await expect(page.locator("html")).toHaveAttribute("data-lights", "day");
   await page.waitForTimeout(1000);
   await keyboardHuman();
-  await page
-    .getByRole("button", { name: "View: Gallery", exact: true })
-    .click();
+  if ((await page.locator("html").getAttribute("data-view")) === "gallery") {
+    await page
+      .getByRole("button", { name: "View: Gallery", exact: true })
+      .click();
+  } else {
+    // The explicitly enabled software integration renderer may legitimately
+    // reach G04's session retreat after the functional checks above.
+    await expect(page.locator("html")).toHaveAttribute(
+      "data-view",
+      "catalogue",
+    );
+    await expect(page.locator("[data-gallery-retreat]")).toHaveCount(1);
+    expect(await page.evaluate(() => localStorage.getItem("mr-view"))).toBe(
+      "gallery",
+    );
+  }
   await expect(page.locator(".gallery-torch-mask")).toHaveCount(0);
   expect(errors).toEqual([]);
 });
@@ -156,4 +169,77 @@ test("catalogue photographs switch to the night stills without WebGL", async ({
   await expect(page.locator("#tools [data-photo-mode='night']")).toBeVisible();
   await expect(page.locator("#tools [data-photo-mode='day']")).toBeHidden();
   await expect(page.locator("[data-gallery-layer]")).toHaveCount(0);
+});
+
+test("native drum controls, microphone and absence each receive the keyboard torch", async ({
+  page,
+}, info) => {
+  test.skip(
+    info.project.name !== "desktop-chromium",
+    "Real focus/uniform integration runs once.",
+  );
+  test.setTimeout(60_000);
+  await page.setViewportSize({ width: 960, height: 600 });
+  await allowSoftwareWebGL(page);
+  await page.addInitScript(() => {
+    localStorage.setItem("mr-view", "gallery");
+    localStorage.setItem("mr-lights", "after-hours");
+    localStorage.setItem("mr-sound", "off");
+    const state = { position: [] as number[], direction: [] as number[] };
+    (window as typeof window & { __torchTarget: typeof state }).__torchTarget =
+      state;
+    const names = new WeakMap<WebGLUniformLocation, string>();
+    const gl = WebGL2RenderingContext.prototype;
+    const location = gl.getUniformLocation;
+    gl.getUniformLocation = function (program, name) {
+      const result = location.call(this, program, name);
+      if (result) names.set(result, name);
+      return result;
+    };
+    const uniform = gl.uniform3f;
+    gl.uniform3f = function (at, x, y, z) {
+      const name = at && names.get(at);
+      if (name === "museumTorchPosition") state.position = [x, y, z];
+      if (name === "museumTorchDirection") state.direction = [x, y, z];
+      uniform.call(this, at, x, y, z);
+    };
+  });
+  await page.goto("/#human-error");
+  await expect(page.locator("html")).toHaveAttribute("data-gallery", "ready", {
+    timeout: 30_000,
+  });
+  await page
+    .locator("#human-error > .exhibit__label > details")
+    .evaluate((details: HTMLDetailsElement) => {
+      details.open = true;
+    });
+  const play = page.locator("[data-drum-play]");
+  await play.scrollIntoViewIfNeeded();
+  await expect(play).toBeEnabled();
+  await page.keyboard.press("Tab");
+  const samples: Array<{ control: string; hitX: number }> = [];
+  for (const [selector, expectedX] of [
+    ["[data-drum-play]", 9.3],
+    ["[data-drum-row='0'][data-drum-step='0']", 9.3],
+    ["#open-mic [data-touch]", 9.9],
+    ["#absent [data-touch]", 8.7],
+  ] as const) {
+    await page.locator(selector).focus();
+    await page.waitForTimeout(650);
+    await expect(page.locator("[data-current-stop]")).toContainText("7 of 8");
+    const hitX = await page.evaluate(() => {
+      const { position: p, direction: d } = (
+        window as typeof window & {
+          __torchTarget: { position: number[]; direction: number[] };
+        }
+      ).__torchTarget;
+      return p[0] + d[0] * ((-1.65 - p[2]) / d[2]);
+    });
+    expect(Math.abs(hitX - expectedX)).toBeLessThan(0.24);
+    samples.push({ control: selector, hitX });
+  }
+  await info.attach("keyboard-torch-model-targets", {
+    body: JSON.stringify(samples),
+    contentType: "application/json",
+  });
 });

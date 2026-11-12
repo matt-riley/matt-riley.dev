@@ -42,3 +42,21 @@ full screenshots record the checks. No browser/page errors occurred.
 while mid-scroll. `transition.json` records Gallery ready and one live canvas
 throughout; the images show no white flash. The CPU reversal test separately
 checks bounded exposure continuity on a mid-sweep reversal.
+
+Post-review regressions:
+
+- Native A03 Play/grid controls now retain their nearest `data-model` ancestor
+  for torch aiming, as microphone/absence controls do. The targeted native test
+  traverses Play → first grid cell → microphone → empty plinth and verifies
+  the uploaded ray's world-space intersection against each authored position;
+  all four pass in 5.0s (`drum-focus.txt`).
+- The mode-switch CLS source was the centered fixed “Come in” cue: adding night
+  padding/border changed 43.7×43.6px into 64.9×58.4px and moved its left edge
+  10.6px. Day now reserves the same geometry; night changes only colors.
+  `light-mode-cls-before.json` identifies that exact node; the after capture has
+  identical rectangles and no shifts. The existing exact-zero assertion passes
+  on desktop, mobile and reduced-motion (`light-mode-cls-tests.txt`), unchanged.
+- The long explicit software-renderer integration sequence can legitimately
+  reach G04's session-only catalogue retreat. Teardown now verifies its notice
+  and unchanged saved Gallery preference instead of waiting for a stale button
+  label; all preceding shader, pointer, keyboard and AA assertions remain.

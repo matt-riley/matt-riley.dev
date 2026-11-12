@@ -14,6 +14,7 @@ interface Props {
 const { title, description, noindex = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname.replace(/^\/404\/?$/, "/404.html"), Astro.site);
 const shareImage = new URL("/og.png", Astro.site);
+const shareImageAlt = "An orange ceramic cat on a porcelain plinth beside the words: Matt Riley makes small useful things. Please touch.";
 const home = new URL("/", Astro.site).href;
 const structuredData = JSON.stringify({
   "@context": "https://schema.org",
@@ -49,6 +50,8 @@ const structuredData = JSON.stringify({
     {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
     <link rel="preload" href={wallFont} as="font" type="font/woff2" crossorigin />
     <meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)" />
@@ -63,12 +66,12 @@ const structuredData = JSON.stringify({
     <meta property="og:image" content={shareImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Please Touch: The Museum of Small Useful Things, by Matt Riley" />
+    <meta property="og:image:alt" content={shareImageAlt} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={shareImage} />
-    <meta name="twitter:image:alt" content="Please Touch: The Museum of Small Useful Things, by Matt Riley" />
+    <meta name="twitter:image:alt" content={shareImageAlt} />
     {Astro.url.pathname === "/" && <script type="application/ld+json" is:inline set:html={structuredData} />}
     <title>{title}</title>
   </head>

@@ -24,8 +24,50 @@ for (const route of ["/", "/privacy/", "/terms/", "/404.html"]) {
       "content",
       "https://matt-riley.dev/og.png",
     );
+    await expect(page.locator('link[rel="apple-touch-icon"]')).toHaveAttribute(
+      "href",
+      "/apple-touch-icon.png",
+    );
+    await expect(page.locator('link[rel="manifest"]')).toHaveAttribute(
+      "href",
+      "/site.webmanifest",
+    );
   });
 }
+
+test("shared identity URLs serve the actual budgeted image and manifest icons", async ({
+  request,
+}) => {
+  const share = await request.get("/og.png");
+  expect(share.status()).toBe(200);
+  const png = await share.body();
+  expect(png.subarray(0, 8).toString("hex")).toBe("89504e470d0a1a0a");
+  expect([png.readUInt32BE(16), png.readUInt32BE(20)]).toEqual([1200, 630]);
+  expect(png.length).toBeLessThan(200_000);
+  const response = await request.get("/site.webmanifest");
+  expect(response.status()).toBe(200);
+  const manifest = await response.json();
+  expect(manifest.name).toBe("Please Touch: The Museum of Small Useful Things");
+  for (const [path, size] of [
+    ["/apple-touch-icon.png", 180],
+    ["/icon-192.png", 192],
+    ["/icon-512.png", 512],
+  ] as const) {
+    if (size !== 180)
+      expect(manifest.icons).toContainEqual({
+        src: path,
+        sizes: `${size}x${size}`,
+        type: "image/png",
+      });
+    const icon = await request.get(path);
+    expect(icon.status()).toBe(200);
+    const bytes = await icon.body();
+    expect([bytes.readUInt32BE(16), bytes.readUInt32BE(20)]).toEqual([
+      size,
+      size,
+    ]);
+  }
+});
 
 test("the home page publishes only the requested WebSite and Person graph", async ({
   page,

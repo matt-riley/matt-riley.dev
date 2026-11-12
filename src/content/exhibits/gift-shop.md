@@ -2,7 +2,7 @@
 id: "gift-shop"
 order: 8
 title: "Exit through the gift shop"
-alt: "A tiny porcelain notebook, open toolbox, filing box and plain mug with an orange tea surface on a gallery counter."
+alt: "A porcelain notebook, toolbox, filing box and mug of orange tea share a gallery counter with a curled orange ceramic cat asleep beside them."
 dates: "2026 to ongoing"
 medium: "Links, porcelain, a brew."
 accession: "MR.2026.009"
