@@ -7,6 +7,8 @@ export const site = {
     open: "The museum is open. Please touch.",
     closed: "The museum is closed. The cat let you in.",
   },
+  interests:
+    "Yorkshire. Stand-up, in training. Modern art and Dada. Hip hop, 1986 to 1996.",
   contact: {
     label: "Find Matt on GitHub",
     href: "https://github.com/matt-riley",

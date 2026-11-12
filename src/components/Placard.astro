@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
+import { site } from "../content/site";
 import type { GitHubDossier } from "../data/types";
 
 interface Props {
@@ -20,6 +21,7 @@ const headingId = `${data.id}-heading`;
   ) : (
     <h2 id={headingId}><em>{data.title}</em></h2>
   )}
+  {data.id === "human-error" && <p class="human-error__interests mono">{site.interests}</p>}
   <p class="placard__dates">{data.dates}</p>
   <p class="placard__medium">{data.medium}</p>
   <p class="placard__accession mono">{data.accession}</p>

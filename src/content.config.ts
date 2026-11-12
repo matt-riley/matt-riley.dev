@@ -33,7 +33,12 @@ const exhibits = defineCollection({
     touchResult: text,
     items: z
       .array(
-        z.object({ label: text, href: href.optional(), note: text.optional() }),
+        z.object({
+          label: text,
+          href: href.optional(),
+          note: text.optional(),
+          medium: text.optional(),
+        }),
       )
       .optional(),
     draft: z.boolean().default(true),
