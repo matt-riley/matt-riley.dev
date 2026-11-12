@@ -107,6 +107,29 @@ test("drum pads follow the selected row, dip within their range and release clon
       frame(delta);
     });
   try {
+    // Gallery boot synchronizes glaze emission before feature listeners run.
+    const syncLights = (event: Event) => {
+      if ((event as CustomEvent).detail?.key !== "lights") return;
+      root.traverse((object) => {
+        const mesh = object as Mesh;
+        if (!mesh.isMesh) return;
+        for (const material of Array.isArray(mesh.material)
+          ? mesh.material
+          : [mesh.material])
+          if (
+            material instanceof MeshStandardMaterial &&
+            material.name.startsWith("glaze")
+          )
+            material.emissive
+              .copy(material.color)
+              .multiplyScalar(
+                (event as CustomEvent).detail.value === "after-hours"
+                  ? 0.035
+                  : 0,
+              );
+      });
+    };
+    events.addEventListener("mr:setting", syncLights);
     const release = mountDrumPads(
       registry as unknown as ExhibitRegistry,
       () => state,
@@ -130,6 +153,15 @@ test("drum pads follow the selected row, dip within their range and release clon
     expect(materials[0].emissiveIntensity).toBe(0);
     expect(materials[1].emissiveIntensity).toBe(0.025);
     expect(materials[5].emissiveIntensity).toBe(0.22);
+    for (const value of ["day", "after-hours", "day"]) {
+      events.dispatchEvent(
+        new CustomEvent("mr:setting", { detail: { key: "lights", value } }),
+      );
+      expect(materials[1].emissive.getHex()).toBe(0xe8741a);
+      expect(materials[1].emissiveIntensity).toBe(0.025);
+      expect(materials[5].emissive.getHex()).toBe(0xe8741a);
+      expect(materials[5].emissiveIntensity).toBe(0.22);
+    }
     events.dispatchEvent(
       new CustomEvent("mr:touch", {
         detail: { model: "boom-bap", part: "touch_pad_2" },
@@ -148,6 +180,14 @@ test("drum pads follow the selected row, dip within their range and release clon
     });
     release();
     expect(disposed).toBe(16);
+    materials[1].emissive.setHex(0);
+    events.dispatchEvent(
+      new CustomEvent("mr:setting", {
+        detail: { key: "lights", value: "day" },
+      }),
+    );
+    expect(materials[1].emissive.getHex()).toBe(0);
+    events.removeEventListener("mr:setting", syncLights);
     expect(frames.size).toBe(0);
     expect(controls.size).toBe(0);
     expect(hitAreas.size).toBe(0);
