@@ -45,6 +45,8 @@ export class ExhibitRegistry {
   private ended = false;
   private windowStop = 0;
   private windowRadius = Infinity;
+  private nearStop = 0;
+  private readonly stopStreaming: () => void;
   private recordMounts = new Map<
     (record: ExhibitRecord) => (() => void) | undefined,
     Map<string, () => void>
@@ -56,7 +58,18 @@ export class ExhibitRegistry {
   constructor(readonly app: InteractionApp) {
     const rope = app.room.getObjectByName("touch_rope");
     if (rope) this.add("entrance", "entrance", 0, rope, false);
-    this.ready = this.load();
+    this.windowStop = this.nearStop = app.activeStop;
+    let previous = app.activeStop;
+    this.stopStreaming = app.onFrame(() => {
+      if (this.ended || previous === app.activeStop) return false;
+      previous = app.activeStop;
+      this.windowStop = previous;
+      void this.loadNear(previous).catch(() => {
+        if (!this.ended) set("view", "catalogue");
+      });
+      return false;
+    });
+    this.ready = this.loadNear(app.activeStop);
     void this.ready.catch(() => {
       if (!this.ended) set("view", "catalogue");
     });
@@ -108,8 +121,9 @@ export class ExhibitRegistry {
     this.app.requestRender();
   }
 
-  private async load() {
-    const nearest = this.app.activeStop;
+  private async loadNear(nearest: number) {
+    this.nearStop = nearest;
+    this.app.assets.setNearestStop?.(nearest);
     const order = [...modelSpecs].sort(
       (a, b) =>
         Math.abs(a.index - nearest) - Math.abs(b.index - nearest) ||
@@ -117,8 +131,15 @@ export class ExhibitRegistry {
     );
     for (const { id, stop, index } of order) {
       if (this.ended) return;
+      if (this.records.has(id) || Math.abs(index - this.nearStop) > 2) continue;
       const asset = await this.app.assets.get(id);
       if (this.ended) return;
+      if (Math.abs(index - this.nearStop) > 2) {
+        if (Math.abs(index - this.windowStop) > this.windowRadius)
+          this.app.assets.release?.(id);
+        continue;
+      }
+      if (this.records.has(id)) continue;
       const anchor = this.app.room.getObjectByName(`anchor_${id}`);
       if (!anchor) throw new Error(`Missing room anchor: anchor_${id}`);
       anchor.add(asset.scene);
@@ -185,28 +206,7 @@ export class ExhibitRegistry {
     this.windowRadius = radius;
     for (const record of this.records.values())
       if (Math.abs(record.index - stop) > radius) this.removeRecord(record.id);
-    const order = [...modelSpecs].sort(
-      (a, b) => Math.abs(a.index - stop) - Math.abs(b.index - stop),
-    );
-    for (const spec of order) {
-      if (this.ended) return;
-      if (
-        this.records.has(spec.id) ||
-        Math.abs(spec.index - this.windowStop) > this.windowRadius
-      )
-        continue;
-      const asset = await this.app.assets.get(spec.id);
-      if (this.ended) return;
-      if (Math.abs(spec.index - this.windowStop) > this.windowRadius) {
-        this.app.assets.release?.(spec.id);
-        continue;
-      }
-      if (this.records.has(spec.id)) continue;
-      const anchor = this.app.room.getObjectByName(`anchor_${spec.id}`);
-      if (!anchor) throw new Error(`Missing room anchor: anchor_${spec.id}`);
-      anchor.add(asset.scene);
-      this.add(spec.id, spec.stop, spec.index, asset.scene, true);
-    }
+    await this.loadNear(stop);
     this.app.requestRender();
   }
 
@@ -285,6 +285,7 @@ export class ExhibitRegistry {
   dispose() {
     if (this.ended) return;
     this.ended = true;
+    this.stopStreaming();
     for (const releases of this.recordMounts.values())
       releases.forEach((cleanup) => {
         cleanup();

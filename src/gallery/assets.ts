@@ -122,9 +122,12 @@ export class AssetStore {
 
   prefetch(stop: number) {
     this.setNearestStop(stop);
-    for (const id of [...exhibits].sort(
-      (a, b) => Math.abs(modelStops[a] - stop) - Math.abs(modelStops[b] - stop),
-    )) {
+    for (const id of exhibits
+      .filter((id) => Math.abs(modelStops[id] - stop) <= 2)
+      .sort(
+        (a, b) =>
+          Math.abs(modelStops[a] - stop) - Math.abs(modelStops[b] - stop),
+      )) {
       void this.get(id).catch(() => {});
     }
   }
