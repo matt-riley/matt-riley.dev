@@ -1,25 +1,31 @@
 ---
-import { Picture } from "astro:assets";
+import { getImage, Picture } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
 import portrait from "../assets/waffle-portrait.jpg";
 
-interface Props {
-  items: NonNullable<CollectionEntry<"exhibits">["data"]["items"]>;
-}
-
+interface Props { items: NonNullable<CollectionEntry<"exhibits">["data"]["items"]> }
 const { items } = Astro.props;
+const models = ["open-mic", "boom-bap", "absent", "portrait"];
+const galleryPortrait = await getImage({ src: portrait, width: 768, format: "webp", quality: 90 });
 ---
 
+<nav class="human-error__nav mono" aria-label="Human Error exhibits">
+  {items.map((item, index) => <a href={`#${models[index]}`}>{item.label}</a>)}
+</nav>
 <ul class="human-error">
   {items.map((item, index) => (
-    <li class="human-error__item">
-      {index === 3 ? (
-        <figure class="portrait-frame">
-          <Picture src={portrait} alt="Waffle, Matt’s orange tabby cat, looking towards the camera." widths={[320, 480, 640]} sizes="(min-width: 900px) 280px, (min-width: 600px) 40vw, 85vw" formats={["avif", "webp"]} width={480} loading="lazy" />
+    <li id={models[index]} class="human-error__item" data-model={models[index]} tabindex="-1" aria-labelledby={`${models[index]}-heading`}>
+      {index === 3 && (
+        <figure class="portrait-frame" data-portrait-src={galleryPortrait.src}>
+          <Picture src={portrait} alt="Waffle, Matt’s orange tabby cat, looking towards the camera." widths={[320, 480, 640, 768]} sizes="(min-width: 900px) 280px, (min-width: 600px) 40vw, 85vw" formats={["avif", "webp"]} width={480} loading="lazy" />
         </figure>
-      ) : <div class="human-error__study" aria-hidden="true"></div>}
-      <h3>{item.label}</h3>
-      <p>{item.note}</p>
+      )}
+      <h3 id={`${models[index]}-heading`}>{item.label}</h3>
+      {item.medium && <p class="human-error__medium">{item.medium}</p>}
+      <p data-absence-note={index === 2 ? "" : undefined}>{item.note}</p>
+      {index === 0 && <button class="touch-control" type="button" data-touch data-part="touch_mic" data-touch-message="The microphone nods.">Touch the microphone<span aria-hidden="true"> ↗</span></button>}
+      {index === 2 && <button class="touch-control" type="button" data-touch data-touch-message="Nothing happens. That is the piece.">Touch the empty plinth<span aria-hidden="true"> ↗</span></button>}
+      {(index === 0 || index === 2) && <p class="touch-result" data-touch-result aria-live="polite" aria-atomic="true"></p>}
     </li>
   ))}
 </ul>
