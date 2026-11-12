@@ -1,25 +1,46 @@
 ---
+import wallFont from "@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2?url";
+import bodyFont from "@fontsource-variable/newsreader/files/newsreader-latin-wght-normal.woff2?url";
+import bodyItalic from "@fontsource-variable/newsreader/files/newsreader-latin-wght-italic.woff2?url";
+import monoFont from "@fontsource/commit-mono/files/commit-mono-latin-400-normal.woff2?url";
+import "../styles/tokens.css";
+import "../styles/catalogue.css";
+
 interface Props {
   title: string;
   description: string;
+  noindex?: boolean;
 }
 
-const { title, description } = Astro.props;
+const { title, description, noindex = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const fontFaces = [
+  ["Bricolage Grotesque Variable", wallFont, "normal", "200 800"],
+  ["Newsreader Variable", bodyFont, "normal", "200 800"],
+  ["Newsreader Variable", bodyItalic, "italic", "200 800"],
+  ["Commit Mono", monoFont, "normal", "400"],
+].map(([family, url, style, weight]) => `@font-face{font-family:"${family}";src:url("${url}") format("woff2");font-style:${style};font-weight:${weight};font-display:swap}`).join("");
 ---
 
 <!doctype html>
-<html lang="en-GB">
+<html lang="en-GB" data-lights="day" data-cat="on" data-sound="off" data-view="gallery">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline>(()=>{try{let d=document.documentElement;for(let[k,a,b,v]of[["lights","day","after-hours",matchMedia("(prefers-color-scheme: dark)").matches?"after-hours":"day"],["cat","on","off","on"],["sound","on","off","off"],["view","gallery","catalogue","gallery"]]){let s;try{s=localStorage.getItem("mr-"+k)}catch{}d.dataset[k]=s===a||s===b?s:v}}catch{}})();</script>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
+    <link rel="preload" href={wallFont} as="font" type="font/woff2" crossorigin />
+    <style is:inline set:html={fontFaces} />
     <title>{title}</title>
   </head>
   <body>
-    <slot />
+    <a class="skip-link" href="#main">Skip to the main content</a>
+    {Astro.slots.has("header") && <header><slot name="header" /></header>}
+    <main id="main" tabindex="-1"><slot name="main"><slot /></slot></main>
+    {Astro.slots.has("footer") && <footer><slot name="footer" /></footer>}
   </body>
 </html>

@@ -6,12 +6,12 @@ const dossier = await loadDossier();
 ---
 
 <Base title="Please Touch — Matt Riley" description="The Museum of Small Useful Things.">
-  <main>
     <h1>Please Touch</h1>
     <p>{dossier.profile.name} makes small useful things.</p>
     <nav aria-label="Site information">
-      <a href="/privacy">Privacy</a>
-      <a href="/terms">Terms</a>
+      <ul>
+        <li><a href="/privacy">Privacy</a></li>
+        <li><a href="/terms">Terms</a></li>
+      </ul>
     </nav>
-  </main>
 </Base>
