@@ -31,7 +31,7 @@ production workflow.
 ## Review before production
 
 1. `pnpm install --frozen-lockfile`, `pnpm check`, `pnpm lint`, `pnpm build`,
-   `pnpm test`, and `pnpm perf` must pass on the exact reviewed commit.
+   `pnpm test`, `pnpm test:edge`, and `pnpm perf` must pass on the exact reviewed commit.
 2. `pnpm exec wrangler deploy --dry-run` validates the asset-only upload. The
    configuration intentionally has no `main`; unknown routes use `404-page`.
 3. After Matt authorizes a remote preview and account selection:

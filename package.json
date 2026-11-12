@@ -16,7 +16,8 @@
     "assets": "node scripts/build-assets.mjs",
     "perf": "node scripts/run-perf.mjs",
     "assets:stills": "node scripts/build-stills.mjs",
-    "preview:edge": "wrangler dev --local --ip 127.0.0.1"
+    "preview:edge": "wrangler dev --local --ip 127.0.0.1",
+    "test:edge": "playwright test --config playwright.edge.config.ts"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.4.1",
