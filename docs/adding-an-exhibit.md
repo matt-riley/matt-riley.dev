@@ -28,7 +28,23 @@ Inspect the actual optimised `public/models/<id>.glb` with Three.js GLTFLoader p
 
 Update `blender/scenes/room.py`: add the tour ID and author `anchor_<model-id>`, `stop_<index>_cam` and `stop_<index>_target`. Stop eyes are1.5m above the floor, vertical FOV35°, with alternating placard sides. Add an appropriate stable cat marker with `stop` and `pose` extras, following `blender/cat-spots.json` when present. Rebuild the room and check its actual exported camera framing at phone/desktop sizes. The portrait plane owns UV0; the baked room uses UV1. The room owns full-size plinths; miniature models must not duplicate them. The absent fragments intentionally anchor on the floor beside their empty plinth.
 
-Register the new GLB in `modelSpecs` in `src/gallery/exhibits.ts` with its content stop ID and numeric index. The registry positions its root on the exact room anchor. Review fixed stop bounds in `src/gallery/rail-state.ts` and `rail.ts` as well as catalogue/metadata tests. A sub-exhibit can share a stop index. `setStopTarget` allows a lazy adapter to supply both a target and bounds without taking over the render loop.
+Register the new GLB in `modelSpecs` in `src/gallery/exhibits.ts` with its content stop ID and numeric index. Also add it to **both `modelStops` and `exhibits` in `src/gallery/assets.ts`**: these define the asset-ID type, nearest-stop ordering and prefetch eligibility. The registry positions its root on the exact room anchor. A sub-exhibit can share a stop index. `setStopTarget` allows a lazy adapter to supply both a target and bounds without taking over the render loop.
+
+For a new tour stop, update these explicit count/order contracts together:
+
+| Source                                                                                                     | Required change                                                                        |
+| ---------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `src/content.config.ts`                                                                                    | Add canonical ID; extend the order maximum.                                            |
+| `blender/scenes/room.py`                                                                                   | Extend `IDS`; review `BAY_WIDTH`, room length and bay-specific placement.              |
+| `src/gallery/rail.ts`                                                                                      | Extend `stopIds`, `CameraRail.length` and `framingBounds` in the same order.           |
+| `src/gallery/rail-state.ts`                                                                                | Extend the accepted stop-index range.                                                  |
+| `src/gallery/assets.ts`                                                                                    | Extend ID lists and the maximum in `setNearestStop`.                                   |
+| `src/gallery/exhibits.ts`                                                                                  | Register each model/stop/index mapping.                                                |
+| `blender/render_catalogue.py`, `scripts/build-stills.mjs`                                                  | Extend render/copy stop lists and model/subject mappings.                              |
+| `src/components/CataloguePhoto.astro`                                                                      | Review alternating `narrowColumn` IDs so responsive sizes match the new layout.        |
+| `tests/content.spec.ts`, `tests/rail*.spec.ts`, `tests/metadata.spec.ts`, `tests/catalogue-photos.spec.ts` | Extend intentional stop/count/photo/menu expectations, preserving substantive budgets. |
+
+Search for the existing neighbouring stop ID and fixed stop bounds before committing; a generic numeric replacement could also change unrelated viewport sizes or model dimensions. Header navigation and homepage section order follow the content collection automatically.
 
 ## 4. Make the photographs
 
