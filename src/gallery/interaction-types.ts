@@ -8,6 +8,8 @@ export interface InteractionApp {
   renderer: WebGLRenderer;
   assets: { get(id: string): Promise<GLTF> };
   activeStop: number;
+  readonly disposed: boolean;
+  addCleanup(cleanup: () => void): () => void;
   requestRender(): void;
   onFrame(callback: (delta: number) => boolean): () => void;
   onResize(callback: () => void): () => void;
