@@ -22,6 +22,9 @@ from scenes.keyframe import area, point_at
 
 STOPS = ("entrance", "tools", "flagz", "waffle-agent", "agent-skills", "waystone", "acquisitions", "human-error", "gift-shop")
 MODELS = ("tools", "flagz", "waffle-agent", "agent-skills", "waystone", "open-mic", "boom-bap", "absent", "gift-shop")
+# Match E-06's canonical initial locations: sit on the empty Human Error plinth,
+# sleep on the gift-shop counter. Other stops use their first authored marker.
+PREFERRED_CAT_MARKERS = {7: "cat_9", 8: "cat_11"}
 
 
 def import_raw(path):
@@ -83,7 +86,11 @@ def assemble(raw):
     poses = {obj.name: obj for obj in cat_objects if obj.name in {"cat_sit", "cat_loaf", "cat_stretch", "cat_sleep"}}
     markers = sorted((obj for obj in room_objects if obj.name.startswith("cat_") and obj.name[4:].isdigit()), key=lambda obj: int(obj.name[4:]))
     for stop in range(len(STOPS)):
-        marker = next(obj for obj in markers if int(obj["stop"]) == stop)
+        marker = next((obj for obj in markers if obj.name == PREFERRED_CAT_MARKERS.get(stop)), None)
+        if marker is None:
+            marker = next(obj for obj in markers if int(obj["stop"]) == stop)
+        if int(marker["stop"]) != stop:
+            raise ValueError(f"Cat marker {marker.name} belongs to the wrong stop")
         pose = clone_pose(poses[f"cat_{marker['pose']}"])
         pose.name = f"photograph_cat_stop_{stop}"
         pose.matrix_world = marker.matrix_world.copy()
