@@ -1,23 +1,38 @@
 for (const section of document.querySelectorAll<HTMLElement>(
   "[data-exhibit]",
 )) {
-  const result = section.querySelector<HTMLElement>("[data-touch-result]");
-  const touch = (open = true) => {
-    if (result) {
+  const touch = (control: HTMLElement, open = true) => {
+    const group = control.closest<HTMLElement>("[data-model]");
+    const result =
+      group?.querySelector<HTMLElement>("[data-touch-result]") ??
+      section.querySelector<HTMLElement>("[data-touch-result]");
+    if (result)
       result.textContent = open
-        ? (section.dataset.touchMessage ?? "")
+        ? (control.dataset.touchMessage ?? section.dataset.touchMessage ?? "")
         : "The list is closed.";
-    }
+    const model = control.dataset.model ?? group?.dataset.model;
     section.dispatchEvent(
       new CustomEvent("mr:touch", {
         bubbles: true,
-        detail: { exhibit: section.dataset.exhibit },
+        detail: {
+          exhibit: section.dataset.exhibit,
+          ...(model ? { model } : {}),
+          ...(control.dataset.part ? { part: control.dataset.part } : {}),
+        },
       }),
     );
   };
   section
-    .querySelector<HTMLButtonElement>("button[data-touch]")
-    ?.addEventListener("click", () => touch());
-  const reveal = section.querySelector<HTMLDetailsElement>("[data-reveal]");
-  reveal?.addEventListener("toggle", () => touch(reveal.open));
+    .querySelectorAll<HTMLButtonElement>("button[data-touch]")
+    .forEach((button) => {
+      button.addEventListener("click", () => touch(button));
+    });
+  section
+    .querySelectorAll<HTMLDetailsElement>("[data-reveal]")
+    .forEach((reveal) => {
+      reveal.addEventListener("toggle", () => {
+        const summary = reveal.querySelector<HTMLElement>("summary");
+        if (summary) touch(summary, reveal.open);
+      });
+    });
 }
