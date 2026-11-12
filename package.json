@@ -2,7 +2,7 @@
   "name": "matt-riley.dev",
   "packageManager": "pnpm@10.34.9",
   "type": "module",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "astro dev",
@@ -16,6 +16,7 @@
     "assets": "node scripts/build-assets.mjs",
     "perf": "node scripts/run-perf.mjs",
     "assets:stills": "node scripts/build-stills.mjs",
+    "assets:identity": "node scripts/build-identity.mjs",
     "preview:edge": "wrangler dev --local --ip 127.0.0.1",
     "test:edge": "playwright test --config playwright.edge.config.ts"
   },
@@ -36,8 +37,11 @@
     "@lhci/cli": "^0.16.1",
     "@playwright/test": "^1.61.1",
     "@types/three": "~0.187.0",
+    "fontkit": "3.0.0",
     "playwright": "^1.61.1",
+    "sharp": "0.35.5",
     "typescript": "^5.7.3",
     "wrangler": "4.154.0"
-  }
+  },
+  "description": "Please Touch: Matt Riley’s museum of small useful things."
 }

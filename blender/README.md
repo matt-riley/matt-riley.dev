@@ -26,7 +26,8 @@ For this command, set `BLENDER_BIN` first (the package script supplies the defau
 Omit `--only` to run every Python scene file in `blender/scenes/`, in filename order.
 Each module exposes `build(output_path)` and must export its scene to that path.
 The shared reset helper uses Cycles CPU when available and reports an EEVEE
-fallback if the Cycles add-on cannot be enabled. No still rendering happens yet.
+fallback if the Cycles add-on cannot be enabled. Model export does not render the
+catalogue photographs; use `pnpm assets:stills` for those.
 
 ## Coordinate and naming contract
 
@@ -178,13 +179,15 @@ exported. Named camera positions and targets are empty nodes instead.
 The glTF standard has no dedicated Three.js `lightMap` slot. The baked combined
 colour map is therefore carried by each baked material's **emissive texture on
 UV1**, with extras `baked_lightmap: true`, `baked_uv: 1`,
-`baked_transport: "emissive"`. This is a transport binding, not a glowing room.
-G-01 should move that texture into `material.lightMap`, preserve/set its
-`channel = 1`, clear `emissiveMap`, set emission to black and set the base colour
-to white (the approved surface colours are already included in the bake).
-Runtime after-hours lighting can then lower `lightMapIntensity` while the torch
-uses ordinary dynamic light. UV0 remains available for the portrait photograph.
-The rope's glaze stays a normal dynamic material and is not part of the bake.
+`baked_transport: "emissive"`. This is a transport binding. The runtime maps the
+same texture to an unlit `MeshBasicMaterial` with `channel = 1` and
+`toneMapped = false`: the atlas already contains AgX/exposure−1 display colours,
+surface colour and illumination. Applying another light or display transform
+would distort the approved photograph match. After Hours lowers this material's
+colour multiplier; the separate exhibit/glaze materials still use dynamic light.
+UV0 remains available for the original portrait photograph. The rope's glaze is
+not part of the static bake. See `src/gallery/README.md` for the measured runtime
+colour calibration and source ownership.
 
 ### Placement contract
 
