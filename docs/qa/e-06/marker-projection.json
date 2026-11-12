@@ -1,0 +1,243 @@
+{
+  "method": "Actual browser projection/inverse matrices from /tmp/cat-runtime.json at 960x600, shipped cat union bounds, room plinth bounds, unchanged .08m expanded-frustum guard. CPU-only verification; actual visual tour still required.",
+  "evidence": [
+    {
+      "marker": 0,
+      "stop": 0,
+      "blenderPosition": [-12.35, 1.6, 0],
+      "rectangle": {
+        "left": 696.9503173317652,
+        "right": 745.4530215559819,
+        "top": 452.2439224659069,
+        "bottom": 502.66874713695773,
+        "width": 48.5027042242167,
+        "height": 50.42482467105083
+      },
+      "plinth": null,
+      "overlapsPlinth": false,
+      "adjacent": [
+        {
+          "stop": 1,
+          "expandedBoundsIntersectFrustum": false
+        }
+      ]
+    },
+    {
+      "marker": 1,
+      "stop": 1,
+      "blenderPosition": [-10.25, 1.6, 0],
+      "rectangle": {
+        "left": 389.35211291076945,
+        "right": 445.975409774412,
+        "top": 458.87992713942435,
+        "bottom": 529.9456265823029,
+        "width": 56.623296863642565,
+        "height": 71.06569944287855
+      },
+      "plinth": {
+        "left": 238.10323790227042,
+        "right": 375.98295804961873,
+        "top": 268.08857674915816,
+        "bottom": 536.5426120940358,
+        "width": 137.8797201473483,
+        "height": 268.45403534487764
+      },
+      "overlapsPlinth": false,
+      "adjacent": [
+        {
+          "stop": 0,
+          "expandedBoundsIntersectFrustum": false
+        },
+        {
+          "stop": 2,
+          "expandedBoundsIntersectFrustum": false
+        }
+      ]
+    },
+    {
+      "marker": 2,
+      "stop": 2,
+      "blenderPosition": [-6.45, 1.6, 0],
+      "rectangle": {
+        "left": 630.762550227291,
+        "right": 695.2364841527212,
+        "top": 458.87992713942435,
+        "bottom": 529.9456265823029,
+        "width": 64.47393392543029,
+        "height": 71.06569944287855
+      },
+      "plinth": {
+        "left": 703.8054462494504,
+        "right": 861.9543302068425,
+        "top": 268.08857674915816,
+        "bottom": 536.5426120940358,
+        "width": 158.14888395739217,
+        "height": 268.45403534487764
+      },
+      "overlapsPlinth": false,
+      "adjacent": [
+        {
+          "stop": 1,
+          "expandedBoundsIntersectFrustum": false
+        },
+        {
+          "stop": 3,
+          "expandedBoundsIntersectFrustum": false
+        }
+      ]
+    },
+    {
+      "marker": 3,
+      "stop": 3,
+      "blenderPosition": [-3.55, 1.6, 0],
+      "rectangle": {
+        "left": 397.81613497785276,
+        "right": 453.90609278079694,
+        "top": 458.87992713942435,
+        "bottom": 529.9456265823029,
+        "width": 56.089957802944184,
+        "height": 71.06569944287855
+      },
+      "plinth": {
+        "left": 238.10330162913107,
+        "right": 375.98301255391283,
+        "top": 268.08857674915816,
+        "bottom": 536.5426120940358,
+        "width": 137.87971092478176,
+        "height": 268.45403534487764
+      },
+      "overlapsPlinth": false,
+      "adjacent": [
+        {
+          "stop": 2,
+          "expandedBoundsIntersectFrustum": false
+        },
+        {
+          "stop": 4,
+          "expandedBoundsIntersectFrustum": false
+        }
+      ]
+    },
+    {
+      "marker": 4,
+      "stop": 3,
+      "blenderPosition": [-3.55, 2, 0],
+      "rectangle": {
+        "left": 405.65287253236187,
+        "right": 456.25161226335103,
+        "top": 430.6914253967818,
+        "bottom": 493.8054711807219,
+        "width": 50.598739730989166,
+        "height": 63.11404578394007
+      },
+      "plinth": {
+        "left": 238.10330162913107,
+        "right": 375.98301255391283,
+        "top": 268.08857674915816,
+        "bottom": 536.5426120940358,
+        "width": 137.87971092478176,
+        "height": 268.45403534487764
+      },
+      "overlapsPlinth": false,
+      "adjacent": [
+        {
+          "stop": 2,
+          "expandedBoundsIntersectFrustum": false
+        },
+        {
+          "stop": 4,
+          "expandedBoundsIntersectFrustum": false
+        }
+      ]
+    },
+    {
+      "marker": 5,
+      "stop": 4,
+      "blenderPosition": [0.25, 1.6, 0],
+      "rectangle": {
+        "left": 514.0245902255878,
+        "right": 570.6478870892308,
+        "top": 458.87992713942435,
+        "bottom": 529.9456265823029,
+        "width": 56.62329686364308,
+        "height": 71.06569944287855
+      },
+      "plinth": {
+        "left": 584.0169738200135,
+        "right": 721.8966824391538,
+        "top": 268.08857674915816,
+        "bottom": 536.5426120940358,
+        "width": 137.87970861914027,
+        "height": 268.45403534487764
+      },
+      "overlapsPlinth": false,
+      "adjacent": [
+        {
+          "stop": 3,
+          "expandedBoundsIntersectFrustum": false
+        },
+        {
+          "stop": 5,
+          "expandedBoundsIntersectFrustum": false
+        }
+      ]
+    },
+    {
+      "marker": 6,
+      "stop": 5,
+      "blenderPosition": [3.1, 1.6, 0],
+      "rectangle": {
+        "left": 393.58415421408506,
+        "right": 449.94077964000496,
+        "top": 458.87992713942435,
+        "bottom": 529.9456265823029,
+        "width": 56.3566254259199,
+        "height": 71.06569944287855
+      },
+      "plinth": {
+        "left": 238.10336535599177,
+        "right": 375.98306705820744,
+        "top": 268.08857674915816,
+        "bottom": 536.5426120940358,
+        "width": 137.87970170221567,
+        "height": 268.45403534487764
+      },
+      "overlapsPlinth": false,
+      "adjacent": [
+        {
+          "stop": 4,
+          "expandedBoundsIntersectFrustum": false
+        },
+        {
+          "stop": 6,
+          "expandedBoundsIntersectFrustum": false
+        }
+      ]
+    },
+    {
+      "marker": 7,
+      "stop": 6,
+      "blenderPosition": [6.45, 2, 0],
+      "rectangle": {
+        "left": 491.79503592875477,
+        "right": 542.3937725189573,
+        "top": 510.19413570856756,
+        "bottom": 573.3081814925076,
+        "width": 50.59873659020258,
+        "height": 63.11404578394007
+      },
+      "plinth": null,
+      "overlapsPlinth": false,
+      "adjacent": [
+        {
+          "stop": 5,
+          "expandedBoundsIntersectFrustum": false
+        },
+        {
+          "stop": 7,
+          "expandedBoundsIntersectFrustum": false
+        }
+      ]
+    }
+  ]
+}

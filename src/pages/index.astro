@@ -4,6 +4,7 @@ import Exhibit from "../components/Exhibit.astro";
 import Header from "../components/Header.astro";
 import MuseumFooter from "../components/MuseumFooter.astro";
 import SplitFlap from "../components/SplitFlap.astro";
+import HeadOfSecurity from "../components/HeadOfSecurity.astro";
 import { site } from "../content/site";
 import { loadDossier } from "../data/github";
 import Base from "../layouts/Base.astro";
@@ -24,7 +25,10 @@ const exhibits = await Promise.all(entries.map(async (exhibit) => ({ exhibit, ..
       </Exhibit>
     ))}
   </div>
-  <MuseumFooter slot="footer" dossier={dossier} />
+  <Fragment slot="footer">
+    <HeadOfSecurity />
+    <MuseumFooter dossier={dossier} />
+  </Fragment>
 </Base>
 
 <script>
@@ -36,4 +40,5 @@ const exhibits = await Promise.all(entries.map(async (exhibit) => ({ exhibit, ..
   import "../gallery/rail-entry";
   import "../scripts/gallery-gate";
   import "../scripts/gallery-interactions";
+  import "../scripts/cat";
 </script>
