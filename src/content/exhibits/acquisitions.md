@@ -2,6 +2,7 @@
 id: "acquisitions"
 order: 6
 title: "Recent Acquisitions"
+alt: "A large blank noticeboard in a porcelain frame mounted on the gallery wall."
 dates: "2026 to ongoing"
 medium: "Public GitHub activity, languages, release tags."
 accession: "MR.2026.007"
