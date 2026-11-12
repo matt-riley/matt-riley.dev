@@ -1,27 +1,52 @@
-import { type Mesh, Vector3 } from "three";
+import {
+  Group,
+  Mesh,
+  MeshStandardMaterial,
+  SphereGeometry,
+  Vector3,
+} from "three";
 import type { Marker } from "../scripts/marker";
 import type { ExhibitRegistry } from "./exhibits";
 import { animatePart, bindPart, type Part, releasePart } from "./parts";
 
-export async function mountMarker(
+/** Matches blender/scenes/waystone.py's 16×8 porcelain ball exactly. */
+export function createFloorMarker(material?: MeshStandardMaterial) {
+  const floor = new Group();
+  floor.name = "floor_waystone_marker";
+  floor.userData = { axis: "y", kind: "slide", range: [0, 0.04] };
+  const geometry = new SphereGeometry(0.022, 16, 8).scale(1, 0.65, 0.8);
+  const porcelain =
+    material?.clone() ??
+    new MeshStandardMaterial({
+      color: "#F1EEE6",
+      roughness: 0.85,
+      metalness: 0,
+    });
+  floor.add(new Mesh(geometry, porcelain));
+  floor.position.y = 0.022 * 0.65;
+  return floor;
+}
+
+export function mountMarker(
   registry: ExhibitRegistry,
   current: () => Marker | undefined,
 ) {
-  const asset = await registry.app.assets.get("waystone");
-  if (registry.disposed) return;
-  const source = asset.scene.getObjectByName("touch_marker");
-  if (!source) throw new Error("The waystone has no marker pebble");
-  // The floor copy outlives an unloaded Waystone and owns its GPU resources.
-  const floor = source.clone(true);
-  floor.position.y = 0.025;
-  floor.traverse((object) => {
-    const mesh = object as Mesh;
-    if (!mesh.isMesh) return;
-    mesh.geometry = mesh.geometry.clone();
-    mesh.material = Array.isArray(mesh.material)
-      ? mesh.material.map((material) => material.clone())
-      : mesh.material.clone();
-  });
+  // A procedural copy avoids fetching the far-away Waystone at the entrance.
+  // It has the source pebble's dimensions and owns all of its GPU resources.
+  let reference: MeshStandardMaterial | undefined;
+  for (const record of registry.records.values())
+    record.root.traverse((object) => {
+      if (!(object instanceof Mesh)) return;
+      for (const material of Array.isArray(object.material)
+        ? object.material
+        : [object.material])
+        if (
+          material instanceof MeshStandardMaterial &&
+          material.name === "porcelain"
+        )
+          reference ??= material;
+    });
+  const floor = createFloorMarker(reference);
   const copy = bindPart(floor, registry.app.requestRender);
   copy.visible = false;
   registry.app.scene.add(copy);
