@@ -52,10 +52,13 @@ export function onExhibitsReady(mount: Mount): Cleanup {
   };
 }
 
-export function publishExhibits(registry: ExhibitRegistry) {
+export async function publishExhibits(registry: ExhibitRegistry) {
   current = registry;
-  for (const subscription of subscriptions)
-    void mountSubscription(subscription, registry).catch(() => {});
+  await Promise.all(
+    [...subscriptions].map((subscription) =>
+      mountSubscription(subscription, registry),
+    ),
+  );
   return () => {
     if (current !== registry) return;
     current = undefined;

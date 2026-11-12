@@ -31,6 +31,7 @@ export interface ExhibitRecord {
   glaze: Set<MeshStandardMaterial>;
   basePosition: Vector3;
   owned: boolean;
+  draggable: boolean;
 }
 
 export class ExhibitRegistry {
@@ -86,6 +87,7 @@ export class ExhibitRegistry {
       glaze,
       basePosition: root.position.clone(),
       owned,
+      draggable: true,
     });
     this.app.requestRender();
   }
@@ -136,6 +138,16 @@ export class ExhibitRegistry {
     this.handlers.set(id, handler);
     return () => {
       if (this.handlers.get(id) === handler) this.handlers.delete(id);
+    };
+  }
+
+  setDraggable(id: string, enabled: boolean) {
+    const record = this.records.get(id);
+    if (!record) return () => {};
+    const previous = record.draggable;
+    record.draggable = enabled;
+    return () => {
+      record.draggable = previous;
     };
   }
 

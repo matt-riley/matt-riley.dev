@@ -27,6 +27,8 @@ run independently in catalogue view. A feature's visual adapter can use:
   picked part to a DOM control (for example a real flagz setting button).
 - `registry.setTouchHandler(id, handler)` to replace the default small hop once
   that exhibit has its own behaviour. The handler receives the DOM event.
+- `registry.setDraggable(id, false)` to keep an intentionally static exhibit
+  from rotating. Its returned cleanup restores the previous setting.
 - `animatePart(part, fraction, options)` to tween a bound part along its authored
   axis/range. Ranges can be reversed or centred: drum-pad fraction **0** is down
   and **1** is neutral; a microphone with symmetric limits rests at **0.5**.
