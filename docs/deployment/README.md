@@ -43,6 +43,12 @@ Use a minimally scoped token for the public read requests. No credential values
 are supplied or handled by this change. Environment protection may require Matt
 to approve each scheduled request; choose that policy explicitly when enabling.
 
+Before the first repaired build, Matt should set the non-secret Workers Builds
+variable `NODE_VERSION=26` to match this repository and CI. The exact pnpm version
+is already selected by `packageManager: pnpm@10.34.9` in `package.json`, as the
+current Workers build image supports. No package-manager version override is
+needed in the hook workflow.
+
 A successful hook request is **not** proof that its build or deployment finished.
 Record the matching Workers Builds result, deployed version/commit and visible
 GitHub provenance. API failures keep the existing all-or-nothing archived dossier,
@@ -54,7 +60,8 @@ an old snapshot fresh.
 1. Review this PR's exact green commit: check, lint, build, browser tests,
    `pnpm test:edge` and performance audits. The source remains assets-only.
 2. Matt approves preserving Workers Builds plus the 06:00 UTC deploy-hook plan.
-   Matt repairs the disconnected GitHub integration; agents do not reconnect it.
+   Matt configures the Node build version and repairs the disconnected GitHub
+   integration; agents do not reconnect it.
 3. After repair, push the reviewed branch and inspect its non-production Workers
    Builds result. The configured version command uploads a version rather than
    promoting production. Open the preview URL returned by that build. Confirm
@@ -113,4 +120,5 @@ actual emitted output rather than source-size estimates.
 Sources: [Workers limits](https://developers.cloudflare.com/workers/platform/limits/),
 [asset headers](https://developers.cloudflare.com/workers/static-assets/headers/),
 [version URLs](https://developers.cloudflare.com/workers/versions-and-deployments/version-urls/),
-[Workers Builds deploy hooks](https://developers.cloudflare.com/workers/ci-cd/builds/deploy-hooks/).
+[Workers Builds deploy hooks](https://developers.cloudflare.com/workers/ci-cd/builds/deploy-hooks/),
+[build image versions](https://developers.cloudflare.com/workers/ci-cd/builds/build-image/).
