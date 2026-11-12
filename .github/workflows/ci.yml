@@ -37,6 +37,9 @@ jobs:
       - run: pnpm build
       - run: pnpm test
       - run: pnpm perf
+        env:
+          # Hosted Ubuntu blocks Chromium user namespaces; audits serve only local static output.
+          LHCI_COLLECT__SETTINGS__CHROME_FLAGS: "--no-sandbox"
       - name: Upload validation reports
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
