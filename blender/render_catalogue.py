@@ -139,6 +139,10 @@ def subject_bounds(name, nodes, models):
     elif name == "human-error":
         subjects = [models[key] for key in ("open-mic", "boom-bap", "absent")]
         subjects += [obj for key, obj in nodes.items() if key.startswith(("plinth_open", "plinth_boom", "plinth_absent", "portrait_"))]
+    elif name == "gift-shop":
+        # The scripted sleeping cat is on the counter beside the linked objects.
+        # Keep both in the square photograph rather than cropping the cat away.
+        subjects = [models[name], bpy.data.objects["photograph_cat_stop_8"]]
     else:
         subjects = [models[name]]
     meshes = {mesh for obj in subjects for mesh in (obj, *obj.children_recursive) if mesh.type == "MESH"}
@@ -210,6 +214,8 @@ def main():
         raise RuntimeError("Catalogue photographs require Cycles with denoising")
     current.cycles.samples = args.samples
     current.cycles.use_denoising = True
+    if hasattr(current.cycles, "denoising_use_gpu"):
+        current.cycles.denoising_use_gpu = False
     current.cycles.adaptive_threshold = 0.06
     current.cycles.max_bounces = 8
     current.cycles.seed = 7

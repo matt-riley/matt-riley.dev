@@ -53,6 +53,8 @@ def main():
     if current.render.engine == "CYCLES":
         current.cycles.samples = args.samples
         current.cycles.use_denoising = True
+        if hasattr(current.cycles, "denoising_use_gpu"):
+            current.cycles.denoising_use_gpu = False
         current.cycles.seed = 7
         current.cycles.max_bounces = 6
     args.output.parent.mkdir(parents=True, exist_ok=True)
