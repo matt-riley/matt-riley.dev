@@ -29,3 +29,152 @@ body > footer {
     transition: opacity 400ms ease;
   }
 }
+
+/* The printed catalogue owns the document; these rules only enhance a live gallery. */
+html[data-gallery="ready"] main#main {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+html[data-gallery="ready"] .collection {
+  width: 100%;
+}
+
+html[data-gallery="ready"] .exhibit {
+  display: flow-root;
+  position: relative;
+  min-height: 100svh;
+  min-height: 125dvh;
+  border: 0;
+  padding: 0;
+}
+
+html[data-gallery="ready"] .exhibit__running,
+html[data-gallery="ready"] .exhibit__figure {
+  display: none;
+}
+
+html[data-gallery="ready"] .exhibit__label {
+  position: sticky;
+  top: max(
+    calc(var(--header-height, 4.5rem) + 1rem),
+    calc(
+      (100dvh + var(--header-height, 4.5rem) - var(--placard-height, 24rem)) /
+      2
+    )
+  );
+  width: min(26rem, calc(100% - 3rem));
+  max-height: calc(100dvh - var(--header-height, 4.5rem) - 2rem);
+  margin-block: 0;
+  padding: var(--space-6);
+  overflow: auto;
+  overscroll-behavior: auto;
+  color: var(--ink);
+  background: var(--plinth);
+  border: 1px solid var(--rule);
+  box-shadow: 0 0.5rem 2rem rgb(0 0 0 / 0.08);
+  scrollbar-gutter: stable;
+}
+
+html[data-gallery="ready"] .exhibit__label[data-placard-side="left"] {
+  margin-inline: 1.5rem auto;
+}
+
+html[data-gallery="ready"] .exhibit__label[data-placard-side="right"] {
+  margin-inline: auto 1.5rem;
+}
+
+html[data-gallery="ready"] .placard {
+  display: block;
+}
+
+html[data-gallery="ready"] .placard h1,
+html[data-gallery="ready"] .placard h2 {
+  font-size: clamp(1.5rem, 1.1rem + 1vw, 2rem);
+  max-width: none;
+}
+
+html[data-gallery="ready"] .placard__artist {
+  margin-block-end: var(--space-3);
+}
+
+html[data-gallery="ready"] .placard__note {
+  margin-block-start: var(--space-6);
+}
+
+@media (max-width: 899px) {
+  html[data-gallery="ready"] .exhibit {
+    min-height: 150dvh;
+  }
+  html[data-gallery="ready"] .exhibit__label {
+    top: max(
+      calc(var(--header-height, 4.5rem) + 1rem),
+      calc(100dvh - var(--placard-height, 45dvh))
+    );
+    width: 100%;
+    max-width: none;
+    max-height: 45dvh;
+    margin-block: 0;
+    padding: var(--space-4) var(--space-6);
+    border-inline: 0;
+    border-block-end: 0;
+  }
+
+  html[data-gallery="ready"] .exhibit__label[data-placard-side] {
+    margin-inline: 0;
+  }
+
+  html[data-gallery="ready"] .placard h1,
+  html[data-gallery="ready"] .placard h2 {
+    font-size: 1.5rem;
+    line-height: 1.1;
+  }
+}
+
+html[data-gallery="ready"] .gallery-wall-source {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
+.gallery-projection {
+  position: fixed;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+  color: var(--gallery-wall-ink, #17171a);
+}
+
+.gallery-wall-title {
+  display: grid;
+  align-items: center;
+  text-align: center;
+  font-family: var(--font-wall);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+}
+
+.gallery-wall-board {
+  display: grid;
+  grid-template-rows: repeat(5, minmax(0, 1fr));
+  font-family: var(--font-mono);
+  line-height: 1.1;
+}
+
+.gallery-board-row {
+  display: grid;
+  align-items: center;
+  border-block-end: 1px solid rgb(23 23 26 / 0.2);
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+
+.gallery-projection[hidden] {
+  display: none;
+}
