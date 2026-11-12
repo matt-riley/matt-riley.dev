@@ -2,7 +2,7 @@
   "routes": [
     {
       "route": "/404.html",
-      "htmlGzipBytes": 1483,
+      "htmlGzipBytes": 1583,
       "eagerGzipBytes": 957,
       "inlineGzipBytes": 346,
       "eagerExternalGzipBytes": 611,
@@ -14,11 +14,11 @@
     },
     {
       "route": "/",
-      "htmlGzipBytes": 12492,
+      "htmlGzipBytes": 12567,
       "eagerGzipBytes": 13878,
       "inlineGzipBytes": 346,
       "eagerExternalGzipBytes": 13532,
-      "lazyGzipBytes": 220048,
+      "lazyGzipBytes": 220052,
       "eagerFiles": [
         "_astro/Base.astro_astro_type_script_index_0_lang.mL1lMMMQ.js",
         "_astro/DrumMachine.astro_astro_type_script_index_0_lang.BaZNgQ25.js",
@@ -28,14 +28,14 @@
         "_astro/SplitFlap.astro_astro_type_script_index_0_lang.BS9iTDJ0.js",
         "_astro/drum-gate.DzOBl1qi.js",
         "_astro/exhibit-state.Vu76ickP.js",
-        "_astro/index.astro_astro_type_script_index_0_lang.CkvZOB7b.js",
+        "_astro/index.astro_astro_type_script_index_0_lang.DEE-EYIz.js",
         "_astro/preload-helper.DHhhL8Zf.js",
         "_astro/settings.Dzwo62uw.js"
       ]
     },
     {
       "route": "/privacy/",
-      "htmlGzipBytes": 1599,
+      "htmlGzipBytes": 1703,
       "eagerGzipBytes": 957,
       "inlineGzipBytes": 346,
       "eagerExternalGzipBytes": 611,
@@ -47,7 +47,7 @@
     },
     {
       "route": "/terms/",
-      "htmlGzipBytes": 1518,
+      "htmlGzipBytes": 1613,
       "eagerGzipBytes": 957,
       "inlineGzipBytes": 346,
       "eagerExternalGzipBytes": 611,
@@ -60,9 +60,9 @@
   ],
   "distinctLazy": {
     "count": 18,
-    "gzipBytes": 220048,
+    "gzipBytes": 220052,
     "files": [
-      "_astro/boot.BtXqazBb.js",
+      "_astro/boot.B2cJ_XGp.js",
       "_astro/cat.i13T_YHq.js",
       "_astro/drawers.DItqnJOY.js",
       "_astro/drums.fcpxKThN.js",
