@@ -22,7 +22,6 @@ const exhibits = await Promise.all(entries.map(async (exhibit) => ({ exhibit, ..
         <Content />
         {exhibit.data.id === "acquisitions" && <SplitFlap dossier={dossier} />}
         <Fragment slot="after">
-          {exhibit.data.id === "entrance" && <p class="opening-hours" data-opening-hours>{site.openingHours.open}</p>}
           {exhibit.data.id === "gift-shop" && (
             <div class="gift-shop-note">
               <p><a href={site.contact.href}>{site.contact.label}<span aria-hidden="true"> ↗</span></a></p>
