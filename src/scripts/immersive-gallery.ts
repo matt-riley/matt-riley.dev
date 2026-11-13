@@ -82,3 +82,24 @@ if (loreExample) {
     if (!event.persisted) cleanup();
   });
 }
+
+const revealProjectFragment = () => {
+  let id: string;
+  try {
+    id = decodeURIComponent(location.hash.slice(1));
+  } catch {
+    return;
+  }
+  if (!id.startsWith("project-")) return;
+  const project = document.getElementById(id);
+  if (
+    !(project instanceof HTMLDetailsElement) ||
+    !project.classList.contains("curated-project")
+  )
+    return;
+  if (collection) collection.open = true;
+  project.open = true;
+  project.scrollIntoView({ block: "start", behavior: "instant" });
+};
+revealProjectFragment();
+window.addEventListener("hashchange", revealProjectFragment);

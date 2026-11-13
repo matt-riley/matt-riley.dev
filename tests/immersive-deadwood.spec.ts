@@ -4,7 +4,7 @@ import { expect, test } from "@playwright/test";
 // Browser plugin unavailable: Chromium functional checks of the image-led
 // prototype, including phone emulation. No physical-device or full-3D claim.
 test.beforeEach(async ({ page }) => {
-  const response = await page.goto("/preview-a/");
+  const response = await page.goto("/");
   expect(response?.status()).toBe(200);
   await expect(page.locator("#deadwood-heading")).toHaveText("deadwood.");
 });

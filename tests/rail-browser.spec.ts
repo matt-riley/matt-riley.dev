@@ -26,7 +26,7 @@ test("gallery handover preserves layout and a native hash chosen while loading",
           shifts.push((entry as PerformanceEntry & { value: number }).value);
     }).observe({ type: "layout-shift", buffered: true });
   });
-  await page.goto("/");
+  await page.goto("/archive-gallery/");
   await page.locator("[data-stop-menu] summary").click();
   await page.locator('[data-stop-menu] a[href="#waystone"]').click();
   await expect(page.locator("html")).toHaveAttribute("data-gallery", "ready", {
@@ -68,7 +68,7 @@ test("an initial Waystone fragment measures the gallery rather than the loading 
     !["desktop-chromium", "mobile-chromium"].includes(info.project.name),
     "Real gallery fragment geometry is covered on desktop and touch Chromium.",
   );
-  await page.goto("/#waystone");
+  await page.goto("/archive-gallery/#waystone");
   await expect(page.locator("html")).toHaveAttribute("data-gallery", "ready", {
     timeout: 30_000,
   });
@@ -125,7 +125,7 @@ test("the last painted photograph fades at its original rectangle and releases i
       });
     await route.continue();
   });
-  await page.goto("/");
+  await page.goto("/archive-gallery/");
   await expect(page.locator("html")).toHaveAttribute("data-gallery", "ready", {
     timeout: 30_000,
   });

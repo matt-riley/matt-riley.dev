@@ -18,7 +18,7 @@ test("terminal lines advance in order and a touch while typing finishes only tha
     "The unenhanced placard is covered by catalogue smoke tests.",
   );
   await page.addInitScript(() => localStorage.setItem("mr-view", "catalogue"));
-  await page.goto("/#waffle-agent");
+  await page.goto("/archive-gallery/#waffle-agent");
   const button = page.locator("#waffle-agent button[data-touch]");
   const terminal = page.locator("[data-terminal]");
   const result = page.locator("#waffle-agent [data-touch-result]");

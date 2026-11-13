@@ -3,7 +3,7 @@ import { expect, type Page, test } from "@playwright/test";
 
 // Browser plugin not available: focused Playwright checks of an image-led
 // prototype. These exercise DOM interactions, not a full 3D gallery.
-const route = "/preview-a/";
+const route = "/";
 const projects = [
   {
     id: "pi-extensions",

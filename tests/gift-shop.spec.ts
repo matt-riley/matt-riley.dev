@@ -20,7 +20,7 @@ const destinations = [
 
 test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => localStorage.setItem("mr-view", "catalogue"));
-  await page.goto("/#gift-shop");
+  await page.goto("/archive-gallery/#gift-shop");
 });
 
 test("the shelf offers three clearly named free links and a plain final footer", async ({
@@ -71,7 +71,7 @@ test("every profile destination is reachable with both pointer and keyboard", as
 }) => {
   for (const mode of ["pointer", "keyboard"] as const)
     for (const destination of destinations) {
-      await page.goto("/#gift-shop");
+      await page.goto("/archive-gallery/#gift-shop");
       await page.route(destination.href, (route) =>
         route.fulfill({
           status: 200,
@@ -96,7 +96,7 @@ test("phone shelf links work through real touchscreen taps", async ({
     "Actual touchscreen uses the mobile project",
   );
   for (const destination of destinations) {
-    await page.goto("/#gift-shop");
+    await page.goto("/archive-gallery/#gift-shop");
     await page.route(destination.href, (route) =>
       route.fulfill({
         status: 200,

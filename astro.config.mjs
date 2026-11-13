@@ -7,6 +7,6 @@ export default defineConfig({
   output: "static",
   build: { inlineStylesheets: "never" },
   integrations: [sitemap({
-    filter: (page) => !["/404", "/404.html", "/styleguide", "/preview-a"].includes(new URL(page).pathname.replace(/\/$/, "")),
+    filter: (page) => !["/404", "/404.html", "/styleguide", "/preview-a", "/archive-gallery"].includes(new URL(page).pathname.replace(/\/$/, "")),
   })],
 });

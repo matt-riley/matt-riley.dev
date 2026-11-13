@@ -73,7 +73,7 @@ test("the complete drum grid can be programmed and played with the keyboard afte
 }) => {
   test.skip(!javaScriptEnabled, "Programming is the DOM enhancement.");
   await prepare(page);
-  await page.goto("/#human-error");
+  await page.goto("/archive-gallery/#human-error");
   await showMachine(page);
   await page.locator("[data-drum-clear]").focus();
   await page.keyboard.press("Space");
@@ -132,7 +132,7 @@ test("shared URLs reproduce the full pattern in a fresh browser without autoplay
     swing: 64,
   };
   await prepare(page);
-  await page.goto(`/#boom=${encodePattern(pattern)}`);
+  await page.goto(`/archive-gallery/#boom=${encodePattern(pattern)}`);
   await expect(page.locator("[data-drum-play]")).toBeVisible();
   expect(await readPattern(page)).toEqual(pattern);
   await expect(page.locator("[data-drum-play]")).toHaveAttribute(
@@ -160,7 +160,7 @@ test("drum code waits for near plus Play, asks inline once, and stops on Off, hi
     if (/\/drums\.[\w-]+\.js(?:\?|$)/.test(request.url()))
       requests.push(request.url());
   });
-  await page.goto("/");
+  await page.goto("/archive-gallery/");
   await page.waitForTimeout(200);
   expect(requests).toEqual([]);
   await showMachine(page);
@@ -237,7 +237,7 @@ test("actual oscillator deadlines stay within 2ms of the swung audio clock for 3
   );
   test.setTimeout(50_000);
   await prepare(page);
-  await page.goto("/#human-error");
+  await page.goto("/archive-gallery/#human-error");
   await showMachine(page);
   await page.locator("[data-drum-clear]").click();
   for (let step = 1; step <= 16; step++)

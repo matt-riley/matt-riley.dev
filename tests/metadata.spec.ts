@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import sharp from "sharp";
 
 for (const route of ["/", "/privacy/", "/terms/", "/404.html"]) {
   test(`${route} has canonical and sharing metadata`, async ({ page }) => {
@@ -18,11 +19,11 @@ for (const route of ["/", "/privacy/", "/terms/", "/404.html"]) {
     );
     await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
       "content",
-      "https://matt-riley.dev/og.png",
+      "https://matt-riley.dev/og.jpg",
     );
     await expect(page.locator('meta[name="twitter:image"]')).toHaveAttribute(
       "content",
-      "https://matt-riley.dev/og.png",
+      "https://matt-riley.dev/og.jpg",
     );
     await expect(page.locator('link[rel="apple-touch-icon"]')).toHaveAttribute(
       "href",
@@ -38,16 +39,17 @@ for (const route of ["/", "/privacy/", "/terms/", "/404.html"]) {
 test("shared identity URLs serve the actual budgeted image and manifest icons", async ({
   request,
 }) => {
-  const share = await request.get("/og.png");
+  const share = await request.get("/og.jpg");
   expect(share.status()).toBe(200);
-  const png = await share.body();
-  expect(png.subarray(0, 8).toString("hex")).toBe("89504e470d0a1a0a");
-  expect([png.readUInt32BE(16), png.readUInt32BE(20)]).toEqual([1200, 630]);
-  expect(png.length).toBeLessThan(200_000);
+  const image = await share.body();
+  expect(image.subarray(0, 2).toString("hex")).toBe("ffd8");
+  const metadata = await sharp(image).metadata();
+  expect([metadata.width, metadata.height]).toEqual([1200, 630]);
+  expect(image.length).toBeLessThan(200_000);
   const response = await request.get("/site.webmanifest");
   expect(response.status()).toBe(200);
   const manifest = await response.json();
-  expect(manifest.name).toBe("Please Touch: The Museum of Small Useful Things");
+  expect(manifest.name).toBe("Please Touch — Matt Riley");
   for (const [path, size] of [
     ["/apple-touch-icon.png", 180],
     ["/icon-192.png", 192],
@@ -82,7 +84,7 @@ test("the home page publishes only the requested WebSite and Person graph", asyn
     {
       "@type": "WebSite",
       "@id": "https://matt-riley.dev/#website",
-      name: "Please Touch: The Museum of Small Useful Things",
+      name: "Please Touch — Matt Riley",
       url: "https://matt-riley.dev/",
       description: "Matt Riley makes small useful things. Please touch.",
       inLanguage: "en-GB",
@@ -93,19 +95,13 @@ test("the home page publishes only the requested WebSite and Person graph", asyn
       "@id": "https://matt-riley.dev/#person",
       name: "Matt Riley",
       url: "https://matt-riley.dev/",
-      sameAs: [
-        "https://github.com/matt-riley",
-        "https://mattriley.work/",
-        "https://mattriley.tools/",
-      ],
+      sameAs: ["https://github.com/matt-riley", "https://mattriley.tools/"],
       homeLocation: { "@type": "Place", name: "Yorkshire" },
     },
   ]);
 });
 
-test("the sitemap contains only public catalogue pages", async ({
-  request,
-}) => {
+test("the sitemap contains only the release pages", async ({ request }) => {
   const sitemap = await request.get("/sitemap-0.xml");
   expect(sitemap.status()).toBe(200);
   const locations = [
@@ -119,18 +115,20 @@ test("the sitemap contains only public catalogue pages", async ({
   expect((await request.get("/styleguide/")).status()).toBe(404);
 });
 
-test("the 404 stop menu reaches actual collection sections", async ({
+test("the 404 collection menu opens the selected approved project", async ({
   page,
 }) => {
   await page.goto("/404.html");
   const menu = page.getByRole("navigation", {
-    name: "Museum stops",
+    name: "The collection",
     exact: true,
   });
-  await expect(menu.getByRole("link")).toHaveCount(9);
+  await expect(menu.getByRole("link")).toHaveCount(5);
   await menu.getByRole("link", { name: /mattriley.tools/ }).click();
-  await expect(page).toHaveURL("/#tools");
-  await expect(page.locator("#tools-heading")).toBeVisible();
+  await expect(page).toHaveURL("/#project-mattriley-tools");
+  await expect(
+    page.locator("#project-mattriley-tools .project-description"),
+  ).toBeVisible();
 });
 
 for (const lights of ["day", "after-hours"] as const) {
@@ -145,7 +143,7 @@ for (const lights of ["day", "after-hours"] as const) {
       (value) => localStorage.setItem("mr-lights", value),
       lights,
     );
-    await page.goto("/");
+    await page.goto("/archive-gallery/");
     const colour = lights === "day" ? "#f4f1ea" : "#0e0e10";
     await expect(
       page.locator('meta[name="theme-color"]').first(),

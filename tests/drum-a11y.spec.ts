@@ -15,7 +15,7 @@ for (const mode of ["day", "after-hours"])
       localStorage.setItem("mr-sound", "off");
       localStorage.setItem("mr-lights", mode);
     }, mode);
-    await page.goto("/#human-error");
+    await page.goto("/archive-gallery/#human-error");
     await page
       .locator("#human-error details[data-reveal] > summary")
       .first()

@@ -52,7 +52,7 @@ test("rapid reversal of every authored drawer part settles fully closed", async 
 test("both native drawer lists remain independent and keyboard reachable", async ({
   page,
 }, info) => {
-  await page.goto("/");
+  await page.goto("/archive-gallery/");
   const tools = page.locator("#tools details");
   const skills = page.locator("#agent-skills details");
   await tools.locator("summary").click();
@@ -82,7 +82,7 @@ test("every fallback drawer destination responds with HTTP 200", async ({
     "Run explicitly to verify live external destinations without making CI depend on other sites.",
   );
   test.setTimeout(120_000);
-  await page.goto("/");
+  await page.goto("/archive-gallery/");
   const destinations = await page
     .locator("#tools .item-list a, #agent-skills .item-list a")
     .evaluateAll((links) =>

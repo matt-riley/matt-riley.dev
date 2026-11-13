@@ -82,7 +82,7 @@ for (const gate of [
     }, gate);
     const requests: string[] = [];
     page.on("request", (request) => requests.push(request.url()));
-    await page.goto("/");
+    await page.goto("/archive-gallery/");
     await page.waitForLoadState("networkidle");
     await page.waitForTimeout(1700);
     expect(
@@ -126,7 +126,7 @@ test("a capable visitor who saved Catalogue can still choose Gallery", async ({
       },
     });
   });
-  await page.goto("/");
+  await page.goto("/archive-gallery/");
   const view = page.locator("[data-setting=view]");
   await expect(view).toBeVisible();
   await expect(view).toHaveAttribute("aria-pressed", "false");
