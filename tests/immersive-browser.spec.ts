@@ -3,7 +3,7 @@ import { expect, type Page, test } from "@playwright/test";
 
 // Browser plugin not available: focused Playwright checks of an image-led
 // prototype. These exercise DOM interactions, not a full 3D gallery.
-const route = "/preview-a/";
+const route = "/";
 const projects = [
   {
     id: "pi-extensions",
@@ -82,11 +82,41 @@ async function visit(page: Page) {
     .toBe(true);
 }
 
+// macOS WebKit follows Safari's default keyboard preference: Option-Tab
+// includes links/buttons. Linux WebKit and Chromium use plain Tab.
+async function tab(page: Page, reverse = false) {
+  const alternate =
+    process.platform === "darwin" &&
+    test.info().project.name.includes("webkit");
+  await page.keyboard.press(
+    `${alternate ? "Alt+" : ""}${reverse ? "Shift+" : ""}Tab`,
+  );
+}
+
 async function picture(page: Page, name: string, selector?: string) {
+  // Playwright's WebKit screenshot preparation injects a <style> even when
+  // animation/caret options are disabled, violating this site's strict CSP.
+  // Keep every WebKit interaction/console assertion; capture visual artifacts
+  // in Chromium and retain shipping-Safari inspection as a manual gate.
+  if (test.info().project.name.includes("webkit")) {
+    await test.info().attach(`${name}-webkit-capture-boundary`, {
+      body: "No WebKit screenshot injected: strict-CSP functional and console checks remain active. Chromium renders supply automated visual evidence.",
+      contentType: "text/plain",
+    });
+    return;
+  }
   const path = test.info().outputPath(`${name}.png`);
   if (selector)
-    await page.locator(selector).screenshot({ path, animations: "disabled" });
-  else await page.screenshot({ path, fullPage: false, animations: "disabled" });
+    await page
+      .locator(selector)
+      .screenshot({ path, animations: "allow", caret: "initial" });
+  else
+    await page.screenshot({
+      path,
+      fullPage: false,
+      animations: "allow",
+      caret: "initial",
+    });
   await test.info().attach(name, { path, contentType: "image/png" });
 }
 
@@ -139,7 +169,7 @@ test("desktop and phone can discover the five approved subjects and their public
     await page
       .getByRole("link", { name: "Open the toolbox", exact: true })
       .click();
-  await expect(page).toHaveURL(/\/preview-a\/#collection$/);
+  await expect(page).toHaveURL("/#collection");
   await expect(page.locator("[data-collection-disclosure]")).toHaveJSProperty(
     "open",
     true,
@@ -157,7 +187,7 @@ test("the first keyboard skip opens the collection and focuses its native summar
     "The native no-JavaScript path is covered separately.",
   );
   await visit(page);
-  await page.keyboard.press("Tab");
+  await tab(page);
   const skip = page.getByRole("link", {
     name: "Skip to the collection",
     exact: true,
@@ -197,7 +227,7 @@ test("native keyboard ranges update score, status, track fill and the rendered n
   await expect(score).toHaveAttribute("aria-label", "CRAP score");
   await expect(needle).toHaveCSS("rotate", "30deg");
   await complexity.focus();
-  await page.keyboard.press("Tab");
+  await tab(page);
   await expect(coverage).toBeFocused();
   await page.keyboard.press("End");
   await expect(coverage).toHaveValue("100");
@@ -207,7 +237,7 @@ test("native keyboard ranges update score, status, track fill and the rendered n
   await expect(page.locator("[data-risk-status]")).toHaveText(
     "Below the threshold",
   );
-  await page.keyboard.press("Shift+Tab");
+  await tab(page, true);
   await expect(complexity).toBeFocused();
   await page.keyboard.press("End");
   await expect(score).toHaveText("30");
@@ -274,7 +304,7 @@ test("no JavaScript preserves native collection/source details and an honest sta
   test.skip(javaScriptEnabled, "Dedicated no-JavaScript project.");
   await visit(page);
   await expect(page.locator(".toolbox-touch")).toBeHidden();
-  await page.keyboard.press("Tab");
+  await tab(page);
   await expect(
     page.getByRole("link", { name: "Skip to the collection", exact: true }),
   ).toBeFocused();

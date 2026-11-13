@@ -37,7 +37,7 @@ test("the real gallery uploads a two-second microphone light and exposes its nat
   page.on("request", (request) => {
     if (request.resourceType() === "image") images.push(request.url());
   });
-  await page.goto("/#human-error");
+  await page.goto("/archive-gallery/#human-error");
   await expect(page.locator("html")).toHaveAttribute("data-gallery", "ready", {
     timeout: 30_000,
   });
@@ -122,7 +122,7 @@ test("the portrait stays unfetched at the entrance and starts only within two st
     if (request.resourceType() === "image")
       images.push(new URL(request.url()).pathname);
   });
-  await page.goto("/");
+  await page.goto("/archive-gallery/");
   await expect(page.locator("html")).toHaveAttribute("data-gallery", "ready", {
     timeout: 30_000,
   });

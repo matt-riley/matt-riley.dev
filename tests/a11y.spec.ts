@@ -62,7 +62,7 @@ for (const view of ["catalogue", "gallery"] as const) {
         },
         { view, lights },
       );
-      await page.goto("/");
+      await page.goto("/archive-gallery/");
       if (view === "gallery")
         await expect(page.locator("html")).toHaveAttribute(
           "data-gallery",

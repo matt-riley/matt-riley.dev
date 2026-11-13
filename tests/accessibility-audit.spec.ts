@@ -16,7 +16,7 @@ for (const lights of ["day", "after-hours"] as const) {
       localStorage.setItem("mr-view", "catalogue");
       localStorage.setItem("mr-lights", value);
     }, lights);
-    await page.goto("/");
+    await page.goto("/archive-gallery/");
     const ratios = await page.evaluate(() => {
       const style = getComputedStyle(document.documentElement);
       const luminance = (token: string) => {
@@ -67,7 +67,7 @@ test("320px and 200/400 percent equivalent viewports preserve every placard", as
   await page.addInitScript(() => localStorage.setItem("mr-view", "catalogue"));
   for (const width of [1280, 640, 320]) {
     await page.setViewportSize({ width, height: 800 });
-    await page.goto("/");
+    await page.goto("/archive-gallery/");
     await page.locator("details").evaluateAll((details) => {
       for (const element of details)
         (element as HTMLDetailsElement).open = true;
@@ -106,7 +106,7 @@ test("forced colours retain control borders and a visible keyboard focus ring", 
   page,
 }) => {
   await page.emulateMedia({ forcedColors: "active" });
-  await page.goto("/");
+  await page.goto("/archive-gallery/");
   await page.keyboard.press("Tab");
   const focused = page.locator(":focus-visible");
   await expect(focused).toHaveCount(1);
@@ -138,7 +138,7 @@ test("standalone touch targets are at least 24px and primary controls are 44px",
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.addInitScript(() => localStorage.setItem("mr-view", "catalogue"));
-  await page.goto("/");
+  await page.goto("/archive-gallery/");
   await page.locator("details").evaluateAll((elements) => {
     for (const element of elements) (element as HTMLDetailsElement).open = true;
   });
@@ -193,7 +193,7 @@ for (const view of ["catalogue", "gallery"] as const) {
       (view) => localStorage.setItem("mr-view", view),
       view,
     );
-    await page.goto("/");
+    await page.goto("/archive-gallery/");
     if (view === "gallery")
       await expect(page.locator("html")).toHaveAttribute(
         "data-gallery",

@@ -58,7 +58,7 @@ test("audio code waits for opt-in, toggles reuse one context, and Off prevents a
     if (/\/sound\.[\w-]+\.js(?:\?|$)/.test(request.url()))
       requested.push(request.url());
   });
-  await page.goto("/");
+  await page.goto("/archive-gallery/");
   await page.waitForTimeout(250);
   expect(requested).toEqual([]);
   expect(await page.evaluate(() => window.audioContexts.length)).toBe(0);
@@ -150,7 +150,7 @@ test("a saved On preference stays silent until a trusted gesture without autopla
   page.on("console", (message) => {
     if (message.type() === "error") errors.push(message.text());
   });
-  await page.goto("/");
+  await page.goto("/archive-gallery/");
   await expect(
     page.getByRole("button", { name: "Sound: On", exact: true }),
   ).toHaveAttribute("aria-pressed", "true");
@@ -187,7 +187,7 @@ test("the real output analyser stays below -6dBFS during rapid touches", async (
     "The real Web Audio graph is measured once.",
   );
   await observeAudio(page);
-  await page.goto("/");
+  await page.goto("/archive-gallery/");
   await page.getByRole("button", { name: "Sound: Off", exact: true }).click();
   await expect(page.locator("html")).toHaveAttribute("data-audio", "ready", {
     timeout: 10_000,

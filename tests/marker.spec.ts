@@ -44,7 +44,7 @@ test("a local marker survives into a new session, returns to its stop and clears
     if (["fetch", "xhr"].includes(request.resourceType()))
       requests.push(request.url());
   });
-  await page.goto("/#waystone");
+  await page.goto("/archive-gallery/#waystone");
   await page.locator("[data-marker-stop]").selectOption("flagz");
   await page.locator("#waystone button[data-touch]").click();
   await expect(page.locator("#waystone [data-touch-result]")).toHaveText(
@@ -64,7 +64,7 @@ test("a local marker survives into a new session, returns to its stop and clears
       info.project.name === "reduced-motion" ? "reduce" : "no-preference",
   });
   const returning = await context.newPage();
-  await returning.goto(new URL("/", page.url()).href);
+  await returning.goto(new URL("/archive-gallery/", page.url()).href);
   await expect(returning.locator("[data-marker-notice]")).toBeVisible();
   await expect(returning.locator("[data-marker-notice-copy]")).toContainText(
     "You left a marker at flagz",
@@ -109,7 +109,7 @@ test("blocked storage and malformed saved markers leave the controls usable", as
       return original.call(this, key, value);
     };
   });
-  await page.goto("/#waystone");
+  await page.goto("/archive-gallery/#waystone");
   await expect(page.locator("[data-marker-notice]")).toBeHidden();
   await page.locator("[data-marker-stop]").selectOption("tools");
   await page.locator("#waystone button[data-touch]").click();

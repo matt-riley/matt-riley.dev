@@ -36,7 +36,10 @@ test("opening hours use London time in Los Angeles and Tokyo and remain static w
     if (javaScriptEnabled)
       await page.clock.setFixedTime(new Date("2026-07-12T13:12:00Z"));
     await page.goto(
-      info.config.projects[0].use.baseURL ?? "http://127.0.0.1:4333",
+      new URL(
+        "/archive-gallery/",
+        info.config.projects[0].use.baseURL ?? "http://127.0.0.1:4333",
+      ).href,
     );
     const hours = page.locator("[data-opening-hours]");
     await expect(hours).toHaveText(
@@ -67,7 +70,7 @@ test("rope controls announce the same result for click, touch and keyboard", asy
     "Static catalogue has no event-driven announcements.",
   );
   await page.addInitScript(() => localStorage.setItem("mr-view", "catalogue"));
-  await page.goto("/");
+  await page.goto("/archive-gallery/");
   const rope = page.getByRole("button", { name: "Touch the rope" });
   if (isMobile) await rope.tap();
   else await rope.click();
@@ -104,7 +107,7 @@ test("the rope adapter damps to rest, repeats without drift and releases its fra
     },
   ).outputText;
   await page.addInitScript(() => localStorage.setItem("mr-view", "catalogue"));
-  await page.goto("/");
+  await page.goto("/archive-gallery/");
   const result = await page.evaluate(async (moduleCode) => {
     const { mountEntrance } = await import(
       `data:text/javascript,${encodeURIComponent(moduleCode)}`
@@ -182,7 +185,7 @@ test("the quiet entrance cue follows native navigation and then gets out of the 
     "One native anchor check covers the cue.",
   );
   await page.addInitScript(() => localStorage.setItem("mr-view", "catalogue"));
-  await page.goto("/");
+  await page.goto("/archive-gallery/");
   const cue = page.locator("[data-scroll-cue]");
   await expect(cue).toBeVisible();
   await cue.click();

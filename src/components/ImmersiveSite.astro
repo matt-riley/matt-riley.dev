@@ -1,0 +1,102 @@
+---
+import { getImage, Image, Picture } from "astro:assets";
+import closedScene from "../assets/immersive/toolbox-closed.png";
+import mobileScene from "../assets/immersive/toolbox-mobile.png";
+import openScene from "../assets/immersive/toolbox-open.png";
+import riskScene from "../assets/immersive/risk-scene.png";
+import riskPointer from "../assets/immersive/risk-pointer.png";
+import wafflePortrait from "../assets/waffle-portrait.jpg";
+import { curatedCollection } from "../data/curated-collection";
+import LoreExhibit from "../components/LoreExhibit.astro";
+import DeadwoodExhibit from "../components/DeadwoodExhibit.astro";
+import ImmersiveLayout from "../layouts/ImmersiveLayout.astro";
+interface Props { noindex?: boolean; }
+const { noindex = false } = Astro.props;
+const [heroAvif, heroWebp, mobileAvif, mobileWebp] = await Promise.all([
+  getImage({src: closedScene, width: 1668, format: "avif", quality: 88}),
+  getImage({src: closedScene, width: 1668, format: "webp", quality: 90}),
+  getImage({src: mobileScene, width: 1024, format: "avif", quality: 88}),
+  getImage({src: mobileScene, width: 1024, format: "webp", quality: 90}),
+]);
+---
+<ImmersiveLayout noindex={noindex} canonicalPath="/">
+    <header slot="header" class="immersive-header">
+      <a class="immersive-wordmark" href="#arrival-heading">Matt Riley</a>
+      <nav class="desktop-nav" aria-label="Main navigation">
+        <a href="#collection" data-open-toolbox>Work</a>
+        <a href="#human">Human</a>
+        <a href="https://github.com/matt-riley">GitHub</a>
+      </nav>
+      <details class="mobile-nav">
+        <summary aria-label="Open navigation"><svg viewBox="0 0 28 24" width="28" height="24" aria-hidden="true"><path d="M2 4h24M2 12h24M2 20h24" fill="none" stroke="currentColor" stroke-width="3" /></svg></summary>
+        <nav aria-label="Mobile navigation"><a href="#collection" data-open-toolbox>Work</a><a href="#human">Human</a><a href="https://github.com/matt-riley">GitHub</a></nav>
+      </details>
+    </header>
+  <section class="arrival" aria-labelledby="arrival-heading">
+    <picture>
+      <source media="(max-width: 760px)" type="image/avif" srcset={mobileAvif.src} />
+      <source media="(max-width: 760px)" type="image/webp" srcset={mobileWebp.src} />
+      <source type="image/avif" srcset={heroAvif.src} />
+      <img src={heroWebp.src} width={1668} height={939} alt="A speckled ceramic toolbox with an orange handle in warm window light." class="arrival-scene" loading="eager" fetchpriority="high" />
+    </picture>
+
+    <h1 id="arrival-heading">Please<br />touch<span>.</span></h1>
+    <div class="arrival-invitation">
+      <p>Matt Riley makes<br />small useful things.</p>
+      <a class="text-action orange-action" href="#collection" data-open-toolbox>Open the toolbox<svg viewBox="0 0 28 20" width="28" height="20" aria-hidden="true"><path d="M1 10h24M17 2l8 8-8 8" fill="none" stroke="currentColor" stroke-width="2" /></svg></a>
+    </div>
+    <button class="toolbox-touch" type="button" data-open-toolbox hidden aria-label="Open the ceramic toolbox"><span class="toolbox-hint">Open the toolbox<svg viewBox="0 0 22 20" width="22" height="20" aria-hidden="true"><path d="M1 10h19M12 2l8 8-8 8" fill="none" stroke="currentColor" stroke-width="2" /></svg></span></button>
+  </section>
+
+  <section id="collection" class="collection-section" aria-labelledby="collection-heading">
+    <details class="collection-disclosure" data-collection-disclosure>
+      <summary id="collection-summary" class="collection-summary"><h2 id="collection-heading">The collection<span>.</span></h2><span class="collection-summary-action"><span class="collection-open-label">Open</span><span class="collection-close-label">Close</span><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M3 12h18M12 3v18" fill="none" stroke="currentColor" stroke-width="2" /></svg></span></summary>
+      <div class="collection-stage">
+        <Picture src={openScene} formats={["avif", "webp"]} fallbackFormat="jpeg" widths={[640, 1000, 1440, 1920]} sizes="(max-width: 760px) 150vw, 70vw" alt="The ceramic toolbox opens into tiers of trays holding a notebook, a small instrument, a cord and a stone." class="open-toolbox-scene" loading="lazy" />
+        <div class="collection-copy">
+          <p class="collection-intro">Five things I’m glad I made.</p>
+          <div class="project-index">
+            {curatedCollection.map((project, index) => (
+              <details class="curated-project" name="curated-project" id={"project-" + project.id} open={project.id === "mattriley-tools"}>
+                <summary><span class="project-number">{String(index + 1).padStart(2, "0")}</span><h3>{project.name}</h3><svg class="project-toggle" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M4 12h16M12 4v16" fill="none" stroke="currentColor" stroke-width="1.75" /></svg></summary>
+                <div class="project-description"><p>{project.description}</p><p class="project-note">{project.note}</p><div class="project-links"><a class="text-action" href={project.source}>View source<svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M4 16 16 4M4 4h12v12" fill="none" stroke="currentColor" stroke-width="1.8" /></svg></a>{"visit" in project && <a class="text-action" href={project.visit}>Visit<svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M4 16 16 4M4 4h12v12" fill="none" stroke="currentColor" stroke-width="1.8" /></svg></a>}{"exhibit" in project && <a class="text-action orange-action" href={project.exhibit}>Try the exhibit<svg viewBox="0 0 24 20" width="24" height="20" aria-hidden="true"><path d="M1 10h21M14 2l8 8-8 8" fill="none" stroke="currentColor" stroke-width="1.8" /></svg></a>}</div></div>
+              </details>
+            ))}
+          </div>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <LoreExhibit />
+
+  <DeadwoodExhibit />
+
+  <section id="crap-exhibit" class="risk-section" aria-labelledby="risk-heading">
+    <div class="risk-art" aria-hidden="true"><div class="risk-image-wrap">
+      <Picture src={riskScene} formats={["avif", "webp"]} fallbackFormat="jpeg" widths={[640, 1000, 1440, 1920]} sizes="(max-width: 760px) 175vw, 100vw" alt="" class="risk-scene" loading="lazy" />
+      <Image src={riskPointer} format="webp" width={320} alt="" class="risk-pointer" data-risk-pointer loading="lazy" />
+    </div></div>
+    <div class="risk-copy">
+      <h2 id="risk-heading">crap<span>.</span></h2>
+      <p class="risk-intro">Complicated code. Not enough tests.</p>
+      <p class="risk-description">A closer look at the places most likely<br class="desktop-break" /> to deserve one.</p>
+      <form class="risk-controls" data-risk-controls>
+        <div class="risk-control"><label for="risk-complexity">Complexity</label><input id="risk-complexity" type="range" min="1" max="30" step="1" value="6" disabled /><output id="complexity-value" for="risk-complexity" aria-live="off">6</output></div>
+        <div class="risk-control"><label for="risk-coverage">Test coverage</label><input id="risk-coverage" type="range" min="0" max="100" step="1" value="0" disabled /><output id="coverage-value" for="risk-coverage" aria-live="off">0%</output></div>
+        <div class="risk-result"><span class="risk-result-label">CRAP score</span><div><output id="risk-score" for="risk-complexity risk-coverage" aria-label="CRAP score" aria-live="polite" aria-atomic="true">42</output><p data-risk-status>Worth a closer look</p></div></div>
+        <noscript><p class="risk-noscript">This example scores 42. Turn on JavaScript to adjust it, or read the metric below.</p></noscript>
+      </form>
+      <div class="risk-links"><a class="text-action orange-action" href="https://github.com/matt-riley/crap">View source<svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true"><path d="M4 16 16 4M4 4h12v12" fill="none" stroke="currentColor" stroke-width="1.8" /></svg></a><a class="metric-link" href="#about-metric">About the metric</a></div>
+      <p class="metric-credit">Metric by Alberto Savoia and Bob Evans.</p>
+      <details id="about-metric" class="metric-details"><summary class="metric-summary">How the score works</summary><p>Complexity² × (1 − coverage ÷ 100)³ + complexity.</p><p>Full coverage leaves the complexity term. This is a way to prioritise investigation, rather than a probability that code will fail. The needle is a relative indicator, capped at a score of 60.</p><a class="metric-readmore" href="https://github.com/matt-riley/crap#the-metric">Read about the metric</a></details>
+    </div>
+  </section>
+
+  <section id="human" class="human-section" aria-labelledby="human-heading">
+    <div class="human-copy"><h2 id="human-heading">The human<br />behind the things<span>.</span></h2><p>Yorkshire. Stand-up, in training. Modern art and Dada. Hip hop, 1986 to 1996.</p><p>And Waffle, the Head of Security.</p><a class="text-action" href="https://github.com/matt-riley">Find me on GitHub<svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true"><path d="M4 16 16 4M4 4h12v12" fill="none" stroke="currentColor" stroke-width="1.8" /></svg></a></div>
+    <figure class="human-portrait"><Image src={wafflePortrait} alt="Waffle, Matt’s tabby kitten, sitting on a bright orange blanket." widths={[300, 500, 700]} sizes="(max-width: 760px) 80vw, 28vw" format="webp" loading="lazy" /><figcaption>Portrait of the Head of Security.</figcaption></figure>
+  </section>
+  <footer slot="footer" class="immersive-footer"><a class="immersive-wordmark" href="#arrival-heading">Matt Riley</a><span class="origin-note">Made in Yorkshire.</span><nav aria-label="Footer navigation"><a href="#collection" data-open-toolbox>Work</a><a href="#human">Human</a><a href="https://github.com/matt-riley">GitHub</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a></nav></footer>
+  <script>import "../scripts/immersive-gallery";</script>
+</ImmersiveLayout>

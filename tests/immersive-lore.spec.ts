@@ -18,7 +18,7 @@ async function originalEvidence(example: Locator) {
 }
 
 test.beforeEach(async ({ page }) => {
-  const response = await page.goto("/preview-a/");
+  const response = await page.goto("/");
   expect(response?.status()).toBe(200);
   await expect(page).toHaveTitle("Please touch. — Matt Riley");
   await expect(page.locator("#lore-heading")).toHaveText("Lore.");
