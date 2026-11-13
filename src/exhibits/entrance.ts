@@ -75,9 +75,28 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
   }
 }
 
-window.setTimeout(() => {
+// Release the fill state when the authored arrival ends. Keeping it for 1.8s
+// causes a late repaint of the largest heading under mobile throttling.
+async function finishArrival() {
+  for (;;) {
+    // The lazy gallery can add its wall lettering while the initial lines run.
+    const arrivals = [...document.querySelectorAll(".entrance-line")]
+      .flatMap((line) => line.getAnimations())
+      .filter(
+        (animation) =>
+          "animationName" in animation &&
+          animation.animationName === "entrance-arrival" &&
+          animation.playState !== "finished" &&
+          animation.playState !== "idle",
+      );
+    if (!arrivals.length) break;
+    await Promise.all(
+      arrivals.map((animation) => animation.finished.catch(() => {})),
+    );
+  }
   delete document.documentElement.dataset.entranceArrival;
-}, 1800);
+}
+void finishArrival();
 
 onExhibitsReady(async (registry) => {
   const { mountEntrance } = await import("./entrance-visual");
