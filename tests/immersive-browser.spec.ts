@@ -328,6 +328,51 @@ test("open collection and calculator have no axe violations", async ({
   expect(results.violations).toEqual([]);
 });
 
+test("fixed navigation remains above calculator artwork and operates its links", async ({
+  page,
+  isMobile,
+  javaScriptEnabled,
+}) => {
+  test.skip(
+    !javaScriptEnabled,
+    "Enhanced header navigation; native disclosures are separately covered.",
+  );
+  await visit(page);
+  await page.locator("#crap-exhibit").scrollIntoViewIfNeeded();
+  if (isMobile) await page.locator(".mobile-nav > summary").click();
+  const navigation = page.getByRole("navigation", {
+    name: isMobile ? "Mobile navigation" : "Main navigation",
+    exact: true,
+  });
+  for (const name of ["Work", "Human"]) {
+    const link = navigation.getByRole("link", { name, exact: true });
+    await expect(link).toBeVisible();
+    expect(
+      await link.evaluate((element) => {
+        const bounds = element.getBoundingClientRect();
+        return (
+          document
+            .elementFromPoint(
+              bounds.x + bounds.width / 2,
+              bounds.y + bounds.height / 2,
+            )
+            ?.closest("a") === element
+        );
+      }),
+      `${name} must receive pointer input above the artwork`,
+    ).toBe(true);
+  }
+  await navigation.getByRole("link", { name: "Human", exact: true }).click();
+  await expect(page).toHaveURL(/#human$/);
+  if (isMobile) await page.locator(".mobile-nav > summary").click();
+  await navigation.getByRole("link", { name: "Work", exact: true }).click();
+  await expect(page).toHaveURL(/#collection$/);
+  await expect(page.locator("[data-collection-disclosure]")).toHaveJSProperty(
+    "open",
+    true,
+  );
+});
+
 test("the open prototype has no horizontal document overflow at 320px", async ({
   page,
   javaScriptEnabled,
