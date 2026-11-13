@@ -1,0 +1,96 @@
+{
+  "bytes": 146016,
+  "triangles": 7476,
+  "embeddedTextureBytes": 7704,
+  "textureDimensions": [
+    512,
+    512
+  ],
+  "materials": [
+    "hero_charcoal",
+    "hero_stoneware",
+    "hero_orange_glaze"
+  ],
+  "parts": [
+    {
+      "name": "touch_clasp",
+      "kind": "hinge",
+      "axis": "x",
+      "range": [
+        0,
+        0.7330382858376184
+      ],
+      "phase": "clasp"
+    },
+    {
+      "name": "touch_lid",
+      "kind": "hinge",
+      "axis": "x",
+      "range": [
+        0,
+        -1.9198621771937625
+      ],
+      "phase": "lid"
+    },
+    {
+      "name": "touch_tray_front_level",
+      "kind": "hinge",
+      "axis": "x",
+      "range": [
+        0,
+        -1.7
+      ],
+      "phase": "tray"
+    },
+    {
+      "name": "touch_tray_front",
+      "kind": "hinge",
+      "axis": "x",
+      "range": [
+        0,
+        1.7
+      ],
+      "phase": "tray"
+    },
+    {
+      "name": "touch_tray_front_link",
+      "kind": "hinge",
+      "axis": "x",
+      "range": [
+        0,
+        1.7
+      ],
+      "phase": "tray"
+    },
+    {
+      "name": "touch_tray_upper_level",
+      "kind": "hinge",
+      "axis": "x",
+      "range": [
+        0,
+        -1.35
+      ],
+      "phase": "tray"
+    },
+    {
+      "name": "touch_tray_upper",
+      "kind": "hinge",
+      "axis": "x",
+      "range": [
+        0,
+        1.35
+      ],
+      "phase": "tray"
+    },
+    {
+      "name": "touch_tray_upper_link",
+      "kind": "hinge",
+      "axis": "x",
+      "range": [
+        0,
+        1.35
+      ],
+      "phase": "tray"
+    }
+  ]
+}
