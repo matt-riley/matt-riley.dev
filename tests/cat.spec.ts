@@ -67,7 +67,10 @@ test.describe("the real gallery figurine", () => {
         (stop) =>
           document
             .getElementById(stop)
-            ?.scrollIntoView({ block: "center", behavior: "smooth" }),
+            // This tour verifies rendered placement and poses. Browser smooth
+            // scrolling plus rail damping needlessly benchmarks SwiftShader;
+            // rail interpolation and slow-frame retreat have separate checks.
+            ?.scrollIntoView({ block: "center", behavior: "instant" }),
         id,
       );
       const index = stops.indexOf(id);
@@ -108,6 +111,10 @@ test.describe("the real gallery figurine", () => {
         path: screenshot,
         contentType: "image/png",
       });
+      await expect(page.locator("html")).toHaveAttribute(
+        "data-gallery",
+        "ready",
+      );
     }
   });
 
