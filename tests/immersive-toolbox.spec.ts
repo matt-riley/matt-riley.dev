@@ -1,3 +1,4 @@
+import AxeBuilder from "@axe-core/playwright";
 import {
   expect,
   type Page,
@@ -119,8 +120,13 @@ test("native controls open, close and turn actual rendered pixels", async ({
   await allowSoftwareWebGL(page);
   await visit(page);
   await pickUp(page);
+  const audit = await new AxeBuilder({ page })
+    .include("[data-toolbox-viewer]")
+    .analyze();
+  expect(audit.violations).toEqual([]);
   await expect(host(page)).toHaveAttribute("data-toolbox-open", "1.000");
   const opened = await canvas(page).screenshot();
+  await info.attach("toolbox-open", { body: opened, contentType: "image/png" });
   const close = viewer(page).getByRole("button", {
     name: "Close toolbox",
     exact: true,
@@ -129,6 +135,10 @@ test("native controls open, close and turn actual rendered pixels", async ({
   await page.keyboard.press("Enter");
   await expect(host(page)).toHaveAttribute("data-toolbox-open", "0.000");
   const closed = await canvas(page).screenshot();
+  await info.attach("toolbox-closed", {
+    body: closed,
+    contentType: "image/png",
+  });
   expect(closed).not.toEqual(opened);
   await page.keyboard.press("Space");
   await expect(host(page)).toHaveAttribute("data-toolbox-open", "1.000");
@@ -139,7 +149,12 @@ test("native controls open, close and turn actual rendered pixels", async ({
   await expect
     .poll(async () => Number(await host(page).getAttribute("data-toolbox-yaw")))
     .toBeLessThan(0);
-  expect(await canvas(page).screenshot()).not.toEqual(opened);
+  const turned = await canvas(page).screenshot();
+  expect(turned).not.toEqual(opened);
+  await info.attach("toolbox-turned", {
+    body: turned,
+    contentType: "image/png",
+  });
   await viewer(page)
     .getByRole("button", { name: "Turn toolbox right", exact: true })
     .click();
