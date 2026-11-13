@@ -139,7 +139,7 @@ test("desktop and phone can discover the five approved subjects and their public
     await page
       .getByRole("link", { name: "Open the toolbox", exact: true })
       .click();
-  await expect(page).toHaveURL(/\/preview-a\/#collection$/);
+  await expect(page).toHaveURL("/#collection");
   await expect(page.locator("[data-collection-disclosure]")).toHaveJSProperty(
     "open",
     true,
