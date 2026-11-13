@@ -137,6 +137,14 @@ const modelRows = sourceModels.map((source) => {
   );
   return { file: label(file), bytes: bytes.length };
 });
+// Imported GLBs and comparison assets are shipped too: count every emitted
+// model, including both intentionally retained toolbox URLs, without deduping.
+for (const file of files(dist).filter(
+  (file) =>
+    file.endsWith(".glb") && !file.startsWith(join(dist, "models") + sep),
+)) {
+  modelRows.push({ file: label(file), bytes: readFileSync(file).length });
+}
 const models = {
   count: modelRows.length,
   bytes: modelRows.reduce((sum, model) => sum + model.bytes, 0),

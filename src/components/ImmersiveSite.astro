@@ -7,6 +7,7 @@ import riskScene from "../assets/immersive/risk-scene.png";
 import riskPointer from "../assets/immersive/risk-pointer.png";
 import wafflePortrait from "../assets/waffle-portrait.jpg";
 import { curatedCollection } from "../data/curated-collection";
+import ToolboxViewer from "./ToolboxViewer.astro";
 import LoreExhibit from "../components/LoreExhibit.astro";
 import DeadwoodExhibit from "../components/DeadwoodExhibit.astro";
 import ImmersiveLayout from "../layouts/ImmersiveLayout.astro";
@@ -53,6 +54,7 @@ const [heroAvif, heroWebp, mobileAvif, mobileWebp] = await Promise.all([
       <summary id="collection-summary" class="collection-summary"><h2 id="collection-heading">The collection<span>.</span></h2><span class="collection-summary-action"><span class="collection-open-label">Open</span><span class="collection-close-label">Close</span><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M3 12h18M12 3v18" fill="none" stroke="currentColor" stroke-width="2" /></svg></span></summary>
       <div class="collection-stage">
         <Picture src={openScene} formats={["avif", "webp"]} fallbackFormat="jpeg" widths={[640, 1000, 1440, 1920]} sizes="(max-width: 760px) 150vw, 70vw" alt="The ceramic toolbox opens into tiers of trays holding a notebook, a small instrument, a cord and a stone." class="open-toolbox-scene" loading="lazy" />
+        <ToolboxViewer />
         <div class="collection-copy">
           <p class="collection-intro">Five things I’m glad I made.</p>
           <div class="project-index">

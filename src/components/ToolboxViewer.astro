@@ -1,0 +1,15 @@
+---
+import "../styles/immersive-toolbox.css";
+---
+<div class="toolbox-viewer" data-toolbox-viewer data-state="photo">
+  <button class="toolbox-start" type="button" data-toolbox-start hidden>Pick up the toolbox <span aria-hidden="true">↗</span></button>
+  <div class="toolbox-live" data-toolbox-live hidden>
+    <div class="toolbox-canvas" data-toolbox-canvas></div>
+    <div class="toolbox-controls" role="group" aria-label="Handle the ceramic toolbox">
+      <p class="toolbox-instruction">Drag to turn, or use the buttons.</p>
+      <div class="toolbox-control-row"><button type="button" data-toolbox-action="left" aria-label="Turn toolbox left">←</button><button type="button" data-toolbox-action="open">Close toolbox</button><button type="button" data-toolbox-action="right" aria-label="Turn toolbox right">→</button></div>
+      <button class="toolbox-photo" type="button" data-toolbox-action="photo">Back to the photograph</button>
+    </div>
+  </div>
+  <p class="toolbox-status" data-toolbox-status role="status" aria-atomic="true"></p>
+</div>
