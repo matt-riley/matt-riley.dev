@@ -1,3 +1,4 @@
+import { mountImportExample } from "./immersive-deadwood";
 import { mountRiskControls } from "./immersive-score";
 
 document.body.dataset.enhanced = "";
@@ -60,5 +61,15 @@ if (controls) {
       controls.removeEventListener("input", syncNeedle);
       cleanup();
     }
+  });
+}
+
+const importExample = document.querySelector<HTMLElement>(
+  "[data-import-example]",
+);
+if (importExample) {
+  const cleanup = mountImportExample(importExample);
+  window.addEventListener("pagehide", (event) => {
+    if (!event.persisted) cleanup();
   });
 }

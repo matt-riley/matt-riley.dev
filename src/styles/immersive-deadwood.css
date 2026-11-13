@@ -1,0 +1,189 @@
+.deadwood-section {
+  display: grid;
+  grid-template-columns: 48% 52%;
+  background: var(--i-paper);
+  scroll-margin-top: 92px;
+}
+.deadwood-art {
+  min-width: 0;
+  overflow: clip;
+}
+.deadwood-art picture,
+.deadwood-art img {
+  width: 100%;
+  height: 100%;
+}
+.deadwood-art img {
+  object-fit: cover;
+  object-position: 50% 50%;
+}
+.deadwood-copy {
+  min-width: 0;
+  padding: clamp(2rem, 4vw, 5rem) clamp(1.5rem, 3.5vw, 4rem);
+}
+.deadwood-copy h2 {
+  font-size: clamp(3.2rem, 6.5vw, 7.8rem);
+  line-height: 1;
+  letter-spacing: -0.065em;
+  font-weight: 800;
+  margin: 0 0 1.3rem;
+}
+.deadwood-dot {
+  color: var(--i-glaze);
+}
+.deadwood-intro {
+  font-family: "Newsreader Variable", serif;
+  font-size: clamp(1.6rem, 2.5vw, 3rem);
+  line-height: 1.1;
+  margin: 0 0 1.8rem;
+}
+.deadwood-instruction {
+  font-family: "Newsreader Variable", serif;
+  font-size: clamp(1.2rem, 1.6vw, 1.7rem);
+  margin: 0;
+}
+.deadwood-copy code {
+  font-family: "Commit Mono", monospace;
+  font-size: 0.85em;
+}
+.import-tree {
+  margin: 2rem 0 1.8rem;
+  font-size: clamp(1.15rem, 1.8vw, 1.8rem);
+}
+.import-tree > div {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  min-height: 3.1rem;
+}
+.import-tree span {
+  font-family: "Newsreader Variable", serif;
+  font-style: italic;
+  font-size: 0.85em;
+}
+.import-entry span {
+  font-size: 0.65em;
+  font-style: normal;
+}
+.import-branch {
+  padding: 0.55rem 0 0.55rem 3rem;
+  margin-left: 0.65rem;
+  border-left: 2px solid var(--i-orange);
+}
+.import-branch::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 1.4rem;
+  width: 2rem;
+  border-top: 2px solid var(--i-orange);
+}
+.import-optional {
+  margin-left: 0.65rem;
+  padding: 0.55rem 0 0.55rem 3rem;
+  color: var(--i-orange);
+}
+.import-optional[data-reachable="true"] {
+  border-left: 2px solid var(--i-orange);
+  color: var(--i-ink);
+}
+.import-optional[data-reachable="true"]::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 1.4rem;
+  width: 2rem;
+  border-top: 2px solid var(--i-orange);
+}
+.import-control {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  width: fit-content;
+  min-height: 44px;
+  font-family: "Newsreader Variable", serif;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+.import-control input {
+  width: 1.4rem;
+  height: 1.4rem;
+  margin: 0 0.3rem 0 0;
+  accent-color: var(--i-orange);
+  cursor: pointer;
+}
+.import-result {
+  font-family: "Newsreader Variable", serif;
+  font-size: clamp(1.25rem, 1.6vw, 1.6rem);
+  font-weight: 700;
+  margin: 1.7rem 0 1rem;
+}
+.import-caption,
+.import-noscript {
+  font-family: "Newsreader Variable", serif;
+  font-size: 1.15rem;
+  line-height: 1.4;
+}
+.import-caption {
+  font-style: italic;
+  margin: 0 0 1.8rem;
+}
+.import-evidence {
+  margin-top: 2rem;
+  border-top: 1px solid var(--i-rule);
+  padding-top: 1rem;
+}
+.import-evidence summary {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  min-height: 32px;
+}
+.import-source {
+  margin-top: 1.25rem;
+}
+.import-source p {
+  margin: 1.5rem 0 0.5rem;
+  font-weight: 700;
+}
+.import-source pre {
+  font-size: clamp(0.7rem, 1vw, 0.9rem);
+  line-height: 1.7;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  margin: 0;
+}
+.import-limit {
+  font-family: "Newsreader Variable", serif;
+  line-height: 1.4;
+  font-size: 1.1rem;
+  margin: 1.5rem 0 0;
+}
+@media (max-width: 760px) {
+  .deadwood-section {
+    display: block;
+  }
+  .deadwood-art {
+    height: 300px;
+  }
+  .deadwood-art img {
+    object-position: 50% 40%;
+  }
+  .deadwood-copy {
+    padding: 2rem 1.5rem 2.5rem;
+  }
+  .deadwood-copy h2 {
+    font-size: clamp(3rem, 13.5vw, 5.5rem);
+  }
+  .deadwood-intro {
+    font-size: 2rem;
+  }
+  .import-tree {
+    font-size: 1.4rem;
+  }
+  .import-control {
+    font-size: 1.35rem;
+  }
+}
