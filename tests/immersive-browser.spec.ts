@@ -84,15 +84,27 @@ async function visit(page: Page) {
 
 // macOS WebKit follows Safari's default keyboard preference: Option-Tab
 // includes links/buttons. Linux WebKit and Chromium use plain Tab.
-async function tab(page: Page) {
+async function tab(page: Page, reverse = false) {
+  const alternate =
+    process.platform === "darwin" &&
+    test.info().project.name.includes("webkit");
   await page.keyboard.press(
-    process.platform === "darwin" && test.info().project.name.includes("webkit")
-      ? "Alt+Tab"
-      : "Tab",
+    `${alternate ? "Alt+" : ""}${reverse ? "Shift+" : ""}Tab`,
   );
 }
 
 async function picture(page: Page, name: string, selector?: string) {
+  // Playwright's WebKit screenshot preparation injects a <style> even when
+  // animation/caret options are disabled, violating this site's strict CSP.
+  // Keep every WebKit interaction/console assertion; capture visual artifacts
+  // in Chromium and retain shipping-Safari inspection as a manual gate.
+  if (test.info().project.name.includes("webkit")) {
+    await test.info().attach(`${name}-webkit-capture-boundary`, {
+      body: "No WebKit screenshot injected: strict-CSP functional and console checks remain active. Chromium renders supply automated visual evidence.",
+      contentType: "text/plain",
+    });
+    return;
+  }
   const path = test.info().outputPath(`${name}.png`);
   if (selector)
     await page
@@ -225,7 +237,7 @@ test("native keyboard ranges update score, status, track fill and the rendered n
   await expect(page.locator("[data-risk-status]")).toHaveText(
     "Below the threshold",
   );
-  await page.keyboard.press("Shift+Tab");
+  await tab(page, true);
   await expect(complexity).toBeFocused();
   await page.keyboard.press("End");
   await expect(score).toHaveText("30");
