@@ -1,0 +1,10 @@
+HTTP/1.1 200 OK
+Content-Type: text/html; charset=utf-8
+Cache-Control: public, max-age=0, must-revalidate
+ETag: "8c2f5369dcb90c56501ca9beac7a6f89"
+CF-Cache-Status: HIT
+content-security-policy: default-src 'self'; script-src 'self' 'sha256-9i7GH0hBD5ypgINcV6tDJufW4/oTOKzsMs4mrZtV6Ck=' 'sha256-LGQ/8fvzIjyanI07nc3aYjBErMTavcVTixFG8NqpQUs=' 'wasm-unsafe-eval'; style-src 'self'; img-src 'self' blob:; font-src 'self'; connect-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+permissions-policy: camera=(), microphone=(), geolocation=()
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+

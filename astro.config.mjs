@@ -5,6 +5,7 @@ import sitemap from "@astrojs/sitemap";
 export default defineConfig({
   site: "https://matt-riley.dev",
   output: "static",
+  build: { inlineStylesheets: "never" },
   integrations: [sitemap({
     filter: (page) => !["/404", "/404.html", "/styleguide"].includes(new URL(page).pathname.replace(/\/$/, "")),
   })],

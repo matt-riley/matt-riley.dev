@@ -1,81 +1,94 @@
-# matt-riley.dev
+# Please Touch
 
-Please Touch: The Museum of Small Useful Things. Built with Astro, strict
-TypeScript and static output for Cloudflare Workers Assets.
+Matt Riley makes small useful things. This site presents them as a nine-stop museum of porcelain objects, orange working parts and a cat who has ignored the rules. The complete photographic catalogue works without JavaScript; capable browsers can explore the same exhibits in an optional Three.js gallery.
 
-The redesign is in progress. This foundation is intentionally unstyled; catalogue
-content, gallery enhancement and interactions arrive in subsequent tasks.
-The source brief and task order live in
-[Notion](https://app.notion.com/p/416d4557a772812a906cd4d199f361a1).
+![The museum’s free link shelf](docs/qa/e-08-gift-shelf.png)
 
-## Development
+The approved design and task tracker live in [Notion](https://app.notion.com/p/416d4557a772812a906cd4d199f361a1).
 
-Use Node 26 and pnpm 10.
+## Local development
+
+Use Node 26 and pnpm 10. The lockfile pins the toolchain; CI installs with `--frozen-lockfile`.
 
 ```sh
-pnpm install
+pnpm install --frozen-lockfile
 pnpm dev
 pnpm check
 pnpm lint
 GITHUB_DATA=fallback pnpm build
 pnpm preview
-pnpm exec wrangler deploy --dry-run
 ```
 
-`pnpm format` formats and lints supported files. Astro templates are checked by
-`pnpm check`. The preserved `src/data/` layer is excluded from Biome to keep it
-untouched during the scaffold task.
+Astro produces static HTML and locally hosted assets. Content belongs in `src/content/exhibits/`; shared copy is in `src/content/site.ts`. The original supplied portrait is `src/assets/waffle-portrait.jpg`. The app sends no visitor state to a server.
 
-`pnpm test` builds with `GITHUB_DATA=fallback` and tests the production preview in
-Chromium, WebKit, a mobile viewport, reduced motion and JavaScript-disabled mode.
-Install the browser binaries first with `pnpm exec playwright install chromium webkit`.
-Every generated HTML route is smoke-tested; axe audits every route in both light
-modes in the four JavaScript-enabled projects (axe itself requires JavaScript).
-The JavaScript-disabled project checks the unenhanced HTML and navigation.
+## Asset builds
 
-`pnpm perf` audits the homepage, privacy and terms with Lighthouse's mobile settings
-and enforces the brief's score, LCP and CLS thresholds. Run a fallback build first.
-It uses Playwright Chromium or the standard macOS Chrome installation; `CHROME_PATH`
-can select another executable.
-Reports stay in ignored `playwright-report/`, `test-results/` and `.lighthouseci/`.
+Use Blender **5.2 LTS**. `BLENDER_BIN` overrides `/Applications/Blender.app/Contents/MacOS/Blender`.
 
-The build-budget tests follow initial module imports and module preloads, including
-inline JavaScript, and exclude dynamic imports until requested. No-model builds
-explicitly skip the model-size check; once models exist their combined size must
-be below 1.5MB. GitHub CI runs install, checks, build, tests and performance audits;
-it never runs Blender.
-`pnpm assets` is a placeholder until the Blender pipeline task B-01.
+```sh
+pnpm assets
+pnpm assets:stills
+pnpm assets:identity
+```
 
-## Structure
+`pnpm assets` runs scripted sources in `blender/scenes/`, then glTF Transform dedup/prune/weld/resize/WebP/Meshopt. Raw GLBs and manifests live in ignored `blender/out/`; optimised GLBs in `public/models/` are committed. Room generation includes a Cycles CPU bake and takes substantially longer than the small models. To rebuild one Python module, use `pnpm assets -- --only agent_skills` (the module declares `MODEL_ID="agent-skills"`). The complete shipped GLB set must remain below 1.5MB.
 
-- `blender/` — scripted scene sources and material/export helpers.
-- `scripts/` — asset build orchestration.
-- `public/models/` — optimised gallery models.
-- `src/assets/catalogue/` — catalogue still renders.
-- `src/assets/waffle-portrait.jpg` — original photograph of Waffle.
-- `src/content/exhibits/` — exhibit content collection.
-- `src/data/` — build-time GitHub dossier and atomic fallback.
-- `src/components/`, `src/layouts/`, `src/pages/` — semantic catalogue HTML.
-- `src/gallery/` — optional gallery runtime.
-- `src/scripts/` — small browser enhancements.
-- `src/styles/` — design tokens and catalogue/gallery styles.
-- `tests/` — Playwright checks.
+`pnpm assets:stills` renders 36 day/night, wide/square photographs from the raw GLBs, validates the complete set and copies them to `src/assets/catalogue/`. Blender cannot import the Meshopt web derivatives. Astro generates responsive AVIF/WebP derivatives at build time; mobile photographs must remain below 90KB. See [catalogue photography](blender/CATALOGUE.md) for constrained render/resume commands. Existing complete renders can be copied with `pnpm assets:stills -- --copy-only`.
+
+`pnpm assets:identity` renders the sitting cat share image with `blender/render_og.py`, extracts the bundled Bricolage Grotesque glyph outlines with Fontkit and composites them using Sharp, and creates the Apple/manifest icons from `public/favicon.svg`. `-- --copy-only` reuses the existing share render; `-- --icons-only` rebuilds only icons. The final 1200×630 PNG must be below 200KB. Render intermediates and font provenance stay in ignored output.
+
+Material factories, export axes, pivot metadata, room anchors and budgets are documented in [the asset pipeline](blender/README.md). The approved P2/G2 porcelain/glaze palette is shared by every source. Generated source PNGs and optimised GLBs are checked in; local builds and CI do not need Blender unless changing assets.
+
+## Settings and interaction contracts
+
+`src/scripts/settings.ts` owns these browser-local values. The initial head script applies them before paint; unavailable storage falls back to the same DOM state.
+
+| Storage key | Values                 | Default                |
+| ----------- | ---------------------- | ---------------------- |
+| `mr-lights` | `day`, `after-hours`   | system colour scheme   |
+| `mr-cat`    | `on`, `off`            | `on`                   |
+| `mr-sound`  | `on`, `off`            | `off`                  |
+| `mr-view`   | `gallery`, `catalogue` | `gallery` when capable |
+
+Each value also appears as the corresponding `data-*` attribute on `<html>`. Change settings through the exported `set`, `get` and `toggle` helpers; `document` receives `mr:setting` with `detail: { key, value }`. Settings synchronize across tabs. Sound remains opt-in; a stored setting does not authorize automatic playback. Feature-specific state includes the browser-local `mr-marker` and session-only interaction hints.
+
+The DOM owns results and accessibility. `button[data-touch]` and native `details[data-reveal]` dispatch bubbling `mr:touch` from their exhibit with `detail: { exhibit, model?, part? }`. Physical picks click the same real control. Keep heavy imports inside lazy visual modules registered through the type-only `onExhibitsReady` boundary. Use `registry.onRecord` for bindings that must survive model unloading/reloading; return cleanup and leave GPU disposal to the asset owner. Session-owned resources need immediate `app.addCleanup` registration before any await. See [adapter contracts](src/gallery/INTERACTIONS.md) and [gallery lifecycle](src/gallery/README.md).
+
+## Adding an exhibit
+
+Follow [the end-to-end contributor guide](docs/adding-an-exhibit.md): content, semantic DOM, Blender geometry/pivots, room anchor/camera, photographs, lazy adapter, ownership and validation. The current tour has nine canonical IDs; adding a stop intentionally changes those explicit lists and budgets. Do not introduce a model-only interaction or invented copy.
 
 ## GitHub data
 
-The build reads the public GitHub profile, repositories, events and releases for
-`matt-riley`. If any request fails or cannot be normalised, the whole dossier falls
-back to the checked-in snapshot. `GITHUB_TOKEN` optionally raises the build-time
-API limit and never reaches the browser. `GITHUB_DATA=fallback` skips fetching for
-deterministic builds.
+The build reads the public profile, repositories, events and releases for `matt-riley`. `GITHUB_TOKEN` optionally raises the build-time API allowance and never reaches the browser. `GITHUB_DATA=fallback` skips network requests for deterministic builds. A failed request or invalid response switches the entire dossier to the checked-in snapshot, never a mixture of dates; the footer and acquisitions board display its provenance.
+
+## Validation
+
+```sh
+pnpm exec playwright install chromium webkit
+REQUIRE_FINAL_COPY=true pnpm test --workers=1
+GITHUB_DATA=fallback pnpm build
+pnpm perf
+pnpm exec wrangler deploy --dry-run
+```
+
+Playwright checks Chromium, WebKit, mobile, reduced motion and JavaScript-disabled HTML. Axe checks every route in both light modes where JavaScript is available. Actual GLB tests verify dimensions/materials/pivots; renderer tests exercise real contexts through an explicit software-WebGL fixture, while separate gate tests preserve production fallback. Run graphics suites, Blender batches and Lighthouse serially to avoid CPU/software-GPU contention.
+
+Lighthouse enforces the brief’s performance, accessibility, LCP and CLS thresholds; initial JS/model/texture budgets are checked separately. Performance runs use installed Playwright Chromium, or `CHROME_PATH`. Reports remain ignored under `test-results/`, `playwright-report/` and `.lighthouseci/`. Live external link checks are opt-in with `VERIFY_EXTERNAL_LINKS=1` so CI does not depend on other sites. CI runs install, checks, build, browser tests and Lighthouse, without rebuilding Blender assets.
 
 ## Deployment
 
-`wrangler.jsonc` uploads the generated `dist/` as static Workers Assets.
-`pnpm deploy` builds and deploys; it publishes the current scaffold, so review the
-build before using it. No server entry point or Cloudflare adapter is needed.
+Production is configured through Cloudflare **Workers Builds** for `main`, with
+`pnpm run build` and `npx wrangler deploy`; non-production builds use
+`npx wrangler versions upload`. An authenticated dashboard inspection found the
+GitHub connection disconnected, so Matt must repair it before relying on builds.
+`wrangler.jsonc` remains assets-only with no server entry point or adapter.
+
+See the [deployment evidence and approval plan](docs/deployment/README.md) for
+immutable assets, CSP, hosted preview checks, and the **inactive** daily deploy-hook
+proposal. No deployment method, hook, secret, or schedule is activated by this PR.
+`pnpm deploy` is a manual fallback requiring a specific deployment approval.
 
 ## Reuse
 
-This repository has no license. Public visibility does not grant permission to
-reuse the code, copy, or visual assets without the author's permission.
+This repository has no license. Public visibility does not grant permission to reuse the code, copy or visual assets without the author’s permission.
