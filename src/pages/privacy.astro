@@ -9,16 +9,18 @@ import Base from "../layouts/BackMatterLayout.astro";
     <p>This site is a static personal site. It does not ask for your name, email, or anything else.</p>
     <section aria-labelledby="stored-heading">
       <h2 id="stored-heading"><span class="mono">01</span> What is stored</h2>
-      <p>The four settings — Lights, Cat, Sound and Gallery/Catalogue view — are stored in your browser's localStorage so the page remembers how you left it. The waystone marker is stored there too when you choose to leave one. Nothing else is stored in localStorage, and none of these values is sent anywhere.</p>
+      <p>The main collection's toolbox and examples keep their state only for the current page visit. They do not save your choices, scan a repository, or send questions to a model.</p>
+      <p>The separate comparison archive uses browser localStorage for Lights, Cat, Sound and Gallery/Catalogue settings, plus a return marker if you choose to leave one. Those archive values are not sent to this site's server.</p>
     </section>
     <section aria-labelledby="collection-heading">
       <h2 id="collection-heading"><span class="mono">02</span> What is not collected</h2>
       <p>There is no analytics tracker, account system, contact form, or server side visitor profile on this site.</p>
+      <p>Cloudflare hosts the static site and processes ordinary requests, including network information needed to serve it. That hosting is separate from the interactive examples, which run in your browser.</p>
     </section>
     <section aria-labelledby="links-heading">
       <h2 id="links-heading"><span class="mono">03</span> External links</h2>
-      <p>Links to GitHub, mattriley.work, and mattriley.tools leave this site and have their own policies.</p>
+      <p>Links to GitHub and mattriley.tools leave this site and have their own policies. The linked projects are separate software; their data handling is not determined by these demonstrations.</p>
     </section>
-    <p class="back-matter__updated mono">Last updated: 12 November 2026</p>
+    <p class="back-matter__updated mono">Last updated: 13 November 2026</p>
   </article>
 </Base>
