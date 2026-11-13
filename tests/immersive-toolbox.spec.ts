@@ -23,17 +23,24 @@ const desktop = (info: TestInfo) =>
     info.project.name !== "desktop-chromium",
     "Real-renderer lifecycle checks run once on desktop Chromium.",
   );
-const diagnostics = new WeakMap<Page, Array<{ text: string; url: string }>>();
+const diagnostics = new WeakMap<
+  Page,
+  Array<{ text: string; url: string; kind: string }>
+>();
 
 test.beforeEach(async ({ page }) => {
-  const messages: Array<{ text: string; url: string }> = [];
+  const messages: Array<{ text: string; url: string; kind: string }> = [];
   diagnostics.set(page, messages);
   page.on("pageerror", (error) =>
-    messages.push({ text: error.message, url: page.url() }),
+    messages.push({ text: error.message, url: page.url(), kind: "pageerror" }),
   );
   page.on("console", (message) => {
     if (["warning", "error"].includes(message.type()))
-      messages.push({ text: message.text(), url: message.location().url });
+      messages.push({
+        text: message.text(),
+        url: message.location().url,
+        kind: message.type(),
+      });
   });
 });
 
@@ -42,14 +49,33 @@ test.afterEach(async ({ page }, info) => {
   const expectedModelFailure = info.annotations.some(
     (annotation) => annotation.type === "expected-model-failure",
   );
-  const unexpected = (diagnostics.get(page) ?? []).filter(({ text, url }) => {
+  const messages = diagnostics.get(page) ?? [];
+  await info.attach("renderer-diagnostics", {
+    body: JSON.stringify(messages, null, 2),
+    contentType: "application/json",
+  });
+  const unexpected = messages.filter(({ text, url, kind }) => {
+    // Measured Chromium SwiftShader limitations: Three falls back to synchronous
+    // shader compilation, and browser screenshots/readback can stall the GPU.
+    // Keep these exact warnings in the artifact; never accept renderer errors.
     if (
+      kind === "warning" &&
+      (text ===
+        "THREE.WebGLRenderer: KHR_parallel_shader_compile extension not supported." ||
+        /^\[\.WebGL-0x[\da-f]+\]GL Driver Message \(OpenGL, Performance, GL_CLOSE_PATH_NV, High\): GPU stall due to ReadPixels(?: \(this message will no longer repeat\))?$/.test(
+          text,
+        ))
+    )
+      return false;
+    if (
+      kind === "warning" &&
       expectedModelFailure &&
       text.startsWith("Unable to open the toolbox.") &&
       text.includes("Toolbox model unavailable")
     )
       return false;
     if (
+      kind === "error" &&
       expectedModelFailure &&
       model(new URL(url || page.url())) &&
       /Failed to load resource.*503/.test(text)
