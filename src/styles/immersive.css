@@ -560,6 +560,7 @@ summary::-webkit-details-marker {
   margin-top: 1rem;
 }
 .immersive-footer {
+  flex-wrap: wrap;
   padding: 2.25rem 4vw;
   display: flex;
   gap: 2rem;
@@ -575,6 +576,8 @@ summary::-webkit-details-marker {
 }
 .immersive-footer nav {
   display: flex;
+  flex-wrap: wrap;
+  max-width: 100%;
   gap: 2rem;
   font-weight: 700;
 }

@@ -82,11 +82,29 @@ async function visit(page: Page) {
     .toBe(true);
 }
 
+// macOS WebKit follows Safari's default keyboard preference: Option-Tab
+// includes links/buttons. Linux WebKit and Chromium use plain Tab.
+async function tab(page: Page) {
+  await page.keyboard.press(
+    process.platform === "darwin" && test.info().project.name.includes("webkit")
+      ? "Alt+Tab"
+      : "Tab",
+  );
+}
+
 async function picture(page: Page, name: string, selector?: string) {
   const path = test.info().outputPath(`${name}.png`);
   if (selector)
-    await page.locator(selector).screenshot({ path, animations: "disabled" });
-  else await page.screenshot({ path, fullPage: false, animations: "disabled" });
+    await page
+      .locator(selector)
+      .screenshot({ path, animations: "allow", caret: "initial" });
+  else
+    await page.screenshot({
+      path,
+      fullPage: false,
+      animations: "allow",
+      caret: "initial",
+    });
   await test.info().attach(name, { path, contentType: "image/png" });
 }
 
@@ -157,7 +175,7 @@ test("the first keyboard skip opens the collection and focuses its native summar
     "The native no-JavaScript path is covered separately.",
   );
   await visit(page);
-  await page.keyboard.press("Tab");
+  await tab(page);
   const skip = page.getByRole("link", {
     name: "Skip to the collection",
     exact: true,
@@ -197,7 +215,7 @@ test("native keyboard ranges update score, status, track fill and the rendered n
   await expect(score).toHaveAttribute("aria-label", "CRAP score");
   await expect(needle).toHaveCSS("rotate", "30deg");
   await complexity.focus();
-  await page.keyboard.press("Tab");
+  await tab(page);
   await expect(coverage).toBeFocused();
   await page.keyboard.press("End");
   await expect(coverage).toHaveValue("100");
@@ -274,7 +292,7 @@ test("no JavaScript preserves native collection/source details and an honest sta
   test.skip(javaScriptEnabled, "Dedicated no-JavaScript project.");
   await visit(page);
   await expect(page.locator(".toolbox-touch")).toBeHidden();
-  await page.keyboard.press("Tab");
+  await tab(page);
   await expect(
     page.getByRole("link", { name: "Skip to the collection", exact: true }),
   ).toBeFocused();
