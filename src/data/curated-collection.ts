@@ -20,6 +20,7 @@ export const curatedCollection = [
     description: "Find the code that is no longer doing anything.",
     note: "Unused files, dependencies and symbols across TypeScript, JavaScript, Go, Rust and Lua. Findings come with evidence and analysis limits.",
     source: "https://github.com/matt-riley/deadwood",
+    exhibit: "#deadwood-exhibit",
   },
   {
     id: "crap",
