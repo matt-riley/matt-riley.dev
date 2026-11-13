@@ -33,13 +33,13 @@ configuration, enable a schedule, or replace Matt's personal preview walk.
 
 ## Browser evidence — pending execution/review
 
-| Required browser/device | Automated evidence | Native/physical walkthrough |
-| --- | --- | --- |
-| Chrome on macOS | Existing Chromium engine coverage; final exact-head results pending | Pending |
-| Firefox on macOS | New Firefox engine preflight; exact version/OS attached by tests | Pending |
-| Safari on macOS | Existing WebKit engine coverage; not shipping Safari proof | Pending |
-| Safari on iOS | Existing engine/mobile evidence does not establish a physical iPhone result | Pending |
-| Chrome on Android | Existing Pixel emulation does not establish a physical Android result | Pending |
+| Required browser/device | Automated evidence                                                          | Native/physical walkthrough |
+| ----------------------- | --------------------------------------------------------------------------- | --------------------------- |
+| Chrome on macOS         | Existing Chromium engine coverage; final exact-head results pending         | Pending                     |
+| Firefox on macOS        | New Firefox engine preflight; exact version/OS attached by tests            | Pending                     |
+| Safari on macOS         | Existing WebKit engine coverage; not shipping Safari proof                  | Pending                     |
+| Safari on iOS           | Existing engine/mobile evidence does not establish a physical iPhone result | Pending                     |
+| Chrome on Android       | Existing Pixel emulation does not establish a physical Android result       | Pending                     |
 
 Each final row must cover Gallery/Catalogue × Day/After hours, all nine stops
 and every exhibit touch. Record actual versions/devices and failures; do not
@@ -59,3 +59,14 @@ The S05 acceptance checkboxes remain open until their own evidence exists:
 complete real browser table, green release CI including snapshots, Matt's merge
 and production serving the new site, and cached-URL checks after deployment.
 A draft preflight PR and local edge evidence do not satisfy production gates.
+
+## Preliminary evidence
+
+- First hosted run 43290211373: seven focused Firefox 157.0/Linux tests passed.
+  That runner declined WebGL, so Gallery requests exercised catalogue fallback;
+  the 3D Firefox walkthrough remains open. Cached offline reload was readable in
+  that runner. Neither result establishes native macOS or phone compatibility.
+- `external-links.json`: all 25 unique external HTTP(S) URLs in the final S01
+  preview HTML resolved. HEAD was retried with GET for errors; mattriley.work
+  returned 405 to HEAD and 200 to GET. This is point-in-time unauthenticated HTTP
+  evidence, with the audited HTML digest and source ref recorded.

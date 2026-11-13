@@ -1,0 +1,183 @@
+{
+  "checkedAt": "2026-11-12T19:34:25.759Z",
+  "source": "Final S01 local preview dist HTML; unauthenticated HTTP HEAD with GET retry on errors; no browser/account cookies",
+  "results": [
+    {
+      "url": "https://github.com/matt-riley",
+      "status": 200,
+      "finalURL": "https://github.com/matt-riley",
+      "headStatus": 200,
+      "outcome": "resolved"
+    },
+    {
+      "url": "https://github.com/matt-riley/agent-skills",
+      "status": 200,
+      "finalURL": "https://github.com/matt-riley/agent-skills",
+      "headStatus": 200,
+      "outcome": "resolved"
+    },
+    {
+      "url": "https://github.com/matt-riley/agent-skills/tree/main/skills/acquire-codebase-knowledge",
+      "status": 200,
+      "finalURL": "https://github.com/matt-riley/agent-skills/tree/main/skills/acquire-codebase-knowledge",
+      "headStatus": 200,
+      "outcome": "resolved"
+    },
+    {
+      "url": "https://github.com/matt-riley/agent-skills/tree/main/skills/agent-instructions",
+      "status": 200,
+      "finalURL": "https://github.com/matt-riley/agent-skills/tree/main/skills/agent-instructions",
+      "headStatus": 200,
+      "outcome": "resolved"
+    },
+    {
+      "url": "https://github.com/matt-riley/agent-skills/tree/main/skills/astro-seo",
+      "status": 200,
+      "finalURL": "https://github.com/matt-riley/agent-skills/tree/main/skills/astro-seo",
+      "headStatus": 200,
+      "outcome": "resolved"
+    },
+    {
+      "url": "https://github.com/matt-riley/agent-skills/tree/main/skills/git-worktrees",
+      "status": 200,
+      "finalURL": "https://github.com/matt-riley/agent-skills/tree/main/skills/git-worktrees",
+      "headStatus": 200,
+      "outcome": "resolved"
+    },
+    {
+      "url": "https://github.com/matt-riley/agent-skills/tree/main/skills/implementation-review",
+      "status": 200,
+      "finalURL": "https://github.com/matt-riley/agent-skills/tree/main/skills/implementation-review",
+      "headStatus": 200,
+      "outcome": "resolved"
+    },
+    {
+      "url": "https://github.com/matt-riley/agent-skills/tree/main/skills/schema-boundary-typing",
+      "status": 200,
+      "finalURL": "https://github.com/matt-riley/agent-skills/tree/main/skills/schema-boundary-typing",
+      "headStatus": 200,
+      "outcome": "resolved"
+    },
+    {
+      "url": "https://github.com/matt-riley/agent-skills/tree/main/skills/test-driven-development",
+      "status": 200,
+      "finalURL": "https://github.com/matt-riley/agent-skills/tree/main/skills/test-driven-development",
+      "headStatus": 200,
+      "outcome": "resolved"
+    },
+    {
+      "url": "https://github.com/matt-riley/agent-skills/tree/main/skills/verification-before-completion",
+      "status": 200,
+      "finalURL": "https://github.com/matt-riley/agent-skills/tree/main/skills/verification-before-completion",
+      "headStatus": 200,
+      "outcome": "resolved"
+    },
+    {
+      "url": "https://github.com/matt-riley/flagz",
+      "status": 200,
+      "finalURL": "https://github.com/matt-riley/flagz",
+      "headStatus": 200,
+      "outcome": "resolved"
+    },
+    {
+      "url": "https://github.com/matt-riley/flagz/releases/tag/v1.13.3",
+      "status": 200,
+      "finalURL": "https://github.com/matt-riley/flagz/releases/tag/v1.13.3",
+      "headStatus": 200,
+      "outcome": "resolved"
+    },
+    {
+      "url": "https://github.com/matt-riley/mattriley.tools",
+      "status": 200,
+      "finalURL": "https://github.com/matt-riley/mattriley.tools",
+      "headStatus": 200,
+      "outcome": "resolved"
+    },
+    {
+      "url": "https://github.com/matt-riley/skill-evaluator",
+      "status": 200,
+      "finalURL": "https://github.com/matt-riley/skill-evaluator",
+      "headStatus": 200,
+      "outcome": "resolved"
+    },
+    {
+      "url": "https://github.com/matt-riley/waffle",
+      "status": 200,
+      "finalURL": "https://github.com/matt-riley/waffle",
+      "headStatus": 200,
+      "outcome": "resolved"
+    },
+    {
+      "url": "https://github.com/matt-riley/waystone.nvim",
+      "status": 200,
+      "finalURL": "https://github.com/matt-riley/waystone.nvim",
+      "headStatus": 200,
+      "outcome": "resolved"
+    },
+    {
+      "url": "https://mattriley.tools/",
+      "status": 200,
+      "finalURL": "https://mattriley.tools/",
+      "headStatus": 200,
+      "outcome": "resolved"
+    },
+    {
+      "url": "https://mattriley.tools/tools/agit/",
+      "status": 200,
+      "finalURL": "https://mattriley.tools/tools/agit/",
+      "headStatus": 200,
+      "outcome": "resolved"
+    },
+    {
+      "url": "https://mattriley.tools/tools/crap/",
+      "status": 200,
+      "finalURL": "https://mattriley.tools/tools/crap/",
+      "headStatus": 200,
+      "outcome": "resolved"
+    },
+    {
+      "url": "https://mattriley.tools/tools/deadwood/",
+      "status": 200,
+      "finalURL": "https://mattriley.tools/tools/deadwood/",
+      "headStatus": 200,
+      "outcome": "resolved"
+    },
+    {
+      "url": "https://mattriley.tools/tools/hopt/",
+      "status": 200,
+      "finalURL": "https://mattriley.tools/tools/hopt/",
+      "headStatus": 200,
+      "outcome": "resolved"
+    },
+    {
+      "url": "https://mattriley.tools/tools/mediacreator/",
+      "status": 200,
+      "finalURL": "https://mattriley.tools/tools/mediacreator/",
+      "headStatus": 200,
+      "outcome": "resolved"
+    },
+    {
+      "url": "https://mattriley.tools/tools/newbrew/",
+      "status": 200,
+      "finalURL": "https://mattriley.tools/tools/newbrew/",
+      "headStatus": 200,
+      "outcome": "resolved"
+    },
+    {
+      "url": "https://mattriley.tools/tools/skill-eval/",
+      "status": 200,
+      "finalURL": "https://mattriley.tools/tools/skill-eval/",
+      "headStatus": 200,
+      "outcome": "resolved"
+    },
+    {
+      "url": "https://mattriley.work/",
+      "status": 200,
+      "finalURL": "https://mattriley.work/",
+      "headStatus": 405,
+      "outcome": "resolved"
+    }
+  ],
+  "previewHtmlSha256": "998a92804553c5137cf14253d96d6ffe20d1f14c5b8e6a9d7f5dfb1e7b15ebcc",
+  "previewSourceRefAtAudit": "957ede23e50783b6884972fe48f9a5777516ed43"
+}
