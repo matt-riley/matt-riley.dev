@@ -36,5 +36,6 @@ export const curatedCollection = [
     description: "Remember the decision. Get on with the work.",
     note: "Memory for coding agents between sessions. Keep useful project context on your machine, then recall it when it matters.",
     source: "https://github.com/matt-riley/lore",
+    exhibit: "#lore-exhibit",
   },
 ] as const;

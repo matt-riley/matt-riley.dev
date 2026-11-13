@@ -1,4 +1,5 @@
 import { mountImportExample } from "./immersive-deadwood";
+import { mountLoreExample } from "./immersive-lore";
 import { mountRiskControls } from "./immersive-score";
 
 document.body.dataset.enhanced = "";
@@ -69,6 +70,14 @@ const importExample = document.querySelector<HTMLElement>(
 );
 if (importExample) {
   const cleanup = mountImportExample(importExample);
+  window.addEventListener("pagehide", (event) => {
+    if (!event.persisted) cleanup();
+  });
+}
+
+const loreExample = document.querySelector<HTMLElement>("[data-lore-example]");
+if (loreExample) {
+  const cleanup = mountLoreExample(loreExample);
   window.addEventListener("pagehide", (event) => {
     if (!event.persisted) cleanup();
   });
