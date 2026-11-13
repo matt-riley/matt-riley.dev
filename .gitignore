@@ -45,3 +45,9 @@ playwright-report/
 # generated Blender intermediates
 blender/out/
 __pycache__/
+
+# release preflight reports
+visual-test-results/
+release-test-results/
+playwright-visual-report/
+playwright-release-report/

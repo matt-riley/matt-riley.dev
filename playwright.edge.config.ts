@@ -3,7 +3,7 @@ import { defineConfig, devices } from "@playwright/test";
 const port = Number(process.env.EDGE_PORT ?? 47849);
 export default defineConfig({
   testDir: "./tests",
-  testMatch: "deployment-edge.ts",
+  testMatch: ["deployment-edge.ts", "release-edge.ts"],
   workers: 1,
   outputDir: "test-results/workers-edge",
   timeout: 60_000,
