@@ -23,6 +23,42 @@ const desktop = (info: TestInfo) =>
     info.project.name !== "desktop-chromium",
     "Real-renderer lifecycle checks run once on desktop Chromium.",
   );
+const diagnostics = new WeakMap<Page, Array<{ text: string; url: string }>>();
+
+test.beforeEach(async ({ page }) => {
+  const messages: Array<{ text: string; url: string }> = [];
+  diagnostics.set(page, messages);
+  page.on("pageerror", (error) =>
+    messages.push({ text: error.message, url: page.url() }),
+  );
+  page.on("console", (message) => {
+    if (["warning", "error"].includes(message.type()))
+      messages.push({ text: message.text(), url: message.location().url });
+  });
+});
+
+test.afterEach(async ({ page }, info) => {
+  if (info.status === "skipped") return;
+  const expectedModelFailure = info.annotations.some(
+    (annotation) => annotation.type === "expected-model-failure",
+  );
+  const unexpected = (diagnostics.get(page) ?? []).filter(({ text, url }) => {
+    if (
+      expectedModelFailure &&
+      text.startsWith("Unable to open the toolbox.") &&
+      text.includes("Toolbox model unavailable")
+    )
+      return false;
+    if (
+      expectedModelFailure &&
+      model(new URL(url || page.url())) &&
+      /Failed to load resource.*503/.test(text)
+    )
+      return false;
+    return true;
+  });
+  expect(unexpected).toEqual([]);
+});
 
 async function visit(page: Page) {
   expect((await page.goto("/"))?.status()).toBe(200);
@@ -34,9 +70,24 @@ async function visit(page: Page) {
   );
 }
 
+async function photographRemains(page: Page) {
+  const image = page.locator(".open-toolbox-scene");
+  await expect(image).toBeVisible();
+  await expect(viewer(page).locator("[data-toolbox-live]")).toBeHidden();
+  await expect
+    .poll(() =>
+      image.evaluate(
+        (element) =>
+          (element as HTMLImageElement).complete &&
+          (element as HTMLImageElement).naturalWidth > 0,
+      ),
+    )
+    .toBe(true);
+}
+
 async function pickUp(page: Page) {
   await viewer(page)
-    .getByRole("button", { name: "Pick up the toolbox" })
+    .getByRole("button", { name: /Pick up the toolbox|Try 3D again/ })
     .click();
   await expect(viewer(page)).toHaveAttribute("data-state", "ready", {
     timeout: 30_000,
@@ -89,6 +140,7 @@ test("the photograph and source links need no eager 3D download or JavaScript", 
   });
   await visit(page);
   await expect(viewer(page)).toHaveAttribute("data-state", "photo");
+  await photographRemains(page);
   await expect(canvas(page)).toHaveCount(0);
   const start = viewer(page).getByRole("button", {
     name: "Pick up the toolbox",
@@ -200,6 +252,10 @@ test("a failed model load preserves the photograph and permits a real retry", as
   page,
 }, info) => {
   desktop(info);
+  info.annotations.push({
+    type: "expected-model-failure",
+    description: "First model response is deliberately HTTP 503.",
+  });
   await allowSoftwareWebGL(page);
   let attempts = 0;
   await page.route(model, async (route) => {
@@ -214,7 +270,11 @@ test("a failed model load preserves the photograph and permits a real retry", as
   await expect(viewer(page).locator("[data-toolbox-status]")).toContainText(
     "3D view is unavailable",
   );
-  await expect(viewer(page)).toHaveAttribute("data-state", "photo");
+  await expect(viewer(page)).toHaveAttribute("data-state", "unavailable");
+  await photographRemains(page);
+  await expect(
+    viewer(page).getByRole("button", { name: "Try 3D again" }),
+  ).toBeVisible();
   await expect(canvas(page)).toHaveCount(0);
   await linksRemainUsable(page);
   await pickUp(page);
@@ -234,7 +294,11 @@ test("real WebGL context loss restores the photograph and releases its canvas", 
     if (!extension) throw new Error("Context-loss extension unavailable");
     extension.loseContext();
   });
-  await expect(viewer(page)).toHaveAttribute("data-state", "photo");
+  await expect(viewer(page)).toHaveAttribute("data-state", "unavailable");
+  await photographRemains(page);
+  await expect(
+    viewer(page).getByRole("button", { name: "Try 3D again" }),
+  ).toBeVisible();
   await expect(canvas(page)).toHaveCount(0);
   await expect(viewer(page).locator("[data-toolbox-status]")).toContainText(
     "3D view is unavailable",
@@ -289,6 +353,11 @@ for (const outcome of ["success", "failure"] as const) {
     page,
   }, info) => {
     desktop(info);
+    if (outcome === "failure")
+      info.annotations.push({
+        type: "expected-model-failure",
+        description: "Held model response is deliberately HTTP 503.",
+      });
     await allowSoftwareWebGL(page);
     const arrived = deferred();
     const release = deferred();
