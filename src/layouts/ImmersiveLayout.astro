@@ -1,0 +1,24 @@
+---
+import wallFont from "@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2?url";
+import "../styles/fonts.css";
+import "../styles/immersive.css";
+---
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Matt Riley makes small useful things. An interactive collection of tools, code and things worth keeping." />
+    <meta name="robots" content="noindex, follow" />
+    <meta name="theme-color" content="#ead8c4" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preload" href={wallFont} as="font" type="font/woff2" crossorigin />
+    <title>Please touch. — Matt Riley</title>
+  </head>
+  <body class="immersive-page">
+    <a class="immersive-skip" href="#collection-summary" data-open-toolbox>Skip to the collection</a>
+    <slot name="header" />
+    <main id="main"><slot /></main>
+    <slot name="footer" />
+  </body>
+</html>

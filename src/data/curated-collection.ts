@@ -1,0 +1,39 @@
+export const curatedCollection = [
+  {
+    id: "pi-extensions",
+    name: "pi-extensions",
+    description: "Plan a change, find the code, run the checks.",
+    note: "Extensions for the Pi coding agent. Built for my own use, shared for yours.",
+    source: "https://github.com/matt-riley/pi-extensions",
+  },
+  {
+    id: "mattriley-tools",
+    name: "mattriley.tools",
+    description: "Useful tools. One place to find them.",
+    note: "Command-line tools, Neovim plugins, skills and templates. With instructions for taking things home.",
+    source: "https://github.com/matt-riley/mattriley.tools",
+    visit: "https://mattriley.tools/",
+  },
+  {
+    id: "deadwood",
+    name: "deadwood",
+    description: "Find the code that is no longer doing anything.",
+    note: "Unused files, dependencies and symbols across TypeScript, JavaScript, Go, Rust and Lua. Findings come with evidence and analysis limits.",
+    source: "https://github.com/matt-riley/deadwood",
+  },
+  {
+    id: "crap",
+    name: "crap",
+    description: "Complicated code. Not enough tests.",
+    note: "A Rust CLI that combines complexity and coverage using the established Change Risk Anti-Patterns metric.",
+    source: "https://github.com/matt-riley/crap",
+    exhibit: "#crap-exhibit",
+  },
+  {
+    id: "lore",
+    name: "Lore",
+    description: "Remember the decision. Get on with the work.",
+    note: "Memory for coding agents between sessions. Keep useful project context on your machine, then recall it when it matters.",
+    source: "https://github.com/matt-riley/lore",
+  },
+] as const;
