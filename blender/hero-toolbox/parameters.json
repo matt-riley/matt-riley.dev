@@ -1,0 +1,171 @@
+{
+  "source": "Original procedural asset; accepted direction A reference",
+  "renderer": "Blender Cycles CPU, AgX exposure -1.0, 48 samples, four threads",
+  "maxTextureSize": 512,
+  "glazeTextureSize": 256,
+  "textureTileMetres": 0.1,
+  "parts": {
+    "touch_lid": {
+      "base": 0,
+      "delta": -1.9198621771937625,
+      "phase": "lid"
+    },
+    "touch_clasp": {
+      "base": 0,
+      "delta": -0.7330382858376184,
+      "phase": "clasp"
+    },
+    "touch_handle": {
+      "base": 0,
+      "delta": 1.9198621771937625,
+      "phase": "lid"
+    },
+    "touch_tray_front": {
+      "base": -1.15,
+      "delta": 1.75,
+      "phase": "tray"
+    },
+    "touch_tray_front_link": {
+      "base": -1.15,
+      "delta": 1.75,
+      "phase": "tray"
+    },
+    "touch_tray_front_level": {
+      "base": 1.15,
+      "delta": -1.75,
+      "phase": "tray"
+    },
+    "touch_tray_upper": {
+      "base": -1.15,
+      "delta": 1.4,
+      "phase": "tray"
+    },
+    "touch_tray_upper_link": {
+      "base": -1.15,
+      "delta": 1.4,
+      "phase": "tray"
+    },
+    "touch_tray_upper_level": {
+      "base": 1.15,
+      "delta": -1.4,
+      "phase": "tray"
+    }
+  },
+  "cameras": {
+    "closed": {
+      "positionBlender": [
+        0.25,
+        -0.78,
+        0.18
+      ],
+      "targetBlender": [
+        0,
+        0,
+        0.105
+      ],
+      "positionGLTF": [
+        0.25,
+        0.18,
+        0.78
+      ],
+      "targetGLTF": [
+        0,
+        0.105,
+        0
+      ],
+      "verticalFov": 25.09094629549748,
+      "shiftX": -0.054999999701976776,
+      "width": 1400,
+      "height": 900
+    },
+    "open": {
+      "positionBlender": [
+        0.35,
+        -0.84,
+        0.44
+      ],
+      "targetBlender": [
+        0,
+        -0.02,
+        0.16
+      ],
+      "positionGLTF": [
+        0.35,
+        0.44,
+        0.84
+      ],
+      "targetGLTF": [
+        0,
+        0.16,
+        0.02
+      ],
+      "verticalFov": 27.107528195463306,
+      "shiftX": -0.054999999701976776,
+      "width": 1400,
+      "height": 900
+    },
+    "mobile-open": {
+      "positionBlender": [
+        0.28,
+        -0.65,
+        0.37
+      ],
+      "targetBlender": [
+        0.03,
+        -0.04,
+        0.16
+      ],
+      "positionGLTF": [
+        0.28,
+        0.37,
+        0.65
+      ],
+      "targetGLTF": [
+        0.03,
+        0.16,
+        0.04
+      ],
+      "verticalFov": 51.28201164861056,
+      "shiftX": 0.0,
+      "width": 720,
+      "height": 960
+    }
+  },
+  "lighting": {
+    "keyPositionBlender": [
+      -0.65,
+      -0.35,
+      0.72
+    ],
+    "keyWatts": 38,
+    "keySize": [
+      0.14,
+      0.6
+    ],
+    "fillWatts": 0.6,
+    "worldStrength": 0.075
+  },
+  "openingSequence": {
+    "clasp": [
+      0,
+      0.18
+    ],
+    "lid": [
+      0.1,
+      0.68
+    ],
+    "trays": [
+      0.38,
+      1.0
+    ]
+  },
+  "rawProofAsset": "blender/out/hero-toolbox/toolbox.raw.glb",
+  "rawProofSha256": "97fe4ca45e1a3faa77804a84526167c09b0966d7c16aa0f92bdebd1d163d1d4f",
+  "caseDimensionsMetres": [
+    0.46,
+    0.23,
+    0.145
+  ],
+  "lidHeightMetres": 0.043,
+  "linearMaterialHandling": "sRGB base-colour images; non-colour ORM/normal images; no legacy shader multiplier"
+}

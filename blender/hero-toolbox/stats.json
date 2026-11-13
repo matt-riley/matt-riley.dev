@@ -1,0 +1,146 @@
+{
+  "rawSourceSha256": "97fe4ca45e1a3faa77804a84526167c09b0966d7c16aa0f92bdebd1d163d1d4f",
+  "bytes": 149396,
+  "triangles": 9916,
+  "embeddedTextureBytes": 9024,
+  "textures": [
+    {
+      "name": "stoneware-normal",
+      "bytes": 770,
+      "dimensions": [
+        512,
+        512
+      ]
+    },
+    {
+      "name": "stoneware-colour",
+      "bytes": 3670,
+      "dimensions": [
+        512,
+        512
+      ]
+    },
+    {
+      "name": "stoneware-orm",
+      "bytes": 3264,
+      "dimensions": [
+        512,
+        512
+      ]
+    },
+    {
+      "name": "glaze-colour",
+      "bytes": 794,
+      "dimensions": [
+        256,
+        256
+      ]
+    },
+    {
+      "name": "glaze-orm",
+      "bytes": 526,
+      "dimensions": [
+        256,
+        256
+      ]
+    }
+  ],
+  "materials": [
+    "hero_stoneware",
+    "hero_charcoal",
+    "hero_orange_glaze"
+  ],
+  "parts": [
+    {
+      "name": "touch_clasp",
+      "kind": "hinge",
+      "axis": "x",
+      "range": [
+        0,
+        -0.7330382858376184
+      ],
+      "phase": "clasp"
+    },
+    {
+      "name": "touch_handle",
+      "kind": "hinge",
+      "axis": "x",
+      "range": [
+        0,
+        1.9198621771937625
+      ],
+      "phase": "lid"
+    },
+    {
+      "name": "touch_lid",
+      "kind": "hinge",
+      "axis": "x",
+      "range": [
+        0,
+        -1.9198621771937625
+      ],
+      "phase": "lid"
+    },
+    {
+      "name": "touch_tray_front_level",
+      "kind": "hinge",
+      "axis": "x",
+      "range": [
+        0,
+        -1.75
+      ],
+      "phase": "tray"
+    },
+    {
+      "name": "touch_tray_front",
+      "kind": "hinge",
+      "axis": "x",
+      "range": [
+        0,
+        1.75
+      ],
+      "phase": "tray"
+    },
+    {
+      "name": "touch_tray_front_link",
+      "kind": "hinge",
+      "axis": "x",
+      "range": [
+        0,
+        1.75
+      ],
+      "phase": "tray"
+    },
+    {
+      "name": "touch_tray_upper_level",
+      "kind": "hinge",
+      "axis": "x",
+      "range": [
+        0,
+        -1.4
+      ],
+      "phase": "tray"
+    },
+    {
+      "name": "touch_tray_upper",
+      "kind": "hinge",
+      "axis": "x",
+      "range": [
+        0,
+        1.4
+      ],
+      "phase": "tray"
+    },
+    {
+      "name": "touch_tray_upper_link",
+      "kind": "hinge",
+      "axis": "x",
+      "range": [
+        0,
+        1.4
+      ],
+      "phase": "tray"
+    }
+  ],
+  "packedSha256": "ef8e3e31d1f45f915f095a2f25deb067962b9dfc713e8c34d4f478b5dbece180"
+}
