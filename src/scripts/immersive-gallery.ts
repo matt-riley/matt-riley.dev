@@ -1,6 +1,7 @@
 import { mountImportExample } from "./immersive-deadwood";
 import { mountLoreExample } from "./immersive-lore";
 import { mountRiskControls } from "./immersive-score";
+import { mountToolboxViewer } from "./immersive-toolbox-gate";
 
 document.body.dataset.enhanced = "";
 const header = document.querySelector<HTMLElement>(".immersive-header");
@@ -103,3 +104,13 @@ const revealProjectFragment = () => {
 };
 revealProjectFragment();
 window.addEventListener("hashchange", revealProjectFragment);
+
+const toolboxViewer = document.querySelector<HTMLElement>(
+  "[data-toolbox-viewer]",
+);
+if (toolboxViewer) {
+  const cleanup = mountToolboxViewer(toolboxViewer);
+  window.addEventListener("pagehide", (event) => {
+    if (!event.persisted) cleanup();
+  });
+}

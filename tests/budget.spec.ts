@@ -97,13 +97,16 @@ test("each route stays below 25KB gzip of eagerly loaded JavaScript", () => {
   }
 });
 
-test("gallery models stay below 1.5MB combined", () => {
+test("all emitted models stay below 1.5MB combined", () => {
   test.skip(
     test.info().project.name !== "desktop-chromium",
     "The models are shared by every browser project.",
   );
-  const files = modelFiles(resolve("public/models"));
-  test.skip(files.length === 0, "No gallery models have been authored yet.");
+  const files = modelFiles(resolve("dist"));
+  expect(
+    files.length,
+    "The built model inventory must be nonempty",
+  ).toBeGreaterThan(0);
   const bytes = files.reduce((sum, file) => sum + statSync(file).size, 0);
   expect(bytes).toBeLessThan(1_500_000);
 });
