@@ -16,7 +16,7 @@ for (const lights of ["day", "after-hours"] as const) {
       localStorage.setItem("mr-view", "catalogue");
       localStorage.setItem("mr-lights", value);
     }, lights);
-    await page.goto("/");
+    await page.goto("/archive-gallery/");
     const ratios = await page.evaluate(() => {
       const style = getComputedStyle(document.documentElement);
       const luminance = (token: string) => {
@@ -67,7 +67,7 @@ test("320px and 200/400 percent equivalent viewports preserve every placard", as
   await page.addInitScript(() => localStorage.setItem("mr-view", "catalogue"));
   for (const width of [1280, 640, 320]) {
     await page.setViewportSize({ width, height: 800 });
-    await page.goto("/");
+    await page.goto("/archive-gallery/");
     await page.locator("details").evaluateAll((details) => {
       for (const element of details)
         (element as HTMLDetailsElement).open = true;
@@ -106,7 +106,7 @@ test("forced colours retain control borders and a visible keyboard focus ring", 
   page,
 }) => {
   await page.emulateMedia({ forcedColors: "active" });
-  await page.goto("/");
+  await page.goto("/archive-gallery/");
   await page.keyboard.press("Tab");
   const focused = page.locator(":focus-visible");
   await expect(focused).toHaveCount(1);
@@ -138,7 +138,7 @@ test("standalone touch targets are at least 24px and primary controls are 44px",
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.addInitScript(() => localStorage.setItem("mr-view", "catalogue"));
-  await page.goto("/");
+  await page.goto("/archive-gallery/");
   await page.locator("details").evaluateAll((elements) => {
     for (const element of elements) (element as HTMLDetailsElement).open = true;
   });
@@ -193,7 +193,7 @@ for (const view of ["catalogue", "gallery"] as const) {
       (view) => localStorage.setItem("mr-view", view),
       view,
     );
-    await page.goto("/");
+    await page.goto("/archive-gallery/");
     if (view === "gallery")
       await expect(page.locator("html")).toHaveAttribute(
         "data-gallery",
@@ -208,6 +208,7 @@ for (const view of ["catalogue", "gallery"] as const) {
       const focus = await page.evaluate(() => {
         const element = document.activeElement as HTMLElement | null;
         const section = element?.closest<HTMLElement>("section[data-exhibit]");
+        const cue = document.querySelector<HTMLElement>("[data-scroll-cue]");
         return {
           stop: section?.dataset.exhibit ?? "",
           name:
@@ -218,23 +219,28 @@ for (const view of ["catalogue", "gallery"] as const) {
           visible: element?.matches(":focus-visible") ?? false,
           footer: Boolean(element?.closest(".museum-footer")),
           outline: element ? getComputedStyle(element).outlineStyle : "none",
+          cueHidden:
+            !cue ||
+            cue.getClientRects().length === 0 ||
+            getComputedStyle(cue).visibility === "hidden",
+          gallery: document.documentElement.dataset.gallery,
         };
       });
       expect(focus.visible, `Tab ${step}: ${focus.name}`).toBe(true);
       expect(focus.outline, `Tab ${step}: ${focus.name}`).not.toBe("none");
       if (focus.stop) {
         reached.add(focus.stop);
-        if (focus.stop !== "entrance")
+        if (focus.stop !== "entrance" && !focus.cueHidden)
+          // Native focus scrolling can finish on the following frame.
           await expect(page.locator("[data-scroll-cue]")).toBeHidden();
         journey.push({ stop: focus.stop, name: focus.name, tag: focus.tag });
         if (focus.tag === "SUMMARY" || focus.tag === "BUTTON")
           await page.keyboard.press("Enter");
       }
+      // Read invariants together with focused-element geometry. Separate
+      // protocol round trips per assertion exhausted the tour on SwiftShader.
       if (view === "gallery")
-        await expect(page.locator("html")).toHaveAttribute(
-          "data-gallery",
-          "ready",
-        );
+        expect(focus.gallery, `Tab ${step}: live gallery`).toBe("ready");
       if (focus.footer) {
         footer = true;
         break;
@@ -243,6 +249,11 @@ for (const view of ["catalogue", "gallery"] as const) {
     expect(footer, "Keyboard focus must reach the footer without a trap").toBe(
       true,
     );
+    if (view === "gallery")
+      await expect(page.locator("html")).toHaveAttribute(
+        "data-gallery",
+        "ready",
+      );
     expect([...reached]).toEqual([
       "entrance",
       "tools",

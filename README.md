@@ -1,8 +1,10 @@
 # Please Touch
 
-Matt Riley makes small useful things. This site presents them as a nine-stop museum of porcelain objects, orange working parts and a cat who has ignored the rules. The complete photographic catalogue works without JavaScript; capable browsers can explore the same exhibits in an optional Three.js gallery.
+Matt Riley makes small useful things. The accepted Direction A presents five selected projects through warm ceramic photography and native browser interactions. The toolbox reveals the collection; CRAP, deadwood and Lore each have an explicitly bounded example, with no remote model or repository execution.
 
-![The museum’s free link shelf](docs/qa/e-08-gift-shelf.png)
+![Direction A’s ceramic toolbox in warm window light](src/assets/immersive/toolbox-closed.png)
+
+The release branch promotes A to `/`. The original nine-stop 3D museum is retained only as an unlinked, noindex comparison archive at `/archive-gallery/`; `/preview-a/` is an unindexed design-review route. These route changes require the coordinator's release integration. Source readiness, a green build and local previews are not deployment approval. See the [final-testing matrix](docs/qa/immersive-final-testing.md).
 
 The approved design and task tracker live in [Notion](https://app.notion.com/p/416d4557a772812a906cd4d199f361a1).
 
@@ -19,27 +21,30 @@ GITHUB_DATA=fallback pnpm build
 pnpm preview
 ```
 
-Astro produces static HTML and locally hosted assets. Content belongs in `src/content/exhibits/`; shared copy is in `src/content/site.ts`. The original supplied portrait is `src/assets/waffle-portrait.jpg`. The app sends no visitor state to a server.
+Astro produces static HTML and locally hosted assets. A's selected projects live in `src/data/curated-collection.ts`; project examples have their own components, scripts and styles. Shared metadata is in `src/content/site.ts`. Add or change project claims from the public source, keep illustrated examples explicitly labelled, and keep controls and outcomes in semantic HTML. The original supplied portrait is `src/assets/waffle-portrait.jpg`. A's examples do not persist or send visitor choices to a server.
 
-## Asset builds
+## Identity assets
+
+`pnpm assets:identity` reuses the approved A toolbox photograph, composites bundled Bricolage Grotesque glyph outlines with Fontkit/Sharp, and regenerates Apple/manifest icons from the toolbox favicon. It requires neither Blender nor network access. The current share image is `public/og.jpg`, 1200×630 and below 200KB; JPEG preserves the photographic ceramic texture. `-- --icons-only` rebuilds only icons; `-- --copy-only` is retained as a compatibility alias for the same photograph-based generation. The historical `public/og.png` remains only for the comparison archive's old metadata. Generated typography/source hashes stay in ignored `blender/out/identity/`.
+
+## Comparison archive: asset builds
 
 Use Blender **5.2 LTS**. `BLENDER_BIN` overrides `/Applications/Blender.app/Contents/MacOS/Blender`.
 
 ```sh
 pnpm assets
 pnpm assets:stills
-pnpm assets:identity
 ```
 
 `pnpm assets` runs scripted sources in `blender/scenes/`, then glTF Transform dedup/prune/weld/resize/WebP/Meshopt. Raw GLBs and manifests live in ignored `blender/out/`; optimised GLBs in `public/models/` are committed. Room generation includes a Cycles CPU bake and takes substantially longer than the small models. To rebuild one Python module, use `pnpm assets -- --only agent_skills` (the module declares `MODEL_ID="agent-skills"`). The complete shipped GLB set must remain below 1.5MB.
 
 `pnpm assets:stills` renders 36 day/night, wide/square photographs from the raw GLBs, validates the complete set and copies them to `src/assets/catalogue/`. Blender cannot import the Meshopt web derivatives. Astro generates responsive AVIF/WebP derivatives at build time; mobile photographs must remain below 90KB. See [catalogue photography](blender/CATALOGUE.md) for constrained render/resume commands. Existing complete renders can be copied with `pnpm assets:stills -- --copy-only`.
 
-`pnpm assets:identity` renders the sitting cat share image with `blender/render_og.py`, extracts the bundled Bricolage Grotesque glyph outlines with Fontkit and composites them using Sharp, and creates the Apple/manifest icons from `public/favicon.svg`. `-- --copy-only` reuses the existing share render; `-- --icons-only` rebuilds only icons. The final 1200×630 PNG must be below 200KB. Render intermediates and font provenance stay in ignored output.
+The original sitting-cat Blender share-image renderer is retained for archive reproducibility; it does not generate A's identity assets.
 
 Material factories, export axes, pivot metadata, room anchors and budgets are documented in [the asset pipeline](blender/README.md). The approved P2/G2 porcelain/glaze palette is shared by every source. Generated source PNGs and optimised GLBs are checked in; local builds and CI do not need Blender unless changing assets.
 
-## Settings and interaction contracts
+## Comparison archive: settings and interaction contracts
 
 `src/scripts/settings.ts` owns these browser-local values. The initial head script applies them before paint; unavailable storage falls back to the same DOM state.
 
@@ -54,11 +59,11 @@ Each value also appears as the corresponding `data-*` attribute on `<html>`. Cha
 
 The DOM owns results and accessibility. `button[data-touch]` and native `details[data-reveal]` dispatch bubbling `mr:touch` from their exhibit with `detail: { exhibit, model?, part? }`. Physical picks click the same real control. Keep heavy imports inside lazy visual modules registered through the type-only `onExhibitsReady` boundary. Use `registry.onRecord` for bindings that must survive model unloading/reloading; return cleanup and leave GPU disposal to the asset owner. Session-owned resources need immediate `app.addCleanup` registration before any await. See [adapter contracts](src/gallery/INTERACTIONS.md) and [gallery lifecycle](src/gallery/README.md).
 
-## Adding an exhibit
+## Comparison archive: adding an exhibit
 
 Follow [the end-to-end contributor guide](docs/adding-an-exhibit.md): content, semantic DOM, Blender geometry/pivots, room anchor/camera, photographs, lazy adapter, ownership and validation. The current tour has nine canonical IDs; adding a stop intentionally changes those explicit lists and budgets. Do not introduce a model-only interaction or invented copy.
 
-## GitHub data
+## Comparison archive: GitHub data
 
 The build reads the public profile, repositories, events and releases for `matt-riley`. `GITHUB_TOKEN` optionally raises the build-time API allowance and never reaches the browser. `GITHUB_DATA=fallback` skips network requests for deterministic builds. A failed request or invalid response switches the entire dossier to the checked-in snapshot, never a mixture of dates; the footer and acquisitions board display its provenance.
 

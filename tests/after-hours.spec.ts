@@ -50,7 +50,7 @@ test("after-hours torch follows pointer and keyboard without darkening labels", 
   page.on("console", (message) => {
     if (message.type() === "error") errors.push(message.text());
   });
-  await page.goto("/?debug");
+  await page.goto("/archive-gallery/?debug");
   await expect(page.locator("html")).toHaveAttribute("data-gallery", "ready", {
     timeout: 30_000,
   });
@@ -162,7 +162,7 @@ test("catalogue photographs switch to the night stills without WebGL", async ({
     localStorage.setItem("mr-view", "catalogue");
     localStorage.setItem("mr-lights", "day");
   });
-  await page.goto("/");
+  await page.goto("/archive-gallery/");
   await expect(page.locator("#tools [data-photo-mode='day']")).toBeVisible();
   await expect(page.locator("#tools [data-photo-mode='night']")).toBeHidden();
   await page.getByRole("button", { name: "Lights: Day", exact: true }).click();
@@ -204,7 +204,7 @@ test("native drum controls, microphone and absence each receive the keyboard tor
       uniform.call(this, at, x, y, z);
     };
   });
-  await page.goto("/#human-error");
+  await page.goto("/archive-gallery/#human-error");
   await expect(page.locator("html")).toHaveAttribute("data-gallery", "ready", {
     timeout: 30_000,
   });

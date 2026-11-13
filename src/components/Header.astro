@@ -2,7 +2,7 @@
 import { getCollection } from "astro:content";
 
 const stops = (await getCollection("exhibits")).sort((a, b) => a.data.order - b.data.order);
-const prefix = Astro.url.pathname === "/" ? "" : "/";
+const prefix = Astro.url.pathname === "/archive-gallery/" ? "" : "/archive-gallery/";
 ---
 
 <div class="site-header">
@@ -47,7 +47,7 @@ const prefix = Astro.url.pathname === "/" ? "" : "/";
       if (button.getAttribute("aria-label") !== ariaLabel) button.setAttribute("aria-label", ariaLabel);
       if (button.getAttribute("aria-pressed") !== pressed) button.setAttribute("aria-pressed", pressed);
       if (key === "view") {
-        const hidden = document.documentElement.dataset.gallery === "unavailable" || location.pathname !== "/";
+        const hidden = document.documentElement.dataset.gallery === "unavailable" || location.pathname !== "/archive-gallery/";
         if (button.hidden !== hidden) button.hidden = hidden;
       }
     }

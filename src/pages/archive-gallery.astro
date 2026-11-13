@@ -1,0 +1,57 @@
+---
+import { getCollection, render } from "astro:content";
+import Exhibit from "../components/Exhibit.astro";
+import Header from "../components/Header.astro";
+import MuseumFooter from "../components/MuseumFooter.astro";
+import SplitFlap from "../components/SplitFlap.astro";
+import HeadOfSecurity from "../components/HeadOfSecurity.astro";
+import WaffleTerminal from "../components/WaffleTerminal.astro";
+import WaystoneMarker from "../components/WaystoneMarker.astro";
+import MarkerNotice from "../components/MarkerNotice.astro";
+import { site } from "../content/site";
+import { loadDossier } from "../data/github";
+import Base from "../layouts/Base.astro";
+import "../styles/exhibits.css";
+
+const dossier = await loadDossier();
+const entries = (await getCollection("exhibits")).sort((a, b) => a.data.order - b.data.order);
+const exhibits = await Promise.all(entries.map(async (exhibit) => ({ exhibit, ...await render(exhibit) })));
+---
+
+<Base title={site.title} description={site.description} noindex>
+  <Header slot="header" />
+  <div class="collection">
+    {exhibits.map(({ exhibit, Content }) => (
+      <Exhibit exhibit={exhibit} dossier={dossier}>
+        <Content />
+        {exhibit.data.id === "acquisitions" && <SplitFlap dossier={dossier} />}
+        <Fragment slot="after">
+          {exhibit.data.id === "waffle-agent" && <WaffleTerminal lines={exhibit.data.lines ?? []} />}
+          {exhibit.data.id === "waystone" && <WaystoneMarker stops={entries.map(({ data }) => ({ id: data.id, title: data.title }))} />}
+          {exhibit.data.id === "entrance" && <MarkerNotice />}
+        </Fragment>
+      </Exhibit>
+    ))}
+  </div>
+  <Fragment slot="footer">
+    <HeadOfSecurity />
+    <MuseumFooter dossier={dossier} />
+  </Fragment>
+</Base>
+
+<script>
+  if (new URLSearchParams(location.search).get("qa") === "1")
+    void import("../scripts/qa-status");
+  import "../scripts/touch";
+  import "../scripts/sound-gate";
+  import "../scripts/drum-gate";
+  import "../scripts/human-error";
+  import "../scripts/gift-shop";
+  import "../gallery/rail-entry";
+  import "../scripts/gallery-gate";
+  import "../scripts/gallery-interactions";
+  import "../scripts/cat";
+  import "../scripts/drawers";
+  import "../scripts/waffle-terminal";
+  import "../scripts/marker";
+</script>

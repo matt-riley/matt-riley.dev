@@ -1,9 +1,8 @@
 ---
-import { getCollection } from "astro:content";
-import Base from "../layouts/Base.astro";
-import "../styles/back-matter.css";
+import { curatedCollection } from "../data/curated-collection";
+import Base from "../layouts/BackMatterLayout.astro";
 
-const stops = (await getCollection("exhibits")).sort((a, b) => a.data.order - b.data.order);
+const stops = curatedCollection;
 ---
 
 <Base title="Untitled (404) — Matt Riley" description="This exhibit is on loan." noindex>
@@ -18,9 +17,9 @@ const stops = (await getCollection("exhibits")).sort((a, b) => a.data.order - b.
       <p>The label was here a moment ago. The cat has declined to comment.</p>
       <p><a href="/">Return to the museum</a></p>
     </div>
-    <nav class="stop-menu" aria-label="Museum stops">
+    <nav class="stop-menu" aria-label="The collection">
       <h2>The collection</h2>
-      <ul>{stops.map(({ data }) => <li><a href={`/#${data.id}`}><span class="mono">{String(data.order).padStart(2, "0")}</span> {data.title}</a></li>)}</ul>
+      <ul>{stops.map((project, index) => <li><a href={`/#project-${project.id}`}><span class="mono">{String(index + 1).padStart(2, "0")}</span> {project.name}</a></li>)}</ul>
     </nav>
   </div>
 </Base>

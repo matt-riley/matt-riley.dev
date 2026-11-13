@@ -21,7 +21,7 @@ test("models and the portrait wait until the visitor is within two stops", async
     if (path.startsWith("/models/") || path.includes("waffle-portrait"))
       requests.push({ path, at: Date.now() });
   });
-  await page.goto("/");
+  await page.goto("/archive-gallery/");
   await expect(page.locator("html")).toHaveAttribute("data-gallery", "ready", {
     timeout: 15_000,
   });

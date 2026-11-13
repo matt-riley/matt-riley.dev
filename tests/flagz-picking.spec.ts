@@ -33,7 +33,7 @@ test("every Flagz switch is individually pickable through its real DOM control",
       }),
     );
   });
-  await page.goto("/#flagz");
+  await page.goto("/archive-gallery/#flagz");
   await expect(page.locator("html")).toHaveAttribute("data-gallery", "ready", {
     timeout: 30_000,
   });

@@ -25,7 +25,7 @@ const linkedStops = [
 test("the complete catalogue preserves the museum's stop order and heading outline", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/archive-gallery/");
   const sections = page.locator("section[data-exhibit]");
   await expect(sections).toHaveCount(9);
   expect(
@@ -62,7 +62,7 @@ test("the complete catalogue preserves the museum's stop order and heading outli
 test("native drawers reveal every tool, skill and Human Error exhibit", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/archive-gallery/");
   const tools = page.locator("#tools");
   await tools.locator("summary").click();
   await expect(
@@ -104,7 +104,7 @@ test("touches bubble to the document and announce the current result", async ({
     testInfo.project.use.javaScriptEnabled === false,
     "Native drawers are tested separately without JavaScript",
   );
-  await page.goto("/");
+  await page.goto("/archive-gallery/");
   await page.evaluate(() => {
     document.addEventListener("mr:touch", (event) => {
       document.documentElement.dataset.lastTouched = (
