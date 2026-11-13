@@ -29,6 +29,37 @@ Production asset prompt: regenerate only the reference concept's photographic pa
 - Fieldset/legend groups native buttons; `aria-pressed` exposes the selected question, and an atomic status region announces the result.
 - No fake terminal execution, AI answer, fabricated confidence or metrics. The explicit caption says nothing is saved and no question is sent to a model.
 
-## Validation boundary
+## Integrated validation
 
-Source checkpoint only. Coordinator owns page integration, browser checks, concept-to-render comparison and responsive fidelity verification. No browser or production action was performed in this worktree. Do not treat source readiness as visual sign-off.
+The coordinator integrated this section before deadwood, mounted its adapter
+with the existing persisted-page lifecycle, and linked it from the collection.
+Astro check reports zero errors/warnings/hints; Biome is clean.
+
+The final text-left/photo-right section concept is
+`exec-c17ef4aa-ebf0-442b-8a52-5da547f868cd.png` under the generated-image session
+`01a1cfdd-cfe8-7a93-83b5-9ee176e4f6e4`. Native text and controls are independently
+implemented; the photo is a separate generated asset. The initial browser
+comparison found undersized desktop typography. Heading, quote, source and
+button scales were corrected, and the latest screenshots were viewed alongside
+the concept at 1440×1000 and 390×844.
+
+Comparison covered split layout, close object crop, ceramic/glaze materials,
+warm palette, type hierarchy, rules and question-control spacing. The visible
+heading, intro, supplied note and initial answer match the concept copy.
+The phone view stacks the photo above readable controls; additional source
+text wraps naturally. No horizontal overflow or page errors were observed.
+Matched and missing states were exercised during capture. Core interactions
+are native buttons with source/provenance and no fabricated model response.
+
+Browser plugin is unavailable; Playwright Chromium was used against the local
+Workers/CSP preview. Temporary captures and reports are outside the repository
+under `/tmp/lore-captures/` and `/tmp/immersive-lore-results*`. They are phone
+emulation evidence, not physical-phone or VoiceOver listening results. Main
+integration, production deployment and daily-hook activation remain held.
+
+Final focused Lore run after the typography correction: eight pass, four
+intentional project skips in 5.1 seconds. Keyboard recall/absence, persistent
+source, no network/storage changes, no-JavaScript evidence, scoped axe in
+three states, and 320px layout all pass. Existing A plus deadwood regression:
+22 pass, 14 intentional skips (A 14/10; deadwood 8/4) against the combined
+Workers page. Independent source/integration review found no actionable bugs.

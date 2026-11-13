@@ -7,6 +7,7 @@ import riskScene from "../assets/immersive/risk-scene.png";
 import riskPointer from "../assets/immersive/risk-pointer.png";
 import wafflePortrait from "../assets/waffle-portrait.jpg";
 import { curatedCollection } from "../data/curated-collection";
+import LoreExhibit from "../components/LoreExhibit.astro";
 import DeadwoodExhibit from "../components/DeadwoodExhibit.astro";
 import ImmersiveLayout from "../layouts/ImmersiveLayout.astro";
 const [heroAvif, heroWebp, mobileAvif, mobileWebp] = await Promise.all([
@@ -64,6 +65,8 @@ const [heroAvif, heroWebp, mobileAvif, mobileWebp] = await Promise.all([
       </div>
     </details>
   </section>
+
+  <LoreExhibit />
 
   <DeadwoodExhibit />
 

@@ -6,8 +6,7 @@ export function mountLoreExample(root: HTMLElement): () => void {
   const answer = root.querySelector<HTMLElement>("[data-lore-answer]");
   const source = root.querySelector<HTMLElement>("[data-lore-answer-source]");
   const original = root.querySelector<HTMLElement>("#lore-original-note");
-  if (!answer || !source || !original || buttons.length !== 2)
-    return () => {};
+  if (!answer || !source || !original || buttons.length !== 2) return () => {};
 
   const initialAnswer = answer.textContent;
   const initiallyHidden = source.hidden;

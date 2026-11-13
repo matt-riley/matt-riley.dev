@@ -27,7 +27,9 @@
   padding: clamp(2rem, 4vw, 4.5rem) 3.6vw;
 }
 .lore-copy h2 {
-  font: 800 clamp(5rem, 8.5vw, 9rem) / 0.85 "Bricolage Grotesque Variable", sans-serif;
+  font:
+    800 clamp(5rem, 11vw, 10.5rem) / 0.85 "Bricolage Grotesque Variable",
+    sans-serif;
   letter-spacing: -0.065em;
   margin: 0 0 1.5rem;
 }
@@ -35,7 +37,9 @@
   color: #dd4c00;
 }
 .lore-intro {
-  font: 400 clamp(1.6rem, 2.2vw, 2.5rem) / 1.1 "Newsreader Variable", serif;
+  font:
+    400 clamp(1.6rem, 2.8vw, 2.8rem) / 1.1 "Newsreader Variable",
+    serif;
   letter-spacing: -0.025em;
   margin: 0 0 2rem;
 }
@@ -44,11 +48,15 @@
   padding-block: 1.5rem;
 }
 .lore-original h3 {
-  font: 400 0.8rem / 1.5 "Commit Mono", monospace;
+  font:
+    400 1.1rem / 1.5 "Commit Mono",
+    monospace;
   margin: 0 0 1rem;
 }
 .lore-original blockquote {
-  font: 400 clamp(1.4rem, 1.9vw, 2rem) / 1.2 "Newsreader Variable", serif;
+  font:
+    400 clamp(1.4rem, 2.4vw, 2.3rem) / 1.2 "Newsreader Variable",
+    serif;
   margin: 0 0 1rem;
 }
 .lore-original blockquote::before {
@@ -58,7 +66,9 @@
   content: "”";
 }
 .lore-provenance {
-  font: 400 1rem / 1.4 "Newsreader Variable", serif;
+  font:
+    400 1.2rem / 1.4 "Newsreader Variable",
+    serif;
   margin: 0;
 }
 .lore-questions {
@@ -84,7 +94,9 @@
   border-radius: 4px;
   background: transparent;
   text-align: left;
-  font: 650 clamp(1rem, 1.35vw, 1.35rem) / 1.25 "Bricolage Grotesque Variable", sans-serif;
+  font:
+    650 clamp(1rem, 1.75vw, 1.6rem) / 1.25 "Bricolage Grotesque Variable",
+    sans-serif;
   color: inherit;
   cursor: pointer;
 }
@@ -106,7 +118,9 @@
 }
 .lore-answer {
   min-height: 7rem;
-  font: 400 1.3rem / 1.3 "Newsreader Variable", serif;
+  font:
+    400 1.5rem / 1.3 "Newsreader Variable",
+    serif;
 }
 .lore-answer p {
   margin: 0 0 0.65rem;
@@ -116,7 +130,9 @@
 }
 .lore-limit,
 .lore-noscript {
-  font: 400 1rem / 1.4 "Newsreader Variable", serif;
+  font:
+    400 1.2rem / 1.4 "Newsreader Variable",
+    serif;
 }
 .lore-limit {
   border-top: 1px solid #b8a38a;
@@ -154,7 +170,7 @@
     font-size: 1.1rem;
   }
   .lore-answer {
-    min-height: 9rem;
+    min-height: 7rem;
   }
 }
 @media (forced-colors: active) {
