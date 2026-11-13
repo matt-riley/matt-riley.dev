@@ -96,3 +96,28 @@ this is not a hosted Cloudflare preview or production deployment.
 
 Main merges and launch remain held. This PR stacks on the reviewed technical
 integration, preserving those fixes without approving the rejected visual result.
+
+## Current validation result
+
+- Astro check: no errors, warnings or hints. Biome: clean.
+- Score module: 9 CPU tests pass.
+- Final local Workers/CSP browser matrix: 12 pass, 9 intentional skips.
+- Follow-up keyboard/focus check: 2 pass, 1 intentional skip; mobile range rows
+  reserve space for the visible focus outline.
+- Header artwork-layer regression and scoped axe: 4 pass, 2 intentional skips;
+  actual pointer hit tests confirm navigation remains above the scene.
+- Three mobile Lighthouse samples on this route: Performance 100,
+  Accessibility 100, Best Practices 100; worst LCP 0.904 s and CLS 0. The deliberate
+  noindex preview is outside the production SEO assertion.
+
+These focused runs overlap; their counts should not be added as unique tests.
+They are browser-engine/phone-emulation evidence, not physical-device or
+VoiceOver listening results. Temporary screenshot/report outputs remain outside
+the repository under `/tmp/immersive-*`.
+
+The inherited S01 parent at 550b90fd has three unresolved legacy-gallery CI
+failures: two software-rendered tests quietly retreat to Catalogue under load,
+and its uninterrupted gallery keyboard tour times out in the hosted runner.
+The tests have not been weakened or rewritten to call fallback a Gallery pass.
+The new image-led route has its own passing focused checks; this draft does not
+claim the whole inherited suite is green. Main integration remains held.
