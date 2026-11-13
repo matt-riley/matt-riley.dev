@@ -47,7 +47,7 @@ test("shared identity URLs serve the actual budgeted image and manifest icons", 
   const response = await request.get("/site.webmanifest");
   expect(response.status()).toBe(200);
   const manifest = await response.json();
-  expect(manifest.name).toBe("Please Touch: The Museum of Small Useful Things");
+  expect(manifest.name).toBe("Please Touch — Matt Riley");
   for (const [path, size] of [
     ["/apple-touch-icon.png", 180],
     ["/icon-192.png", 192],
@@ -82,7 +82,7 @@ test("the home page publishes only the requested WebSite and Person graph", asyn
     {
       "@type": "WebSite",
       "@id": "https://matt-riley.dev/#website",
-      name: "Please Touch: The Museum of Small Useful Things",
+      name: "Please Touch — Matt Riley",
       url: "https://matt-riley.dev/",
       description: "Matt Riley makes small useful things. Please touch.",
       inLanguage: "en-GB",

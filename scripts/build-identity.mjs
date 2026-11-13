@@ -1,4 +1,3 @@
-import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
@@ -23,33 +22,14 @@ for (const [name, size] of [
 ])
   await sharp(favicon, { density: 600 })
     .resize(size, size)
-    .flatten({ background: "#f4f1ea" })
+    .flatten({ background: "#efdfcc" })
     .png()
     .toFile(join(root, `public/${name}.png`));
 if (args[0] === "--icons-only") process.exit(0);
-if (!args.length) {
-  const render = spawnSync(
-    process.env.BLENDER_BIN ||
-      "/Applications/Blender.app/Contents/MacOS/Blender",
-    [
-      "--background",
-      "--threads",
-      "4",
-      "--python-exit-code",
-      "1",
-      "--python",
-      join(root, "blender/render_og.py"),
-    ],
-    { cwd: root, stdio: "inherit" },
-  );
-  if (render.error) throw render.error;
-  if (render.status !== 0)
-    throw new Error(`Share-image render failed (${render.status}).`);
-}
-const source = join(output, "og-scene.png");
-const metadata = await sharp(source).metadata();
-if (metadata.width !== 1200 || metadata.height !== 630)
-  throw new Error("The share-image source must be exactly 1200×630.");
+
+// Reuse the approved A photograph; only native branding is composited over it.
+// No Blender, model call, external font discovery or network is required.
+const source = join(root, "src/assets/immersive/toolbox-closed.png");
 const fontfile = join(
   root,
   "node_modules/@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2",
@@ -58,49 +38,48 @@ const fontBytes = readFileSync(fontfile);
 const face = create(fontBytes);
 if (!face.familyName.includes("Bricolage Grotesque"))
   throw new Error(`Unexpected identity font: ${face.familyName}`);
-const font = face.getVariation({ wght: 700 });
-const scale = 56 / font.unitsPerEm;
-const lines = ["Matt Riley makes", "small useful things.", "Please touch."];
+const font = face.getVariation({ wght: 800 });
+const lines = [
+  { text: "Please", x: 180, baseline: 133, size: 104 },
+  { text: "touch.", x: 180, baseline: 223, size: 104 },
+  { text: "Matt Riley makes", x: 803, baseline: 194, size: 29 },
+  { text: "small useful things.", x: 803, baseline: 227, size: 29 },
+];
 const paths = [];
-for (const [row, line] of lines.entries()) {
-  const run = font.layout(line);
+for (const { text, x, baseline, size } of lines) {
+  const scale = size / font.unitsPerEm;
+  const run = font.layout(text);
   let advance = 0;
   for (const [index, glyph] of run.glyphs.entries()) {
     const position = run.positions[index];
-    const x = 64 + (advance + position.xOffset) * scale;
-    const y =
-      164 + font.capHeight * scale + row * 64 - position.yOffset * scale;
+    const left = x + (advance + position.xOffset) * scale;
+    const top = baseline - position.yOffset * scale;
+    const fill =
+      text === "touch." && index === run.glyphs.length - 1
+        ? "#dd4c00"
+        : "#191611";
     paths.push(
-      `<path transform="translate(${x} ${y}) scale(${scale} ${-scale})" d="${glyph.path.toSVG()}"/>`,
+      `<path fill="${fill}" transform="translate(${left} ${top}) scale(${scale} ${-scale})" d="${glyph.path.toSVG()}"/>`,
     );
     advance += position.xAdvance;
   }
-  if (advance * scale > 600)
-    throw new Error("Share-image text overlaps the cat.");
+  if (x + advance * scale > 1160)
+    throw new Error("Share-image text exceeds its right margin.");
 }
-// Outlines come directly from the bundled font. No OS font discovery/fallback
-// or SVG embedded-font support is involved in Sharp's rasterisation.
 const text = Buffer.from(
-  `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630"><g fill="#17171a">${paths.join("")}</g></svg>`,
-);
-writeFileSync(
-  join(output, "typography.json"),
-  `${JSON.stringify({ family: face.familyName, weight: 700, pixelSize: 56, lines, font_sha256: createHash("sha256").update(fontBytes).digest("hex") }, null, 2)}\n`,
+  `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630"><g fill="#191611">${paths.join("")}</g></svg>`,
 );
 const image = await sharp(source)
+  .resize(1200, 630, { fit: "cover", position: "centre" })
   .composite([{ input: text, left: 0, top: 0 }])
   .removeAlpha()
-  .png({
-    palette: true,
-    quality: 95,
-    colours: 256,
-    dither: 0.1,
-    compressionLevel: 9,
-    adaptiveFiltering: true,
-    effort: 10,
-  })
+  .jpeg({ quality: 82, mozjpeg: true })
   .toBuffer();
 if (image.length >= 200_000)
   throw new Error(`Share image exceeds 200KB: ${image.length} bytes.`);
-writeFileSync(join(root, "public/og.png"), image);
-console.log(`Identity assets built; og.png ${image.length} / 200000 bytes.`);
+writeFileSync(join(root, "public/og.jpg"), image);
+writeFileSync(
+  join(output, "typography.json"),
+  `${JSON.stringify({ family: face.familyName, weight: 800, lines, source: "src/assets/immersive/toolbox-closed.png", source_sha256: createHash("sha256").update(readFileSync(source)).digest("hex"), font_sha256: createHash("sha256").update(fontBytes).digest("hex"), output_bytes: image.length }, null, 2)}\n`,
+);
+console.log(`A identity assets built; og.jpg ${image.length} / 200000 bytes.`);

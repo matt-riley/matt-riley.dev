@@ -1,14 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <style>
-    .ground { fill: #f4f1ea; }
-    .edge { stroke: #17171a; }
+    .ground { fill: #efdfcc; }
+    .edge { stroke: #191611; }
     @media (prefers-color-scheme: dark) {
-      .ground { fill: #0e0e10; }
-      .edge { stroke: #ece8df; }
+      .ground { fill: #2b211a; }
     }
   </style>
   <rect class="ground" width="64" height="64" rx="12"/>
-  <path class="edge" fill="#f1eee6" stroke-width="3" stroke-linejoin="round" d="M18 29h28v28H18z"/>
-  <path fill="#fffdf8" d="M20 31h24v5H20z"/>
-  <circle fill="#e8741a" cx="32" cy="19" r="9"/>
+  <path fill="none" stroke="#ed5b00" stroke-width="7" stroke-linejoin="round" d="M23 26V16h18v10"/>
+  <rect class="edge" x="10" y="25" width="44" height="30" rx="5" fill="#fff6e9" stroke-width="3"/>
+  <path class="edge" fill="none" stroke-width="3" d="M11 38h42"/>
+  <rect x="29" y="34" width="6" height="12" rx="1" fill="#ed5b00"/>
 </svg>
