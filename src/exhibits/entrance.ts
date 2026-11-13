@@ -42,7 +42,12 @@ function scrollPointer(event: PointerEvent) {
   if (event.clientX >= innerWidth - 20) intendScroll();
 }
 function hideCue() {
-  if (!scrollIntent) return;
+  const entrance = document.getElementById("entrance");
+  if (
+    !scrollIntent &&
+    (!entrance || entrance.getBoundingClientRect().bottom > innerHeight / 2)
+  )
+    return;
   if (cue) cue.hidden = true;
   window.removeEventListener("scroll", hideCue, true);
   window.removeEventListener("wheel", intendScroll);
