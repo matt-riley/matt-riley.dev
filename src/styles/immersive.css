@@ -921,7 +921,7 @@ summary::-webkit-details-marker {
 
 @media (max-width: 760px) {
   .risk-art {
-    max-height: 245px;
+    max-height: 225px;
   }
   .risk-image-wrap {
     transform: translateY(-2rem);
