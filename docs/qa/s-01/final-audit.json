@@ -1,0 +1,230 @@
+{
+  "runtimeSource": "957ede23e50783b6884972fe48f9a5777516ed43",
+  "htmlSha256": "998a92804553c5137cf14253d96d6ffe20d1f14c5b8e6a9d7f5dfb1e7b15ebcc",
+  "browser": "Full Chromium / Apple M5 Metal",
+  "stats": {
+    "startTime": "2026-11-12T19:31:29.493Z",
+    "duration": 45405.117999999995,
+    "expected": 19,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "cases": [
+    {
+      "title": "/ has no accessibility violations in day",
+      "project": "desktop-chromium",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 1188
+        }
+      ]
+    },
+    {
+      "title": "/ has no accessibility violations in after-hours",
+      "project": "desktop-chromium",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 1170
+        }
+      ]
+    },
+    {
+      "title": "/404.html has no accessibility violations in day",
+      "project": "desktop-chromium",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 324
+        }
+      ]
+    },
+    {
+      "title": "/404.html has no accessibility violations in after-hours",
+      "project": "desktop-chromium",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 321
+        }
+      ]
+    },
+    {
+      "title": "/privacy/ has no accessibility violations in day",
+      "project": "desktop-chromium",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 313
+        }
+      ]
+    },
+    {
+      "title": "/privacy/ has no accessibility violations in after-hours",
+      "project": "desktop-chromium",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 327
+        }
+      ]
+    },
+    {
+      "title": "/terms/ has no accessibility violations in day",
+      "project": "desktop-chromium",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 323
+        }
+      ]
+    },
+    {
+      "title": "/terms/ has no accessibility violations in after-hours",
+      "project": "desktop-chromium",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 321
+        }
+      ]
+    },
+    {
+      "title": "catalogue day: every stop and its open disclosures pass axe",
+      "project": "desktop-chromium",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 9651
+        }
+      ]
+    },
+    {
+      "title": "catalogue after-hours: every stop and its open disclosures pass axe",
+      "project": "desktop-chromium",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 9649
+        }
+      ]
+    },
+    {
+      "title": "gallery day: every stop and its open disclosures pass axe",
+      "project": "desktop-chromium",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 8580
+        }
+      ]
+    },
+    {
+      "title": "gallery after-hours: every stop and its open disclosures pass axe",
+      "project": "desktop-chromium",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 9085
+        }
+      ]
+    },
+    {
+      "title": "day: text and focus colours meet contrast targets",
+      "project": "desktop-chromium",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 173
+        }
+      ]
+    },
+    {
+      "title": "after-hours: text and focus colours meet contrast targets",
+      "project": "desktop-chromium",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 170
+        }
+      ]
+    },
+    {
+      "title": "320px and 200/400 percent equivalent viewports preserve every placard",
+      "project": "desktop-chromium",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 286
+        }
+      ]
+    },
+    {
+      "title": "forced colours retain control borders and a visible keyboard focus ring",
+      "project": "desktop-chromium",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 215
+        }
+      ]
+    },
+    {
+      "title": "standalone touch targets are at least 24px and primary controls are 44px",
+      "project": "desktop-chromium",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 186
+        }
+      ]
+    },
+    {
+      "title": "catalogue: a keyboard-only tour reaches and operates all nine stops",
+      "project": "desktop-chromium",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 1545
+        }
+      ]
+    },
+    {
+      "title": "gallery: a keyboard-only tour reaches and operates all nine stops",
+      "project": "desktop-chromium",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "durationMs": 848
+        }
+      ]
+    }
+  ],
+  "workersCsp": "Two final Catalogue/Gallery tests passed against local Workers Assets at port4395. Not a hosted Cloudflare preview.",
+  "manualPending": [
+    "Physical Android/iPhone smoothness and settled quality",
+    "iOS/macOS Safari VoiceOver listening",
+    "Real browser zoom200/400 (CSS viewport equivalent passes)"
+  ]
+}

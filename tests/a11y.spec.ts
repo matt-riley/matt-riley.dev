@@ -12,6 +12,20 @@ for (const route of siteRoutes()) {
       await page.evaluate((value) => {
         document.documentElement.dataset.lights = value;
       }, lights);
+      // Entrance typography fades in; audit its final text colour, as in the
+      // disclosure matrix below, without disabling the actual animation.
+      await page.evaluate(async () => {
+        await document.fonts.ready;
+        await Promise.all(
+          document
+            .getAnimations()
+            .filter(
+              (animation) =>
+                animation.effect?.getComputedTiming().iterations !== Infinity,
+            )
+            .map((animation) => animation.finished.catch(() => {})),
+        );
+      });
       const results = await new AxeBuilder({ page }).analyze();
       expect(results.violations).toEqual([]);
     });

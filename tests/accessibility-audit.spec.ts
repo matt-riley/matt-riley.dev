@@ -230,6 +230,11 @@ for (const view of ["catalogue", "gallery"] as const) {
         if (focus.tag === "SUMMARY" || focus.tag === "BUTTON")
           await page.keyboard.press("Enter");
       }
+      if (view === "gallery")
+        await expect(page.locator("html")).toHaveAttribute(
+          "data-gallery",
+          "ready",
+        );
       if (focus.footer) {
         footer = true;
         break;
