@@ -109,7 +109,7 @@ def materials():
     normal.inputs["Strength"].default_value = .28
     tree.links.new(images["normal"].outputs["Color"], normal.inputs["Color"])
     tree.links.new(normal.outputs["Normal"], p.inputs["Normal"])
-    orange, p = material("hero_orange_glaze", "#E8741A", .17)
+    orange, p = material("hero_orange_glaze", "#CC4A05", .14)
     p.inputs["Coat Weight"].default_value = 1
     p.inputs["Coat Roughness"].default_value = .10
     dark, p = material("hero_charcoal", "#242322", .43)
@@ -202,12 +202,12 @@ def create():
     b("clasp_thumb", (.012, .006, .012), (0, -.010, -.023), body, clasp, .003)
     # The carrying bail leans behind the lid's swept arc instead of intersecting it.
     points = []
-    for x, z in ((-.150, .194), (-.150, .316), (-.148, .331), (-.140, .343), (-.127, .351), (-.110, .354), (.110, .354), (.127, .351), (.140, .343), (.148, .331), (.150, .316), (.150, .194)):
-        points.append((x, .11 + (z - .19) * .50, z))
-    tube("orange_carrying_bail", points, .012, orange, root)
-    for x in (-.15, .15):
-        b(f"bail_socket_{x}", (.040, .032, .047), (x, .113, .194), body, root, .009)
-        disk(f"bail_pin_{x}", .007, .043, (x, .109, .194), dark, root)
+    for x, z in ((-.105, .194), (-.098, .220), (-.085, .238), (-.065, .245), (.065, .245), (.085, .238), (.098, .220), (.105, .194)):
+        points.append((x, .116 + (z - .19) * .30, z))
+    tube("orange_carrying_bail", points, .018, orange, root)
+    for x in (-.105, .105):
+        b(f"bail_socket_{x}", (.042, .035, .045), (x, .113, .194), body, root, .011)
+        disk(f"bail_pin_{x}", .007, .045, (x, .109, .194), dark, root)
     carriers = []
     # Parallel links translate each tray along an arc; counter-pivots keep it level.
     for label, y, z in (("front", -.140, .035), ("upper", -.090, .070)):
@@ -298,7 +298,7 @@ def studio():
     s.world.use_nodes = True
     background = s.world.node_tree.nodes.get("Background")
     background.inputs["Color"].default_value = (1, .94, .84, 1)
-    background.inputs["Strength"].default_value = .35
+    background.inputs["Strength"].default_value = .075
     stone, p = material("proof_ledge", "#8B8273", .93)
     n = stone.node_tree.nodes.new("ShaderNodeTexNoise")
     n.inputs["Scale"].default_value = 190
@@ -310,19 +310,19 @@ def studio():
     wall, p = material("proof_wall", "#E0D5C2", .95)
     b("proof_stone_ledge", (2.5, 1.2, .055), (0, 0, -.032), stone, None, .005)
     b("proof_wall", (3.0, .05, 2), (0, .43, .85), wall, None, .003)
-    bpy.ops.object.light_add(type="AREA", location=(.70, -.45, 1.15))
+    bpy.ops.object.light_add(type="AREA", location=(-.65, -.35, .72))
     key = bpy.context.object
     key.name = "proof_warm_window"
-    key.data.energy = 60
+    key.data.energy = 46
     key.data.shape = "RECTANGLE"
-    key.data.size = .65
-    key.data.size_y = .90
-    key.data.color = (1, .88, .70)
+    key.data.size = .24
+    key.data.size_y = .50
+    key.data.color = (1, .86, .65)
     aim(key, (0, 0, .15))
     bpy.ops.object.light_add(type="AREA", location=(-.45, -.15, .60))
     fill = bpy.context.object
     fill.name = "proof_soft_bounce"
-    fill.data.energy = 8
+    fill.data.energy = 1.5
     fill.data.size = 1.0
     fill.data.color = (1, .96, .87)
     aim(fill, (0, 0, .12))
@@ -330,7 +330,7 @@ def studio():
     sun = bpy.context.object
     sun.name = "proof_window_stripe_sun"
     sun.rotation_euler = (math.radians(28), math.radians(-25), math.radians(-26))
-    sun.data.energy = .35
+    sun.data.energy = 0
     sun.data.angle = .045
     for i in range(2):
         bar = b(f"proof_window_mullion_{i}", (.035, 1.4, .04), (.10+i*.36, -.25, .73), wall, None, .003)
@@ -373,11 +373,14 @@ def main():
     camera = studio()
     cameras = {}
     pose(0)
-    cameras["closed"] = render(camera, "closed", (.68, -1.05, .55), (0, 0, .18), 52)
+    cameras["closed"] = render(camera, "closed", (.36, -.80, .275), (0, 0, .145), 51)
+    if "--closed-only" in sys.argv:
+        (HERE / "parameters-v2.json").write_text(json.dumps({"status": "Art-review draft, not approved reference parity", "camera": cameras["closed"], "lighting": {"keyPositionBlender": [-.65,-.35,.72], "keyWatts": 46, "keySize": [.24,.50], "fillWatts": 1.5, "worldStrength": .075, "exposure": -.5}, "glazeSourceColour": "#CC4A05", "handleRadiusMetres": .018, "parts": POSES}, indent=2)+"\n")
+        return
     pose(1)
     cameras["open"] = render(camera, "open", (.64, -.98, .85), (0, -.015, .20), 49)
     cameras["mobile-open"] = render(camera, "mobile-open", (.40, -.75, .58), (.02, -.03, .20), 48, 720, 960)
-    (HERE / "parameters.json").write_text(json.dumps({"source": "Original procedural asset; accepted direction A reference", "renderer": "Blender Cycles CPU, AgX exposure -0.5, 48 samples, four threads", "textureSize": 512, "textureTileMetres": TILE, "parts": POSES, "cameras": cameras, "lighting": {"keyPositionBlender": [.70,-.45,1.15], "keyWatts": 60, "keySize": [.65,.90], "worldStrength": .35}, "openingSequence": {"clasp": [0,.18], "lid": [.10,.68], "trays": [.38,1.0]}, "rawProofAsset": "blender/out/hero-toolbox/toolbox.raw.glb"}, indent=2)+"\n")
+    (HERE / "parameters.json").write_text(json.dumps({"source": "Original procedural asset; accepted direction A reference", "renderer": "Blender Cycles CPU, AgX exposure -0.5, 48 samples, four threads", "textureSize": 512, "textureTileMetres": TILE, "parts": POSES, "cameras": cameras, "lighting": {"keyPositionBlender": [-.65,-.35,.72], "keyWatts": 46, "keySize": [.24,.50], "fillWatts": 1.5, "worldStrength": .075}, "openingSequence": {"clasp": [0,.18], "lid": [.10,.68], "trays": [.38,1.0]}, "rawProofAsset": "blender/out/hero-toolbox/toolbox.raw.glb"}, indent=2)+"\n")
 
 if __name__ == "__main__":
     main()
