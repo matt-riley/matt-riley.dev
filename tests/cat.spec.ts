@@ -39,7 +39,7 @@ test.describe("the real gallery figurine", () => {
       localStorage.setItem("mr-view", "gallery");
       localStorage.setItem("mr-cat", "on");
     });
-    await page.goto("/");
+    await page.goto("/archive-gallery/");
     await expect(page.locator("html")).toHaveAttribute(
       "data-gallery",
       "ready",
