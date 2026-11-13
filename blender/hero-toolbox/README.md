@@ -1,45 +1,59 @@
-# Direction A: standalone toolbox art-review draft
+# Direction A: live toolbox asset
 
-Original procedural foreground asset for the accepted warm, tactile toolbox direction. This is one real 3D object, not the old museum room. No third-party models, textures, or generated object pixels are used. Project labels remain HTML; the asset contains no outdated project names.
+Original procedural foreground object for the accepted warm ceramic toolbox direction. It remains separate from the accepted image-led hero. No third-party models, textures, or generated object pixels are used. Project labels remain HTML.
 
-The initial draft was reviewed and rejected as a visual match for A. The current single closed proof improves the low handle, close camera and directional lighting; it remains separate from the accepted image-led preview and has not been approved as parity.
+The current mechanism proof has a 460 mm wide, 100 mm high body and 43 mm hollow rounded lid, with a 2 mm seam. The case is 145 mm high excluding its handle (width:height 3.17:1); the lid contributes 30%. A smooth round orange arch swivels as the lid opens. Two paired cantilever linkages lift the trays while counter-pivots keep them level. Small side guide notches/pockets clear their mounting blocks; a rear-offset hinge prevents the open lid from entering the case rim.
 
 ## Reproduce
 
-From the repository root, with the repository dependencies installed:
+From the repository root, with dependencies installed:
 
 ```sh
-nice -n 15 /Applications/Blender.app/Contents/MacOS/Blender --background --threads 4 --python-exit-code 1 --python blender/hero-toolbox/build.py -- --closed-only
+nice -n 15 /Applications/Blender.app/Contents/MacOS/Blender --background --threads 4 --python-exit-code 1 --python blender/hero-toolbox/build.py -- --export-only
 node blender/hero-toolbox/pack.mjs
+nice -n 15 /Applications/Blender.app/Contents/MacOS/Blender --background --threads 4 --python-exit-code 1 --python blender/hero-toolbox/build.py -- --render-only
 ```
 
-`GLTF_TRANSFORM_BIN` can select another installed glTF Transform executable. The build generates deterministic 512 px seamless colour, packed roughness/metalness, and normal textures, exports the closed object, then reimports that raw GLB into a standalone Cycles scene for the single closed art-review proof. Omit `-- --closed-only` to render a full pose set in a future review. `blender/out/hero-toolbox` holds ignored intermediates. No `.blend` file is required.
+`GLTF_TRANSFORM_BIN` can select another installed glTF Transform executable. The build deterministically generates seamless stoneware colour/ORM/normal maps (512 px) and low-frequency glaze colour/ORM maps (256 px), exports the closed object, then reimports that actual raw GLB into a standalone Cycles scene for closed/open/mobile proofs. Intermediate exports go in ignored `blender/out/hero-toolbox`; no `.blend` file is needed.
 
-The shipping GLB is `public/preview-a/toolbox.glb`. Meshopt and WebP decoders are required. The pack script retains empty hinge nodes and rejects >=150,000 bytes or >=10,000 triangles. All texture bytes are embedded and included in the GLB budget. Exact output is recorded in `stats.json`.
+The shipping file is `public/preview-a/toolbox.glb`. Meshopt and WebP support are required. Packing joins no animated hierarchy: rigid siblings are batched during authoring, then glTF Transform deduplicates, prunes while retaining pivots, welds, bakes MikkTSpace tangents, compresses textures and applies Meshopt. It rejects >=150,000 bytes, >=10,000 triangles, images above 512 px, or missing hinge nodes. Exact texture dimensions/bytes are inspected from embedded WebP headers, rather than assumed.
 
 ## Runtime contract
 
-Metres, glTF +Y up, floor at Y=0. Front faces +Z. Root `hero_toolbox`. The file's saved transforms are the closed/rest pose: **clone each pivot's original quaternion before animating**. Apply a local X rotation of `delta * progress` relative to that quaternion; do not overwrite with an absolute angle of zero. `parameters-v2.json` records the current native proof camera, lighting and part angles. `parameters-v1.json` and `proofs/v1/` preserve the rejected initial draft for comparison.
+Metres, glTF +Y up, front +Z, floor Y≈0 (14 µm quantization offset). Root `hero_toolbox` has identity orientation/scale; no compensating root rotation is needed. **Clone each pivot’s saved rest quaternion before animating**. Set `restQuaternion * quaternion(localX, delta * progress)`; never replace saved base angles with zero. `parameters.json` records actual proof cameras in Blender and glTF coordinates. `bounds.json` records decoded, world-space bounds at five opening fractions.
 
-| Nodes | Delta | Phase |
+| Nodes | Relative X travel | Phase |
 | --- | --- | --- |
-| `touch_clasp` | +42 degrees | clasp |
-| `touch_lid` | -110 degrees | lid |
-| `touch_tray_front`, `touch_tray_front_link` | +1.70 rad | tray |
-| `touch_tray_front_level` | -1.70 rad | tray |
-| `touch_tray_upper`, `touch_tray_upper_link` | +1.35 rad | tray |
-| `touch_tray_upper_level` | -1.35 rad | tray |
+| `touch_clasp` | −42° | clasp |
+| `touch_lid` | −110° | lid |
+| `touch_handle` | +110° | lid |
+| `touch_tray_front`, `touch_tray_front_link` | +1.75 rad | tray |
+| `touch_tray_front_level` | −1.75 rad | tray |
+| `touch_tray_upper`, `touch_tray_upper_link` | +1.40 rad | tray |
+| `touch_tray_upper_level` | −1.40 rad | tray |
 
-The primary/secondary tray links are a parallelogram mechanism. The counter-pivot must use exactly the same progress/easing as its two links to keep each tray level. Suggested opening phase windows: clasp 0–18%, lid 10–68%, trays 38–100%; reverse in closing order. All hinge axes and relative travel are also exported in node extras (`kind`, `axis`, `range`, `phase`). Avoid reparenting the mesh children.
+All eight original pivots are preserved; `touch_handle` is the ninth. Its counter-rotation keeps the handle upright while its base travels with the lid. Use identical progress/easing for lid/handle and each tray’s paired links/counter-pivot. **Required opening windows for the proven sequence:** clasp 0–18%, lid+handle 10–68%, trays 38–100%; reverse when closing. Uniform progress applied to every part is not the validated mechanism. Saved tray rest angles are −1.15 rad (links) and +1.15 rad (counter-pivots). Node extras export `kind`, `axis`, `range` and `phase`. Avoid reparenting rigid children.
 
-Use the exported PBR materials directly: `hero_stoneware`, `hero_orange_glaze` (#CC4A05 source colour in this new art-review draft), `hero_charcoal`. Grain repeats every 10 cm. No legacy glaze brightness multiplier/shader is required. A warm side area/key, broad dim environment reflection, and ground contact shadow are part of the look. Native proof settings and exact cameras are in `parameters-v2.json`; browser lighting needs its own visual calibration because Blender and Three.js lights do not share power units.
+Decoded closed bounds: `[-.24900,.000014,-.12699]` → `[.24900,.21900,.14000]`. Open: `[-.24900,.000014,-.27677]` → `[.24900,.35831,.19635]`. Include the intermediate sweep in framing: the sequenced sweep reaches .37625 m high. All 101 decoded opening fractions have finite world positions. Side links explain the extra width beyond the 460 mm shell.
+
+## Materials and lighting
+
+Use imported PBR materials directly: `hero_stoneware`, `hero_orange_glaze`, `hero_charcoal`. Colour textures are authored sRGB; roughness/metalness and normal textures are non-colour/linear. glTF base-colour factors are linear. GLTFLoader handles these colour spaces; do not multiply the orange colour by the legacy museum calibration. Grain repeats every 10 cm. Glaze colour centres near sRGB `#AF3404`, with subtle low-frequency kiln variation; roughness is .22±.008, clearcoat .8 and coat roughness .075.
+
+Native lighting uses AgX exposure −1, a warm narrow area key at Blender `[-.65,-.35,.72]` (glTF `[-.65,.72,.35]`), 38 W, .14×.60 m, RGB `[1,.86,.65]`; 0.6 W broad fill; dim warm world .075 and a .65-strength sun. The room’s stone/plaster/record/frame are proof-only context, not part of the object GLB. Three.js area lights do not cast shadows and its power units differ: use a matching warm directional shadow key plus environment reflection/area illumination, a subdued bounce, and a receiving ground plane. Calibrate browser lighting against these proofs; do not assume identical numerical light intensities reproduce Cycles.
 
 ## Evidence and limits
 
-The current `proofs/closed.png` renders the reimported raw GLB with native Cycles CPU, AgX, four threads. It verifies actual exported geometry/materials in the closed pose; the archived v1 open/mobile proofs show the prior mechanism, not the revised material/handle. These are not screenshots of browser lighting or of the optimized decoder. The packed GLB is separately inspected for triangle count, total bytes, texture dimensions and all eight pivots. Vertex tangents are baked before Meshopt compression. Khronos validation reports zero errors and zero warnings for both the shipping GLB and a glTF Transform decoded copy (the validator notes that it cannot itself validate the Meshopt extension). Final size: 145,636 bytes; 7,412 triangles; 7,704 bytes of embedded WebP textures. Browser mounting, interaction/picking, animation interruption, responsive layout and runtime lighting remain integration work.
+Current `proofs/closed.png`, `open.png`, and `mobile-open.png` render the exported-and-reimported final GLB using Cycles CPU, 48 samples, four threads. `parameters.json`, `clearance.json` and `stats.json` link the proof export and packed asset with the same raw SHA-256. The packed asset SHA-256 is also recorded in `stats.json`. Packed and decoded-copy Khronos validation both report zero errors/warnings (Meshopt itself is unsupported informationally by the validator). Decoded geometry at all 101 sequenced fractions has finite world positions; all nine pivot ranges survive packing.
 
-Keep the foreground separate from any generated environment image: do not overlay this object on a backplate already showing a closed toolbox. These proofs establish the object asset; they do not claim an entire 3D site rewrite.
+Final budget: 149,396 bytes, 9,916 triangles, 9,024 embedded texture bytes. Browser mounting, animation interruption, picking and runtime-lighting comparison remain integration checks. These are native proof renders, not browser screenshots and not a claim that an entire site has been replaced in 3D.
 
-## Current comparison with A
+Earlier art passes remain in `proofs/v1`, `proofs/v2`, `proofs/v3`, `proofs/v4` and their numbered parameter files. The current asset corrects their angular handle, tall case/thin lid, noisy glaze, hidden open-state handle and moving collar attachment. A’s generated room has richer environmental detail; the live viewer should keep its own reviewable presentation rather than replace the approved image-led hero or paint this mesh over generated closed-toolbox pixels.
 
-The revised closed proof has a substantially lower, thicker orange arch, larger object framing and darker directional shadows under the clasp, lid and base. It is still an art-review draft: the handle retains visibly angular sections rather than A’s organic rounded curve, the orange glaze is lighter and more uniform than the reference, and the standalone wall/ledge lacks the reference environment’s richness. This is not an approved visual match and is not integrated into the image-led preview. Only one revised closed proof was rendered; the archived open/mobile views belong to v1.
+## Mechanical preflight
+
+Every export runs `clearance.py` before batching. It samples 101 positions in the required staged opening sequence and tests 343 structural mesh pairs at each position using BVH candidates plus exact segment/triangle crossings. The final report has zero triangle crossings and a minimum tray shell gap of 3.459 mm. It checks the case against moving trays, rods, brackets, lid and latch, the lid against payloads/handle, and the two tray assemblies against each other. Intentional bolted joints and within-assembly contacts are excluded; coplanar tangencies are not reported. This is a geometry preflight, not a general physics simulation.
+
+The outward clasp travels −42°; positive travel would fold it into the case. Longer 137 mm arms lift the trays before they pass the front wall. The lower bracket passes through an open-top case guide, and the upper bracket through a pocket at the lid’s lower edge. Fixed handle collars follow the lid; the orange arch counter-rotates above its outer roof. `--render-only` verifies the raw export SHA against the preflight report before importing it, so proof rendering cannot silently regenerate a different mechanism.
+
+Frozen raw export SHA-256: `97fe4ca45e1a3faa77804a84526167c09b0966d7c16aa0f92bdebd1d163d1d4f`. Packed GLB SHA-256: `ef8e3e31d1f45f915f095a2f25deb067962b9dfc713e8c34d4f478b5dbece180`. The final open views retain partial rim occlusion of the orange handle; the fixed collars no longer float inside the cup.

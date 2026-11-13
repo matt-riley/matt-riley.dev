@@ -16,6 +16,7 @@ from mathutils import Matrix, Vector
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
 sys.path.insert(0, str(ROOT / "blender"))
+sys.path.insert(0, str(HERE))
 from lib import scene
 from lib.export import export_glb
 from lib.objects import box, cylinder, pipe, mesh
@@ -69,6 +70,15 @@ def texture_maps():
     png(TEXTURES / "stoneware-colour.png", colour)
     png(TEXTURES / "stoneware-orm.png", orm)
     png(TEXTURES / "stoneware-normal.png", (normals * .5 + .5) * 255)
+    # Kiln-pooling variation is baked into portable sRGB colour and linear ORM.
+    cloud = rng.normal(0, 1, (256, 256))
+    for _ in range(40):
+        cloud = (cloud * 4 + np.roll(cloud, 1, 0) + np.roll(cloud, -1, 0) + np.roll(cloud, 1, 1) + np.roll(cloud, -1, 1)) / 8
+    cloud = np.clip(cloud / cloud.std(), -2, 2)
+    glaze = np.array([175, 52, 4]) + cloud[..., None] * np.array([3, 1.5, .5])
+    png(TEXTURES / "glaze-colour.png", np.clip(glaze, 0, 255))
+    rough = np.clip(.22 + cloud*.008, .19, .25)
+    png(TEXTURES / "glaze-orm.png", np.stack((np.ones_like(rough), rough, np.zeros_like(rough)), axis=-1)*255)
 
 
 def linear(hexcolour):
@@ -110,8 +120,22 @@ def materials():
     tree.links.new(images["normal"].outputs["Color"], normal.inputs["Color"])
     tree.links.new(normal.outputs["Normal"], p.inputs["Normal"])
     orange, p = material("hero_orange_glaze", "#CC4A05", .14)
-    p.inputs["Coat Weight"].default_value = 1
-    p.inputs["Coat Roughness"].default_value = .10
+    p.inputs["Coat Weight"].default_value = .8
+    p.inputs["Coat Roughness"].default_value = .075
+    tree = orange.node_tree
+    for key, filename in (("colour", "glaze-colour.png"), ("orm", "glaze-orm.png")):
+        image = bpy.data.images.load(str(TEXTURES / filename), check_existing=False)
+        image.colorspace_settings.name = "sRGB" if key == "colour" else "Non-Color"
+        node = tree.nodes.new("ShaderNodeTexImage")
+        node.image = image
+        node.extension = "REPEAT"
+        if key == "colour":
+            tree.links.new(node.outputs["Color"], p.inputs["Base Color"])
+        else:
+            split = tree.nodes.new("ShaderNodeSeparateColor")
+            tree.links.new(node.outputs["Color"], split.inputs["Color"])
+            tree.links.new(split.outputs["Green"], p.inputs["Roughness"])
+            tree.links.new(split.outputs["Blue"], p.inputs["Metallic"])
     dark, p = material("hero_charcoal", "#242322", .43)
     p.inputs["Coat Weight"].default_value = .15
     return body, orange, dark
@@ -165,23 +189,67 @@ def shell(name, width, depth, height, owner, mat, radius=.022, thickness=.008):
     n = len(outer)
     vertices = [(x, y, z) for points, z in ((outer, 0), (outer, height), (inner, height), (inner, thickness)) for x, y in points]
     faces = [tuple(reversed(range(n))), tuple(range(3*n, 4*n))]
+    def face(points):
+        indices = []
+        for point in points:
+            indices.append(len(vertices))
+            vertices.append(point)
+        faces.append(tuple(indices))
     for i in range(n):
-        j = (i + 1) % n
-        faces.extend(((i, j, n+j, n+i), (n+i, n+j, 2*n+j, 2*n+i), (2*n+i, 2*n+j, 3*n+j, 3*n+i)))
+        j = (i+1)%n
+        # Lower tray brackets pass through these open-top guide notches, not solid walls.
+        if name == "rounded_body" and abs(outer[i][0]-outer[j][0]) < 1e-8 and abs(outer[i][1]-outer[j][1]) > .1:
+            lo,hi,cut = -.004,.080,.064
+            yi,yj=outer[i][1],outer[j][1]
+            u,v=sorted(((lo-yi)/(yj-yi),(hi-yi)/(yj-yi)))
+            def point(ring,t,z):
+                x1,y1=ring[i];x2,y2=ring[j]
+                return (x1+(x2-x1)*t,y1+(y2-y1)*t,z)
+            for start,end,top in ((0,u,height),(u,v,cut),(v,1,height)):
+                face([point(outer,start,0),point(outer,end,0),point(outer,end,top),point(outer,start,top)])
+                face([point(inner,start,top),point(inner,end,top),point(inner,end,thickness),point(inner,start,thickness)])
+                face([point(outer,start,top),point(outer,end,top),point(inner,end,top),point(inner,start,top)])
+            face([point(outer,u,cut),point(inner,u,cut),point(inner,u,height),point(outer,u,height)])
+            face([point(outer,v,cut),point(outer,v,height),point(inner,v,height),point(inner,v,cut)])
+        else:
+            faces.extend(((i,j,n+j,n+i),(n+i,n+j,2*n+j,2*n+i),(2*n+i,2*n+j,3*n+j,3*n+i)))
     return local(mesh(name, vertices, faces, mat, None, .0016), owner)
 
 
-def rounded_plate(name, width, depth, height, cy, owner, mat):
-    points = outline(width, depth, .020, cy)
-    n = len(points)
-    vertices = [(x, y, z) for z in (0, height) for x, y in points]
-    faces = [tuple(reversed(range(n))), tuple(range(n, 2*n))]
-    faces += [(i, (i+1)%n, (i+1)%n+n, i+n) for i in range(n)]
-    return local(mesh(name, vertices, faces, mat, None, .002), owner)
-
-
 def tray(name, owner, mat):
-    return shell(name, .416, .070, .028, owner, mat, .009, .005)
+    return shell(name, .406 if name.startswith("upper") else .416, .066 if name.startswith("upper") else .070, .026 if name.startswith("upper") else .028, owner, mat, .009, .005)
+
+
+def hollow_lid(owner, mat):
+    # Closed height 43mm: a hollow, softly sloped ceramic cap, not a solid plate.
+    rings = [(.458,.205,.030,0), (.452,.199,.032,.029), (.429,.177,.034,.043), (.442,.189,.023,0), (.421,.169,.030,.039)]
+    outlines = [outline(w,d,r,-.1305) for w,d,r,z in rings]
+    n = len(outlines[0])
+    vertices = [(x,y,rings[i][3]) for i,ring in enumerate(outlines) for x,y in ring]
+    faces = [tuple(range(2*n,3*n)), tuple(reversed(range(4*n,5*n)))]
+    for i in range(n):
+        j=(i+1)%n
+        for a,b in ((0,1),(1,2)):
+            faces.append((a*n+i,a*n+j,b*n+j,b*n+i))
+        faces.append((i,3*n+i,3*n+j,j))
+        faces.append((3*n+i,4*n+i,4*n+j,3*n+j))
+    cap = local(mesh("rounded_lid",vertices,faces,mat,None,0),owner)
+    # Bottom-open guide pockets clear the upper tray mounting blocks in the closed lid.
+    for x in (-.229,.229):
+        bpy.ops.mesh.primitive_cube_add(size=1)
+        cutter = bpy.context.object
+        cutter.name = "temporary_lid_guide_cut"
+        local(cutter,owner,(x,-.086,.012))
+        cutter.scale=(.060,.090,.028)
+        bpy.context.view_layer.update()
+        modifier=cap.modifiers.new("upper_tray_guide","BOOLEAN")
+        modifier.operation="DIFFERENCE"
+        modifier.object=cutter
+        bpy.context.view_layer.objects.active=cap
+        bpy.ops.object.modifier_apply(modifier=modifier.name)
+        bpy.data.objects.remove(cutter,do_unlink=True)
+    scene.bevel(cap,.0035,2)
+    return cap
 
 
 def create():
@@ -189,37 +257,54 @@ def create():
     root["asset_id"] = "immersive-toolbox"
     root["units"] = "metres; authored Z-up, exported glTF Y-up"
     body, orange, dark = materials()
-    shell("rounded_body", .460, .230, .174, root, body)
-    b("rear_top_rail", (.435, .050, .014), (0, .090, .181), body, root, .006)
-    lid = part("touch_lid", root, (0, .070, .176), delta=-math.radians(110), phase="lid")
-    rounded_plate("rounded_lid", .458, .185, .014, -.0925, lid, body)
-    b("lid_inner_inset", (.380, .133, .0025), (0, -.092, -.001), body, lid, .012)
+    shell("rounded_body", .460, .230, .100, root, body, .030, .008)
+    b("rear_top_rail", (.435, .025, .010), (0, .101, .102), body, root, .006)
+    lid = part("touch_lid", root, (0, .117, .102), delta=-math.radians(110), phase="lid")
+    hollow_lid(lid, body)
     for x in (-.19, .19):
-        disk(f"lid_hinge_{x}", .010, .055, (x, .070, .177), body, root)
-    b("latch_receiver", (.038, .018, .043), (0, -.123, .142), body, root, .009)
-    clasp = part("touch_clasp", lid, (0, -.188, .010), delta=math.radians(42), phase="clasp")
-    b("clasp_tongue", (.026, .012, .036), (0, -.003, -.020), body, clasp, .006)
-    b("clasp_thumb", (.012, .006, .012), (0, -.010, -.023), body, clasp, .003)
-    # The carrying bail leans behind the lid's swept arc instead of intersecting it.
-    points = []
-    for x, z in ((-.105, .194), (-.098, .220), (-.085, .238), (-.065, .245), (.065, .245), (.085, .238), (.098, .220), (.105, .194)):
-        points.append((x, .116 + (z - .19) * .30, z))
-    tube("orange_carrying_bail", points, .018, orange, root)
-    for x in (-.105, .105):
-        b(f"bail_socket_{x}", (.042, .035, .045), (x, .113, .194), body, root, .011)
-        disk(f"bail_pin_{x}", .007, .045, (x, .109, .194), dark, root)
+        disk(f"lid_hinge_{x}", .010, .055, (x, .117, .102), body, root)
+    b("latch_receiver", (.042, .016, .037), (0, -.121, .085), body, root, .009)
+    clasp = part("touch_clasp", lid, (0, -.239, .030), delta=-math.radians(42), phase="clasp")
+    b("clasp_tongue", (.032, .019, .045), (0, -.003, -.022), body, clasp, .009)
+    b("clasp_thumb", (.016, .008, .014), (0, -.014, -.023), body, clasp, .005)
+    # A swivelling handle stays upright as the lid opens; every old hinge is preserved.
+    handle = part("touch_handle", lid, (0,-.208,.064), delta=math.radians(110), phase="lid")
+    path = [(-.075,0),(-.075,.005),(-.075,.010)]
+    path += [(-.050+.025*math.cos(a),.010+.025*math.sin(a)) for a in [math.pi-i*math.pi/24 for i in range(1,13)]]
+    path += [(-.050+i*.100/8,.035) for i in range(1,9)]
+    path += [(.050+.025*math.cos(a),.010+.025*math.sin(a)) for a in [math.pi/2-i*math.pi/24 for i in range(1,13)]]
+    path += [(.075,.005),(.075,0)]
+    points = [Vector((x,z*.30,z)) for x,z in path]
+    vertices, faces = [], []
+    sides, radius = 16,.018
+    for i,point in enumerate(points):
+        tangent=(points[min(i+1,len(points)-1)]-points[max(i-1,0)]).normalized()
+        normal=Vector((0,1,0)).cross(tangent).normalized()
+        binormal=tangent.cross(normal).normalized()
+        for j in range(sides):
+            a=math.tau*j/sides
+            vertices.append(tuple(point+radius*(normal*math.cos(a)+binormal*math.sin(a))))
+        if i:
+            for j in range(sides):
+                k=(j+1)%sides
+                faces.append(((i-1)*sides+j,(i-1)*sides+k,i*sides+k,i*sides+j))
+    faces += [tuple(reversed(range(sides))),tuple(range((len(points)-1)*sides,len(points)*sides))]
+    local(mesh("orange_carrying_bail",vertices,faces,orange,None,0),handle)
+    for x in (-.075,.075):
+        b(f"bail_socket_{x}",(.045,.035,.028),(x,-.208,.055),body,lid,.009)
+        disk(f"bail_pin_{x}",.006,.048,(x,-.209,.064),dark,lid)
     carriers = []
     # Parallel links translate each tray along an arc; counter-pivots keep it level.
-    for label, y, z in (("front", -.140, .035), ("upper", -.090, .070)):
-        travel = 1.70 if label == "front" else 1.35
-        primary = part(f"touch_tray_{label}", root, (0, y-.014, z), base=-1.1, delta=travel)
-        secondary = part(f"touch_tray_{label}_link", root, (0, y+.014, z), base=-1.1, delta=travel)
+    for label, y, z in (("front", -.084, .014), ("upper", -.094, .055)):
+        travel = 1.75 if label == "front" else 1.40
+        primary = part(f"touch_tray_{label}", root, (0, y-.014, z), base=-1.15, delta=travel)
+        secondary = part(f"touch_tray_{label}_link", root, (0, y+.014, z), base=-1.15, delta=travel)
         for group in (primary, secondary):
-            for x in (-.240, .240):
-                tube(f"{group.name}_arm_{x}", [(x, 0, 0), (x, 0, .130)], .0032, body, group)
-                for h in (0, .130):
-                    disk(f"{group.name}_pin_{x}_{h}", .0065, .011, (x, 0, h), orange if h == .130 else body, group)
-        level = part(f"touch_tray_{label}_level", primary, (0, 0, .130), base=1.1, delta=-travel)
+            for x in (-.236, .236):
+                tube(f"{group.name}_arm_{x}", [(x, 0, 0), (x, 0, .137)], .0032, body, group)
+                for h in (0, .137):
+                    disk(f"{group.name}_pin_{x}_{h}", .0065, .011 if h else .026, (x, 0, h), orange if h == .137 else body, group)
+        level = part(f"touch_tray_{label}_level", primary, (0, 0, .137), base=1.15, delta=-travel)
         carrier = empty(f"{label}_tray_carrier", level, (0, .014, 0))
         tray(f"{label}_ceramic_tray", carrier, body)
         for x in (-.224, .224):
@@ -232,7 +317,7 @@ def create():
         for column in range(4):
             b(f"key_{row}_{column}", (.019, .0085, .0045), (-.126 + column*.024, -.018 + row*.012, .018), orange if row > 1 and column > 1 else body, upper, .001)
     for radius in (.017, .022):
-        tube(f"coiled_lead_{radius}", [(.100 + math.cos(i*math.tau/32)*radius, math.sin(i*math.tau/32)*radius*.65, .010) for i in range(32)], .0021, dark, upper, True)
+        tube(f"coiled_lead_{radius}", [(.100 + math.cos(i*math.tau/20)*radius, math.sin(i*math.tau/20)*radius*.65, .010) for i in range(20)], .0021, dark, upper, True)
     b("folded_strip", (.080, .043, .015), (-.105, 0, .013), body, lower, .006)
     for i in range(5):
         b(f"strip_inlay_{i}", (.077, .0022, .002), (-.105, -.016 + i*.008, .021), dark, lower, .0006)
@@ -253,14 +338,17 @@ def finalise(root):
             continue
         for modifier in obj.modifiers:
             if modifier.type == "BEVEL":
-                modifier.segments = 1
+                modifier.segments = 2 if obj.name in ("rounded_body", "rounded_lid") else (3 if obj.name.startswith(("clasp_", "latch_receiver", "bail_socket")) else 1)
+                if obj.name in ("rounded_body", "rounded_lid"):
+                    modifier.width = .0035
         for polygon in obj.data.polygons:
             polygon.use_smooth = True
-        try:
-            modifier = obj.modifiers.new("weighted_normals", "WEIGHTED_NORMAL")
-            modifier.keep_sharp = True
-        except Exception:
-            pass
+        if obj.name != "orange_carrying_bail":
+            try:
+                modifier = obj.modifiers.new("weighted_normals", "WEIGHTED_NORMAL")
+                modifier.keep_sharp = True
+            except Exception:
+                pass
         scene.apply_modifiers(obj)
         uv = obj.data.uv_layers.active or obj.data.uv_layers.new(name="UVMap")
         offset = int(hashlib.sha1(obj.name.encode()).hexdigest()[:8], 16) / 0xffffffff
@@ -270,6 +358,21 @@ def finalise(root):
             for loop in polygon.loop_indices:
                 point = obj.data.vertices[obj.data.loops[loop].vertex_index].co
                 uv.data[loop].uv = (point[a] / TILE + offset, point[c] / TILE + offset*.73)
+
+
+def batch_rigid(root):
+    # Joining only direct siblings preserves the mechanism and all pivot transforms.
+    owners = [root] + [obj for obj in root.children_recursive if obj.type == "EMPTY"]
+    for owner in owners:
+        siblings = [obj for obj in owner.children if obj.type == "MESH"]
+        if len(siblings) < 2:
+            continue
+        bpy.ops.object.select_all(action="DESELECT")
+        for obj in siblings:
+            obj.select_set(True)
+        bpy.context.view_layer.objects.active = siblings[0]
+        bpy.ops.object.join()
+        siblings[0].name = f"{owner.name}_rigid"
 
 
 def pose(fraction):
@@ -294,12 +397,12 @@ def studio():
     s.render.threads_mode = "FIXED"
     s.render.threads = 4
     s.view_settings.view_transform = "AgX"
-    s.view_settings.exposure = -.5
+    s.view_settings.exposure = -1.0
     s.world.use_nodes = True
     background = s.world.node_tree.nodes.get("Background")
     background.inputs["Color"].default_value = (1, .94, .84, 1)
     background.inputs["Strength"].default_value = .075
-    stone, p = material("proof_ledge", "#8B8273", .93)
+    stone, p = material("proof_ledge", "#A58E74", .88)
     n = stone.node_tree.nodes.new("ShaderNodeTexNoise")
     n.inputs["Scale"].default_value = 190
     bump = stone.node_tree.nodes.new("ShaderNodeBump")
@@ -307,30 +410,55 @@ def studio():
     bump.inputs["Distance"].default_value = .0012
     stone.node_tree.links.new(n.outputs["Fac"], bump.inputs["Height"])
     stone.node_tree.links.new(bump.outputs["Normal"], p.inputs["Normal"])
-    wall, p = material("proof_wall", "#E0D5C2", .95)
-    b("proof_stone_ledge", (2.5, 1.2, .055), (0, 0, -.032), stone, None, .005)
+    wall, p = material("proof_wall", "#DCCBB2", .95)
+    tree = wall.node_tree
+    noise = tree.nodes.new("ShaderNodeTexNoise")
+    noise.inputs["Scale"].default_value = 145
+    noise.inputs["Detail"].default_value = 3
+    bump = tree.nodes.new("ShaderNodeBump")
+    bump.inputs["Strength"].default_value = .45
+    bump.inputs["Distance"].default_value = .002
+    tree.links.new(noise.outputs["Fac"], bump.inputs["Height"])
+    tree.links.new(bump.outputs["Normal"], p.inputs["Normal"])
+    b("proof_stone_ledge", (2.5, .72, .10), (0, 0, -.052), stone, None, .005)
     b("proof_wall", (3.0, .05, 2), (0, .43, .85), wall, None, .003)
+    # A small handmade room context stays proof-only; it is not in the toolbox GLB.
+    ink, _ = material("proof_ink", "#201C16", .65)
+    cover, _ = material("proof_record_cover", "#B34F1C", .72)
+    paper, _ = material("proof_print_paper", "#E7DDC8", .90)
+    for i, x in enumerate((-.43, -.412, -.39)):
+        spine = b(f"proof_record_spine_{i}", (.018,.10,.29-i*.018), (x,.16,.145), ink if i != 1 else cover, None,.002)
+        spine.rotation_euler.y = -.08+i*.055
+    b("proof_orange_record_sleeve", (.15,.018,.255), (-.34,.19,.128), cover, None,.001)
+    disc = cylinder("proof_vinyl", .074,.003, (-.34,.178,.130), ink,None,64)
+    disc.rotation_euler.x = math.pi/2
+    label = cylinder("proof_vinyl_label", .019,.004, (-.34,.175,.130), paper,None,32)
+    label.rotation_euler.x = math.pi/2
+    b("proof_frame", (.235,.025,.34), (.43,.385,.18), ink,None,.004)
+    b("proof_print", (.213,.008,.317), (.43,.368,.18), paper,None,.001)
+    circle = cylinder("proof_print_orange_circle", .077,.003, (.43,.361,.19),cover,None,64)
+    circle.rotation_euler.x = math.pi/2
     bpy.ops.object.light_add(type="AREA", location=(-.65, -.35, .72))
     key = bpy.context.object
     key.name = "proof_warm_window"
-    key.data.energy = 46
+    key.data.energy = 38
     key.data.shape = "RECTANGLE"
-    key.data.size = .24
-    key.data.size_y = .50
+    key.data.size = .14
+    key.data.size_y = .60
     key.data.color = (1, .86, .65)
     aim(key, (0, 0, .15))
     bpy.ops.object.light_add(type="AREA", location=(-.45, -.15, .60))
     fill = bpy.context.object
     fill.name = "proof_soft_bounce"
-    fill.data.energy = 1.5
+    fill.data.energy = .6
     fill.data.size = 1.0
     fill.data.color = (1, .96, .87)
     aim(fill, (0, 0, .12))
     bpy.ops.object.light_add(type="SUN", location=(0, 0, 2))
     sun = bpy.context.object
     sun.name = "proof_window_stripe_sun"
-    sun.rotation_euler = (math.radians(28), math.radians(-25), math.radians(-26))
-    sun.data.energy = 0
+    aim(sun, (.7, .35, 0))
+    sun.data.energy = .65
     sun.data.angle = .045
     for i in range(2):
         bar = b(f"proof_window_mullion_{i}", (.035, 1.4, .04), (.10+i*.36, -.25, .73), wall, None, .003)
@@ -360,27 +488,48 @@ def render(camera, name, location, target, lens, width=1400, height=900):
 
 
 def main():
+    raw = OUT / "toolbox.raw.glb"
+    if "--render-only" not in sys.argv:
+        export_only(raw)
+    elif not POSES:
+        # Freeze the proven export: rendering must not silently regenerate its geometry.
+        preflight = json.loads((HERE / "clearance.json").read_text())
+        if preflight.get("rawSourceSha256") != hashlib.sha256(raw.read_bytes()).hexdigest():
+            raise RuntimeError("Proof export differs from the checked mechanism")
+        POSES.update(preflight["parts"])
+    if "--export-only" in sys.argv:
+        return
+    render_proofs(raw)
+
+
+def export_only(raw):
     texture_maps()
     scene.reset()
     root = create()
     finalise(root)
+    from clearance import check_clearance
+    check_clearance(root, POSES, pose, HERE / "clearance.json")
+    batch_rigid(root)
     pose(0)
-    raw = OUT / "toolbox.raw.glb"
     export_glb(raw, [root])
+    preflight_path = HERE / "clearance.json"
+    preflight = json.loads(preflight_path.read_text())
+    preflight["rawSourceSha256"] = hashlib.sha256(raw.read_bytes()).hexdigest()
+    preflight_path.write_text(json.dumps(preflight, indent=2)+"\n")
+
+
+def render_proofs(raw):
     # Proofs re-import the actual exported GLB, rather than unpublished shader nodes.
     scene.reset()
     bpy.ops.import_scene.gltf(filepath=str(raw))
     camera = studio()
     cameras = {}
     pose(0)
-    cameras["closed"] = render(camera, "closed", (.36, -.80, .275), (0, 0, .145), 51)
-    if "--closed-only" in sys.argv:
-        (HERE / "parameters-v2.json").write_text(json.dumps({"status": "Art-review draft, not approved reference parity", "camera": cameras["closed"], "lighting": {"keyPositionBlender": [-.65,-.35,.72], "keyWatts": 46, "keySize": [.24,.50], "fillWatts": 1.5, "worldStrength": .075, "exposure": -.5}, "glazeSourceColour": "#CC4A05", "handleRadiusMetres": .018, "parts": POSES}, indent=2)+"\n")
-        return
+    cameras["closed"] = render(camera, "closed", (.25,-.78,.180),(0,0,.105),52)
     pose(1)
-    cameras["open"] = render(camera, "open", (.64, -.98, .85), (0, -.015, .20), 49)
-    cameras["mobile-open"] = render(camera, "mobile-open", (.40, -.75, .58), (.02, -.03, .20), 48, 720, 960)
-    (HERE / "parameters.json").write_text(json.dumps({"source": "Original procedural asset; accepted direction A reference", "renderer": "Blender Cycles CPU, AgX exposure -0.5, 48 samples, four threads", "textureSize": 512, "textureTileMetres": TILE, "parts": POSES, "cameras": cameras, "lighting": {"keyPositionBlender": [-.65,-.35,.72], "keyWatts": 46, "keySize": [.24,.50], "fillWatts": 1.5, "worldStrength": .075}, "openingSequence": {"clasp": [0,.18], "lid": [.10,.68], "trays": [.38,1.0]}, "rawProofAsset": "blender/out/hero-toolbox/toolbox.raw.glb"}, indent=2)+"\n")
+    cameras["open"] = render(camera, "open", (.35,-.84,.44),(0,-.020,.160),48)
+    cameras["mobile-open"] = render(camera, "mobile-open", (.28,-.65,.37),(.03,-.04,.16),50, 720, 960)
+    (HERE / "parameters.json").write_text(json.dumps({"source": "Original procedural asset; accepted direction A reference", "renderer": "Blender Cycles CPU, AgX exposure -1.0, 48 samples, four threads", "maxTextureSize": 512, "glazeTextureSize": 256, "textureTileMetres": TILE, "parts": POSES, "cameras": cameras, "lighting": {"keyPositionBlender": [-.65,-.35,.72], "keyWatts": 38, "keySize": [.14,.60], "fillWatts": .6, "worldStrength": .075}, "openingSequence": {"clasp": [0,.18], "lid": [.10,.68], "trays": [.38,1.0]}, "rawProofAsset": "blender/out/hero-toolbox/toolbox.raw.glb", "rawProofSha256": hashlib.sha256(raw.read_bytes()).hexdigest(), "caseDimensionsMetres": [.460,.230,.145], "lidHeightMetres": .043, "linearMaterialHandling": "sRGB base-colour images; non-colour ORM/normal images; no legacy shader multiplier"}, indent=2)+"\n")
 
 if __name__ == "__main__":
     main()
