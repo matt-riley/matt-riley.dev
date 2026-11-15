@@ -9,7 +9,7 @@ test("Flagz exposes three named switches, live JSON and specific announcements",
     "Live controls require JavaScript; static values remain readable.",
   );
   await page.addInitScript(() => localStorage.setItem("mr-view", "catalogue"));
-  await page.goto("/#flagz");
+  await page.goto("/archive-gallery/#flagz");
   const group = page.getByRole("group", { name: "Site feature flags" });
   await expect(group.getByRole("switch")).toHaveCount(3);
   for (const key of ["lights", "cat", "sound"])
@@ -48,9 +48,9 @@ test("Flagz persists across reload and synchronizes two tabs without event loops
 }) => {
   test.skip(!javaScriptEnabled, "Storage synchronization requires JavaScript.");
   await page.addInitScript(() => localStorage.setItem("mr-view", "catalogue"));
-  await page.goto("/#flagz");
+  await page.goto("/archive-gallery/#flagz");
   const second = await page.context().newPage();
-  await second.goto("/#flagz");
+  await second.goto("/archive-gallery/#flagz");
   const counts = await page.evaluate(() => {
     let settings = 0,
       touches = 0;
@@ -97,7 +97,7 @@ test("Flagz leaves readable values and native disabled switches without JavaScri
   javaScriptEnabled,
 }) => {
   test.skip(javaScriptEnabled, "This case verifies the printed catalogue.");
-  await page.goto("/#flagz");
+  await page.goto("/archive-gallery/#flagz");
   const group = page.getByRole("group", { name: "Site feature flags" });
   for (const key of ["lights", "cat", "sound"])
     await expect(

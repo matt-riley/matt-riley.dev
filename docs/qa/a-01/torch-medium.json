@@ -1,0 +1,15 @@
+{
+  "viewport": [960, 600],
+  "requestedTier": "medium",
+  "actualTier": "medium",
+  "view": "gallery",
+  "frames": 361,
+  "meanMs": 16.66620498614961,
+  "medianMs": 16.699999999999818,
+  "p95Ms": 16.700000000000728,
+  "meanFps": 60.001662095902844,
+  "errors": [],
+  "softwareWebGLFixture": false,
+  "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5, Unspecified Version)",
+  "pointerMoving": true
+}

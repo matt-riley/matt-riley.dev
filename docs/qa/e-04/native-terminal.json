@@ -1,0 +1,11 @@
+{
+  "terminal": "reading the repository",
+  "announcement": "reading the repository",
+  "hidden": {
+    "width": 1,
+    "height": 48,
+    "clip": "inset(50%)"
+  },
+  "qaBadge": "Test quality: high",
+  "errors": []
+}

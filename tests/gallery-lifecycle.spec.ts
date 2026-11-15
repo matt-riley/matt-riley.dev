@@ -1,4 +1,5 @@
 import { expect, type Page, test } from "@playwright/test";
+import { modelURL } from "../src/gallery/model-files";
 import { allowSoftwareWebGL } from "./gallery-capability";
 
 async function liveContexts(page: Page) {
@@ -39,7 +40,7 @@ test("ten gallery/catalogue cycles release every WebGL context", async ({
   test.setTimeout(90_000);
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
-  await page.goto("/");
+  await page.goto("/archive-gallery/");
   await expect(page.locator("html")).toHaveAttribute("data-gallery", "ready", {
     timeout: 15_000,
   });
@@ -80,12 +81,12 @@ test("switching off during an unfinished room fetch disposes immediately", async
   const blocked = new Promise<void>((resolve) => {
     release = resolve;
   });
-  await page.route("**/models/room.glb", async (route) => {
+  await page.route(`**${modelURL("room")}`, async (route) => {
     await blocked;
     await route.continue().catch(() => {});
   });
-  const loading = page.waitForRequest("**/models/room.glb");
-  await page.goto("/");
+  const loading = page.waitForRequest(`**${modelURL("room")}`);
+  await page.goto("/archive-gallery/");
   await loading;
   await expect.poll(() => liveContexts(page)).toBe(1);
   await page
@@ -103,7 +104,7 @@ test("real context loss quietly returns to the complete catalogue", async ({
 }) => {
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
-  await page.goto("/");
+  await page.goto("/archive-gallery/");
   await expect(page.locator("html")).toHaveAttribute("data-gallery", "ready", {
     timeout: 15_000,
   });

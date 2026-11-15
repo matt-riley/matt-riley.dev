@@ -149,6 +149,9 @@ test("Low window unloads record adapters and remounts fresh models on return", a
       room,
       activeStop: 0,
       requestRender() {},
+      onFrame() {
+        return () => {};
+      },
       assets: {
         async get(id: string) {
           loaded.push(id);
@@ -168,16 +171,18 @@ test("Low window unloads record adapters and remounts fresh models on return", a
         cleanups++;
       };
     });
-    expect(mounts).toBe(9);
+    expect(mounts).toBe(2);
+    expect(loaded).toEqual(["tools", "flagz"]);
     await registry.setWindow(0, 3);
-    expect(registry.records.size).toBe(3);
-    expect(released).toHaveLength(6);
-    expect(cleanups).toBe(6);
+    expect(registry.records.size).toBe(2);
+    expect(released).toHaveLength(0);
+    expect(cleanups).toBe(0);
     await registry.setWindow(8, 3);
-    expect(registry.records.size).toBe(5);
-    expect(loaded.length).toBe(14);
-    expect(mounts).toBe(14);
-    expect(cleanups).toBe(9);
+    expect(registry.records.size).toBe(4);
+    expect(loaded).toHaveLength(6);
+    expect(loaded).not.toContain("waystone");
+    expect(mounts).toBe(6);
+    expect(cleanups).toBe(2);
     const cat = registry.registerExhibit("cat", "gift-shop", 8, new Group());
     cat.record.pickPriority = 100;
     cat.record.draggable = false;

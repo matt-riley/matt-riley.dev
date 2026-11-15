@@ -1,0 +1,144 @@
+{
+  "routes": [
+    {
+      "route": "/404.html",
+      "htmlGzipBytes": 1583,
+      "eagerGzipBytes": 957,
+      "inlineGzipBytes": 346,
+      "eagerExternalGzipBytes": 611,
+      "lazyGzipBytes": 0,
+      "eagerFiles": [
+        "_astro/Base.astro_astro_type_script_index_0_lang.mL1lMMMQ.js",
+        "_astro/settings.Dzwo62uw.js"
+      ]
+    },
+    {
+      "route": "/",
+      "htmlGzipBytes": 12565,
+      "eagerGzipBytes": 14009,
+      "inlineGzipBytes": 346,
+      "eagerExternalGzipBytes": 13663,
+      "lazyGzipBytes": 220052,
+      "eagerFiles": [
+        "_astro/Base.astro_astro_type_script_index_0_lang.mL1lMMMQ.js",
+        "_astro/DrumMachine.astro_astro_type_script_index_0_lang.BaZNgQ25.js",
+        "_astro/EntranceDetails.astro_astro_type_script_index_0_lang.BiwMvGdv.js",
+        "_astro/FlagzControls.astro_astro_type_script_index_0_lang.CG0wrDkG.js",
+        "_astro/Header.astro_astro_type_script_index_0_lang.-ZEam0o4.js",
+        "_astro/SplitFlap.astro_astro_type_script_index_0_lang.BS9iTDJ0.js",
+        "_astro/drum-gate.DzOBl1qi.js",
+        "_astro/exhibit-state.Vu76ickP.js",
+        "_astro/index.astro_astro_type_script_index_0_lang.DEE-EYIz.js",
+        "_astro/preload-helper.DHhhL8Zf.js",
+        "_astro/settings.Dzwo62uw.js"
+      ]
+    },
+    {
+      "route": "/privacy/",
+      "htmlGzipBytes": 1703,
+      "eagerGzipBytes": 957,
+      "inlineGzipBytes": 346,
+      "eagerExternalGzipBytes": 611,
+      "lazyGzipBytes": 0,
+      "eagerFiles": [
+        "_astro/Base.astro_astro_type_script_index_0_lang.mL1lMMMQ.js",
+        "_astro/settings.Dzwo62uw.js"
+      ]
+    },
+    {
+      "route": "/terms/",
+      "htmlGzipBytes": 1613,
+      "eagerGzipBytes": 957,
+      "inlineGzipBytes": 346,
+      "eagerExternalGzipBytes": 611,
+      "lazyGzipBytes": 0,
+      "eagerFiles": [
+        "_astro/Base.astro_astro_type_script_index_0_lang.mL1lMMMQ.js",
+        "_astro/settings.Dzwo62uw.js"
+      ]
+    }
+  ],
+  "distinctLazy": {
+    "count": 18,
+    "gzipBytes": 220052,
+    "files": [
+      "_astro/boot.B2cJ_XGp.js",
+      "_astro/cat.i13T_YHq.js",
+      "_astro/drawers.DItqnJOY.js",
+      "_astro/drums.fcpxKThN.js",
+      "_astro/entrance-visual.XH6M7f3W.js",
+      "_astro/flagz-visual.BDmc5uiG.js",
+      "_astro/gift-shop.BhFuDppU.js",
+      "_astro/human-error.CaMhE63A.js",
+      "_astro/marker.DCAL4_h8.js",
+      "_astro/mount-exhibits.D5KCd8t_.js",
+      "_astro/parts.DR9imlAz.js",
+      "_astro/qa-status.SLuV4Gv-.js",
+      "_astro/rail-state.BvORoK6X.js",
+      "_astro/rail.CSG5048Z.js",
+      "_astro/sound.DZkyf5_X.js",
+      "_astro/split-flap.JaOaHI9I.js",
+      "_astro/three.core.DAAFA-Yp.js",
+      "_astro/waffle-cursor.jp7_EhDZ.js"
+    ]
+  },
+  "models": {
+    "count": 12,
+    "bytes": 589516,
+    "largest": {
+      "file": "models/room.59756d0099bf.glb",
+      "bytes": 216756
+    },
+    "files": [
+      {
+        "file": "models/_sample.e430427c5293.glb",
+        "bytes": 8672
+      },
+      {
+        "file": "models/absent.2d8e68273a9f.glb",
+        "bytes": 32960
+      },
+      {
+        "file": "models/agent-skills.1291137bff69.glb",
+        "bytes": 40064
+      },
+      {
+        "file": "models/boom-bap.9572daacf9e3.glb",
+        "bytes": 24396
+      },
+      {
+        "file": "models/cat.ff0727cf16ab.glb",
+        "bytes": 64268
+      },
+      {
+        "file": "models/flagz.dd429b0d7205.glb",
+        "bytes": 20060
+      },
+      {
+        "file": "models/gift-shop.8f37bbdeb34c.glb",
+        "bytes": 64212
+      },
+      {
+        "file": "models/open-mic.e5141681ebd1.glb",
+        "bytes": 27444
+      },
+      {
+        "file": "models/room.59756d0099bf.glb",
+        "bytes": 216756
+      },
+      {
+        "file": "models/tools.3f9711499dc4.glb",
+        "bytes": 34404
+      },
+      {
+        "file": "models/waffle-agent.63ff2f3ecef8.glb",
+        "bytes": 40676
+      },
+      {
+        "file": "models/waystone.8881adee6b7b.glb",
+        "bytes": 15604
+      }
+    ]
+  },
+  "note": "Gzip inventories mirror budget.spec.ts, not measured network transfer. Inline JS is already in HTML; responsive images, fonts, CSS, runtime requests and caching require browser network evidence. Route lazy sums exclude that route's eager files; distinctLazy excludes the union of all routes' eager files."
+}

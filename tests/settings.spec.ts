@@ -7,7 +7,7 @@ test("settings switches work by keyboard and announce their pressed state", asyn
     info.project.name === "no-javascript",
     "Settings are a browser enhancement.",
   );
-  await page.goto("/");
+  await page.goto("/archive-gallery/");
   const lights = page.getByRole("button", { name: "Lights: Day", exact: true });
   await expect(lights).toHaveAttribute("aria-pressed", "true");
   await lights.focus();
@@ -85,7 +85,7 @@ test("get, set and toggle persist values and dispatch the documented event", asy
     },
   }).outputText;
   expect(gzipSync(code).length).toBeLessThan(1500);
-  await page.goto("/");
+  await page.goto("/archive-gallery/");
   const result = await page.evaluate(async (moduleCode) => {
     // Import the public module in the browser without adding a test global to the product.
     const api = await import(
@@ -143,9 +143,9 @@ test("settings survive reload and native storage events synchronise two tabs", a
     info.project.name === "no-javascript",
     "Settings require JavaScript.",
   );
-  await page.goto("/");
+  await page.goto("/archive-gallery/");
   const second = await page.context().newPage();
-  await second.goto("/");
+  await second.goto("/archive-gallery/");
   await page.getByRole("button", { name: "Lights: Day", exact: true }).click();
   await expect(second.locator("html")).toHaveAttribute(
     "data-lights",
@@ -182,7 +182,7 @@ test("blocked storage leaves the controls usable", async ({ page }, info) => {
       },
     });
   });
-  await page.goto("/");
+  await page.goto("/archive-gallery/");
   await page.getByRole("button", { name: "Cat: On", exact: true }).click();
   await expect(page.locator("html")).toHaveAttribute("data-cat", "off");
   await expect(
@@ -196,7 +196,7 @@ test("switching lights causes no layout shift", async ({ page }, info) => {
     "Settings require JavaScript.",
   );
   await page.addInitScript(() => localStorage.setItem("mr-view", "catalogue"));
-  await page.goto("/");
+  await page.goto("/archive-gallery/");
   await page.evaluate(() => document.fonts.ready);
   const before = await page.locator("#entrance").boundingBox();
   const cls = await page.evaluate(
@@ -228,7 +228,7 @@ test("switching lights causes no layout shift", async ({ page }, info) => {
 test("the stop menu reaches all exhibits by keyboard", async ({
   page,
 }, info) => {
-  await page.goto("/");
+  await page.goto("/archive-gallery/");
   const summary = page.locator("[data-stop-menu] summary");
   await summary.focus();
   await page.keyboard.press("Enter");
@@ -265,7 +265,7 @@ test("the stop menu reaches all exhibits by keyboard", async ({
 
 test("the fixed header controls fit a 320px viewport", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 844 });
-  await page.goto("/");
+  await page.goto("/archive-gallery/");
   await page.evaluate(() => document.fonts.ready);
   const boxes = await page
     .locator(

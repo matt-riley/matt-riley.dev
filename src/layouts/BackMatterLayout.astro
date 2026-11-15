@@ -1,0 +1,11 @@
+---
+import ImmersiveLayout from "./ImmersiveLayout.astro";
+import "../styles/immersive-back-matter.css";
+interface Props { title: string; description: string; noindex?: boolean; }
+const { title, description, noindex = false } = Astro.props;
+---
+<ImmersiveLayout title={title} description={description} noindex={noindex} skipTarget="main" skipLabel="Skip to the main content">
+  <header slot="header" class="back-matter-header"><a class="immersive-wordmark" href="/">Matt Riley</a><a href="/">Back to the collection</a></header>
+  <slot />
+  <footer slot="footer" class="back-matter-footer"><span>Made in Yorkshire.</span><nav aria-label="Footer navigation"><a href="/">Collection</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a></nav></footer>
+</ImmersiveLayout>

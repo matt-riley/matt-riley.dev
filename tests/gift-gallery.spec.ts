@@ -88,7 +88,7 @@ test("all three physical shelf objects activate their real native anchors", asyn
   await page.setViewportSize({ width: 1440, height: 1000 });
   await allowSoftwareWebGL(page);
   await page.addInitScript(() => localStorage.setItem("mr-view", "gallery"));
-  await page.goto("/#gift-shop");
+  await page.goto("/archive-gallery/#gift-shop");
   await expect(page.locator("html")).toHaveAttribute("data-gallery", "ready", {
     timeout: 30_000,
   });
@@ -97,7 +97,7 @@ test("all three physical shelf objects activate their real native anchors", asyn
   const points = await shelfPoints(page);
   expect(Object.keys(points).sort()).toEqual(["github", "tools", "work"]);
   for (const kind of ["work", "tools", "github"]) {
-    await page.goto("/#gift-shop");
+    await page.goto("/archive-gallery/#gift-shop");
     await expect(page.locator("html")).toHaveAttribute(
       "data-gallery",
       "ready",

@@ -23,7 +23,7 @@ test("modest hardware starts at Medium and hidden/modal views draw no frames", a
       });
     }
   });
-  await page.goto("/?debug");
+  await page.goto("/archive-gallery/?debug");
   await expect(page.locator("html")).toHaveAttribute("data-gallery", "ready", {
     timeout: 15_000,
   });

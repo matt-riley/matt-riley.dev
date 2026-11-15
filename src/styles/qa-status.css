@@ -1,0 +1,13 @@
+.qa-status {
+  position: fixed;
+  inset-inline-end: 0.5rem;
+  inset-block-end: 0.5rem;
+  z-index: 60;
+  max-width: calc(100% - 1rem);
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--ink-soft);
+  color: var(--ink);
+  background: var(--plinth);
+  font-size: 0.75rem;
+  pointer-events: none;
+}

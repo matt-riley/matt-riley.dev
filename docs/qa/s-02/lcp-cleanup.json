@@ -1,0 +1,108 @@
+{
+  "sourceState": "504d045e plus staged entrance cleanup; hosted rerun pending signing",
+  "entranceSourceSha256": "de55691ac180d1526e1b2d25724366f3024598db6346ba67abbbf96a32afc5cf",
+  "htmlSha256": "d6771da6f74c3e062014f43622b50323c0f28e68d9213e37d0e73f4a67cf4fc2",
+  "before": "Hosted43290681939 second invocation failed: homepage2333/2334/2342ms, CLS0, score98/100/100/100; largest heading repainted at fixed1800ms cleanup.",
+  "afterScope": "Local final production build;9 Lighthouse samples across3 routes. Not three consecutive hosted CI invocations.",
+  "runs": [
+    {
+      "route": "/",
+      "lcpMs": 903.0005000000001,
+      "cls": 0.006361394061229533,
+      "scores": {
+        "performance": 1,
+        "accessibility": 1,
+        "best-practices": 1,
+        "seo": 1
+      }
+    },
+    {
+      "route": "/",
+      "lcpMs": 903.4365,
+      "cls": 0.006361394061229533,
+      "scores": {
+        "performance": 1,
+        "accessibility": 1,
+        "best-practices": 1,
+        "seo": 1
+      }
+    },
+    {
+      "route": "/",
+      "lcpMs": 904.0678,
+      "cls": 0.006361394061229533,
+      "scores": {
+        "performance": 1,
+        "accessibility": 1,
+        "best-practices": 1,
+        "seo": 1
+      }
+    },
+    {
+      "route": "/privacy/",
+      "lcpMs": 901.5698,
+      "cls": 0,
+      "scores": {
+        "performance": 1,
+        "accessibility": 1,
+        "best-practices": 1,
+        "seo": 1
+      }
+    },
+    {
+      "route": "/privacy/",
+      "lcpMs": 901.7239999999999,
+      "cls": 0,
+      "scores": {
+        "performance": 1,
+        "accessibility": 1,
+        "best-practices": 1,
+        "seo": 1
+      }
+    },
+    {
+      "route": "/privacy/",
+      "lcpMs": 902.1063999999999,
+      "cls": 0,
+      "scores": {
+        "performance": 1,
+        "accessibility": 1,
+        "best-practices": 1,
+        "seo": 1
+      }
+    },
+    {
+      "route": "/terms/",
+      "lcpMs": 901.2155,
+      "cls": 0,
+      "scores": {
+        "performance": 1,
+        "accessibility": 1,
+        "best-practices": 1,
+        "seo": 1
+      }
+    },
+    {
+      "route": "/terms/",
+      "lcpMs": 901.4926,
+      "cls": 0,
+      "scores": {
+        "performance": 1,
+        "accessibility": 1,
+        "best-practices": 1,
+        "seo": 1
+      }
+    },
+    {
+      "route": "/terms/",
+      "lcpMs": 901.7054,
+      "cls": 0,
+      "scores": {
+        "performance": 1,
+        "accessibility": 1,
+        "best-practices": 1,
+        "seo": 1
+      }
+    }
+  ]
+}

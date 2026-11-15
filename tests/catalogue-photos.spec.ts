@@ -7,7 +7,7 @@ test("each stop has art-directed photographs, descriptive alt text and reserved 
   page,
 }) => {
   await page.addInitScript(() => localStorage.setItem("mr-view", "catalogue"));
-  await page.goto("/");
+  await page.goto("/archive-gallery/");
   const sections = page.locator("section[data-exhibit]");
   for (const section of await sections.all()) {
     const photos = section.locator(".catalogue-photo");
@@ -56,7 +56,7 @@ test("390px photos fetch only the active mode, stay below 90KB and switch with L
       );
     }
   });
-  await page.goto("/");
+  await page.goto("/archive-gallery/");
   for (const photo of await page.locator('[data-photo-mode="day"] img').all()) {
     await photo.scrollIntoViewIfNeeded();
     await expect
@@ -134,7 +134,7 @@ test("a cold after-hours visit never requests the hidden day photographs", async
     if (/\/_astro\/.*-(day|night)-(square|wide)/.test(request.url()))
       requests.push(request.url());
   });
-  await page.goto("/");
+  await page.goto("/archive-gallery/");
   for (const photo of await page
     .locator('[data-photo-mode="night"] img')
     .all()) {

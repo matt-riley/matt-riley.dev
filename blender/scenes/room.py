@@ -1,5 +1,6 @@
 """Nine-bay gallery with a shared UV1 day-light bake and runtime placement nodes."""
 
+import json
 import math
 from pathlib import Path
 import bpy
@@ -128,23 +129,9 @@ def build(output):
 
     for exhibit, location in anchors.items():
         marker(f"anchor_{exhibit}", location)
-    cat_locations = [
-        (-13.0, 1.2, 0, "sit", 0),
-        (anchors["tools"][0], anchors["tools"][1] - 0.65, 0, "loaf", 1),
-        (anchors["flagz"][0], anchors["flagz"][1] - 0.65, 0, "sit", 2),
-        (-4.0, -0.7, 0, "stretch", 3),
-        (anchors["waffle-agent"][0], anchors["waffle-agent"][1] - 0.65, 0, "sleep", 3),
-        (anchors["agent-skills"][0], anchors["agent-skills"][1] - 0.65, 0, "loaf", 4),
-        (anchors["waystone"][0], anchors["waystone"][1] - 0.65, 0, "sit", 5),
-        (6.1, 2.4, 0, "sleep", 6),
-        (9.0, 0.5, 0, "stretch", 7),
-        (8.7, 1.65, 1, "loaf", 7),
-        (13.3, 2.7, 1.41, "loaf", 8),
-        (13.3, 1.6, 0.9, "sit", 8),
-        (11.9, 0.5, 0, "sleep", 8),
-    ]
-    for number, (x, y, z, pose, stop) in enumerate(cat_locations):
-        marker(f"cat_{number}", (x, y, z), pose=pose, stop=stop)
+    cat_spots = json.loads((ROOT / "cat-spots.json").read_text())["spots"]
+    for spot in cat_spots:
+        marker(f"cat_{spot['id']}", spot["position"], pose=spot["pose"], stop=spot["stop"])
 
     # A shallow pressed pawprint and scattered ceramic dust occupy the empty
     # room plinth; B-05 supplies only the floor fragments beside it.

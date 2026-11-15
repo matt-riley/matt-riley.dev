@@ -19,7 +19,7 @@ test("the acquisitions board is readable once per row without browser GitHub req
     )
       requests.push(request.url());
   });
-  await page.goto("/");
+  await page.goto("/archive-gallery/");
   const board = page.locator("#acquisitions [data-split-flap]");
   await expect(board).toBeVisible();
   const rows = board.locator(".flap-row");
@@ -65,7 +65,7 @@ test("the lazy flap enhancement has no layout shift and touching advances the bo
       }
     }).observe({ type: "layout-shift", buffered: true });
   });
-  await page.goto("/");
+  await page.goto("/archive-gallery/");
   await page.evaluate(() => document.fonts.ready);
   await page.evaluate(() => {
     window.boardShifts = [];

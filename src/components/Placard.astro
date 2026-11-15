@@ -19,7 +19,7 @@ const headingId = `${data.id}-heading`;
 <div class="placard">
   <p class="placard__artist">Matt Riley, b. Yorkshire</p>
   {data.id === "entrance" ? (
-    <Fragment><h1 id={headingId}><span class="entrance-line" style="--line: 0">Matt Riley makes</span>{" "}<span class="entrance-line" style="--line: 1">small useful things.</span>{" "}<em class="entrance-line" style="--line: 2">Please touch.</em></h1><EntranceDetails /></Fragment>
+    <Fragment><h1 id={headingId}><span class="entrance-line">Matt Riley makes</span>{" "}<span class="entrance-line">small useful things.</span>{" "}<em class="entrance-line">Please touch.</em></h1><EntranceDetails /></Fragment>
   ) : (
     <h2 id={headingId}><em>{data.title}</em></h2>
   )}

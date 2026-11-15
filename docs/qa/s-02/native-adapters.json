@@ -1,0 +1,125 @@
+{
+  "e02": [
+    {
+      "id": "tools",
+      "point": {
+        "x": 410.2659824572239,
+        "y": 310.0559851149702
+      },
+      "objectSummaryKeyboard": true
+    },
+    {
+      "id": "agent-skills",
+      "point": {
+        "x": 856.1470820740618,
+        "y": 308.2080144993144
+      },
+      "objectSummaryKeyboard": true
+    }
+  ],
+  "markerBefore": {
+    "saved": "{\"stop\":\"waystone\",\"at\":\"2026-11-12T19:22:07.945Z\"}",
+    "original": true,
+    "copy": true
+  },
+  "markerAfter": {
+    "saved": null,
+    "original": false,
+    "copy": false
+  },
+  "catFlagz": true,
+  "render": [
+    {
+      "id": "entrance",
+      "tier": "high",
+      "stop": 0,
+      "frame": 260,
+      "calls": 13,
+      "triangles": 18790,
+      "points": 0,
+      "lines": 0
+    },
+    {
+      "id": "tools",
+      "tier": "high",
+      "stop": 1,
+      "frame": 294,
+      "calls": 27,
+      "triangles": 23814,
+      "points": 0,
+      "lines": 0
+    },
+    {
+      "id": "agent-skills",
+      "tier": "high",
+      "stop": 4,
+      "frame": 329,
+      "calls": 33,
+      "triangles": 28308,
+      "points": 0,
+      "lines": 0
+    },
+    {
+      "id": "flagz",
+      "tier": "high",
+      "stop": 2,
+      "frame": 364,
+      "calls": 34,
+      "triangles": 25166,
+      "points": 0,
+      "lines": 0
+    },
+    {
+      "id": "waffle-agent",
+      "tier": "high",
+      "stop": 3,
+      "frame": 454,
+      "calls": 33,
+      "triangles": 28710,
+      "points": 0,
+      "lines": 0
+    },
+    {
+      "id": "waystone",
+      "tier": "high",
+      "stop": 5,
+      "frame": 492,
+      "calls": 21,
+      "triangles": 19778,
+      "points": 0,
+      "lines": 0
+    },
+    {
+      "id": "acquisitions",
+      "tier": "high",
+      "stop": 6,
+      "frame": 529,
+      "calls": 16,
+      "triangles": 23026,
+      "points": 0,
+      "lines": 0
+    },
+    {
+      "id": "human-error",
+      "tier": "high",
+      "stop": 7,
+      "frame": 564,
+      "calls": 45,
+      "triangles": 40684,
+      "points": 0,
+      "lines": 0
+    },
+    {
+      "id": "gift-shop",
+      "tier": "high",
+      "stop": 8,
+      "frame": 599,
+      "calls": 29,
+      "triangles": 34802,
+      "points": 0,
+      "lines": 0
+    }
+  ],
+  "qaBadge": "Test quality: high",
+  "errors": []
+}

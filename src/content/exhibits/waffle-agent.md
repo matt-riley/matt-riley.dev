@@ -12,6 +12,11 @@ links:
     href: "https://github.com/matt-riley/waffle"
 touchLabel: "Wake the cursor"
 touchResult: "The waffle displays a line from its repository description."
+lines:
+  - "reading the repository"
+  - "making a small useful change"
+  - "running the tests"
+  - "done. no theatre."
 draft: false
 ---
 

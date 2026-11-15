@@ -1,0 +1,19 @@
+---
+interface Props { stops: { id: string; title: string }[] }
+const { stops } = Astro.props;
+---
+<div data-marker-controls>
+  <label for="marker-stop">Leave a marker at…</label>
+  <select id="marker-stop" data-marker-stop>
+    {stops.map(({ id, title }) => <option value={id}>{title}</option>)}
+  </select>
+  <p class="mono" data-marker-current>No marker left.</p>
+  <button type="button" data-marker-clear hidden>Clear marker</button>
+  <noscript><p>Leaving a marker needs JavaScript and stays in this browser.</p></noscript>
+</div>
+<style>
+  [data-marker-controls] { padding-block: var(--space-4); }
+  label { display: block; }
+  select { width: 100%; min-height: 44px; margin-block: var(--space-2); color: var(--ink); background: var(--plinth); border: 1px solid var(--rule); }
+  button { min-height: 44px; padding: var(--space-2); margin-block-start: var(--space-2); }
+</style>

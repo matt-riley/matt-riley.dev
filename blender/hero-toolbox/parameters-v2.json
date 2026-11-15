@@ -1,0 +1,88 @@
+{
+  "status": "Art-review draft, not approved reference parity",
+  "camera": {
+    "positionBlender": [
+      0.36,
+      -0.8,
+      0.275
+    ],
+    "targetBlender": [
+      0,
+      0,
+      0.145
+    ],
+    "positionGLTF": [
+      0.36,
+      0.275,
+      0.8
+    ],
+    "targetGLTF": [
+      0,
+      0.145,
+      0
+    ],
+    "verticalFov": 25.56690788284873,
+    "shiftX": -0.054999999701976776,
+    "width": 1400,
+    "height": 900
+  },
+  "lighting": {
+    "keyPositionBlender": [
+      -0.65,
+      -0.35,
+      0.72
+    ],
+    "keyWatts": 46,
+    "keySize": [
+      0.24,
+      0.5
+    ],
+    "fillWatts": 1.5,
+    "worldStrength": 0.075,
+    "exposure": -0.5
+  },
+  "glazeSourceColour": "#CC4A05",
+  "handleRadiusMetres": 0.018,
+  "parts": {
+    "touch_lid": {
+      "base": 0,
+      "delta": -1.9198621771937625,
+      "phase": "lid"
+    },
+    "touch_clasp": {
+      "base": 0,
+      "delta": 0.7330382858376184,
+      "phase": "clasp"
+    },
+    "touch_tray_front": {
+      "base": -1.1,
+      "delta": 1.7,
+      "phase": "tray"
+    },
+    "touch_tray_front_link": {
+      "base": -1.1,
+      "delta": 1.7,
+      "phase": "tray"
+    },
+    "touch_tray_front_level": {
+      "base": 1.1,
+      "delta": -1.7,
+      "phase": "tray"
+    },
+    "touch_tray_upper": {
+      "base": -1.1,
+      "delta": 1.35,
+      "phase": "tray"
+    },
+    "touch_tray_upper_link": {
+      "base": -1.1,
+      "delta": 1.35,
+      "phase": "tray"
+    },
+    "touch_tray_upper_level": {
+      "base": 1.1,
+      "delta": -1.35,
+      "phase": "tray"
+    }
+  }
+}

@@ -1,0 +1,82 @@
+[
+  {
+    "mode": "day",
+    "step": 0,
+    "gallery": "ready",
+    "view": "gallery",
+    "canvas": 1,
+    "lights": "day"
+  },
+  {
+    "mode": "day",
+    "step": 1,
+    "gallery": "ready",
+    "view": "gallery",
+    "canvas": 1,
+    "lights": "day"
+  },
+  {
+    "mode": "day",
+    "step": 2,
+    "gallery": "ready",
+    "view": "gallery",
+    "canvas": 1,
+    "lights": "day"
+  },
+  {
+    "mode": "day",
+    "step": 3,
+    "gallery": "ready",
+    "view": "gallery",
+    "canvas": 1,
+    "lights": "day"
+  },
+  {
+    "mode": "day",
+    "step": 4,
+    "gallery": "ready",
+    "view": "gallery",
+    "canvas": 1,
+    "lights": "day"
+  },
+  {
+    "mode": "after-hours",
+    "step": 0,
+    "gallery": "ready",
+    "view": "gallery",
+    "canvas": 1,
+    "lights": "after-hours"
+  },
+  {
+    "mode": "after-hours",
+    "step": 1,
+    "gallery": "ready",
+    "view": "gallery",
+    "canvas": 1,
+    "lights": "after-hours"
+  },
+  {
+    "mode": "after-hours",
+    "step": 2,
+    "gallery": "ready",
+    "view": "gallery",
+    "canvas": 1,
+    "lights": "after-hours"
+  },
+  {
+    "mode": "after-hours",
+    "step": 3,
+    "gallery": "ready",
+    "view": "gallery",
+    "canvas": 1,
+    "lights": "after-hours"
+  },
+  {
+    "mode": "after-hours",
+    "step": 4,
+    "gallery": "ready",
+    "view": "gallery",
+    "canvas": 1,
+    "lights": "after-hours"
+  }
+]

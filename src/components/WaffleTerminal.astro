@@ -1,0 +1,15 @@
+---
+interface Props { lines: string[] }
+const { lines } = Astro.props;
+---
+<p class="waffle-terminal mono" data-terminal data-lines={JSON.stringify(lines)}>
+  <span aria-hidden="true">waffle &gt; <span data-terminal-output></span><span class="waffle-terminal__cursor">▉</span></span>
+  <span class="sr-only">Touch the waffle to see it work.</span>
+</p>
+<style>
+  .waffle-terminal { min-height: 4.5em; padding-block: var(--space-4); overflow-wrap: anywhere; }
+  @media (prefers-reduced-motion: no-preference) {
+    .waffle-terminal__cursor { animation: terminal-blink 1s step-end infinite; }
+    @keyframes terminal-blink { 50% { opacity: 0; } }
+  }
+</style>

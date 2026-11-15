@@ -9,6 +9,7 @@ import {
 } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { writeModelManifest } from "./model-artifacts.mjs";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const raw = join(root, "blender/out");
@@ -150,6 +151,7 @@ function main() {
         join(destination, `${name}.glb`),
       );
     }
+    writeModelManifest();
   } finally {
     rmSync(temporary, { recursive: true, force: true });
   }

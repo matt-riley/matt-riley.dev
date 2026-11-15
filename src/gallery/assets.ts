@@ -1,6 +1,7 @@
 import type { Material, Object3D, Texture } from "three";
 import { MeshoptDecoder } from "three/addons/libs/meshopt_decoder.module.js";
 import { type GLTF, GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { modelURL } from "./model-files";
 
 export const modelStops = {
   room: 0,
@@ -122,9 +123,12 @@ export class AssetStore {
 
   prefetch(stop: number) {
     this.setNearestStop(stop);
-    for (const id of [...exhibits].sort(
-      (a, b) => Math.abs(modelStops[a] - stop) - Math.abs(modelStops[b] - stop),
-    )) {
+    for (const id of exhibits
+      .filter((id) => Math.abs(modelStops[id] - stop) <= 2)
+      .sort(
+        (a, b) =>
+          Math.abs(modelStops[a] - stop) - Math.abs(modelStops[b] - stop),
+      )) {
       void this.get(id).catch(() => {});
     }
   }
@@ -146,9 +150,14 @@ export class AssetStore {
         const request = this.queue.shift();
         if (!request) break;
         try {
-          const response = await fetch(`/models/${request.id}.glb`, {
-            signal: this.controller.signal,
-          });
+          const response = await fetch(
+            import.meta.env.DEV
+              ? `/models/${request.id}.glb`
+              : modelURL(request.id),
+            {
+              signal: this.controller.signal,
+            },
+          );
           if (!response.ok)
             throw new Error(`Gallery model ${request.id}: ${response.status}`);
           const asset = await this.loader.parseAsync(

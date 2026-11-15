@@ -31,7 +31,11 @@ The committed render uses eight denoised Cycles samples, seed 7 and AgX. Source
 materials preserve the approved P2/G2 palette and orange glaze. Wide views use
 the room's exact stop camera/target empties with a 35-degree vertical field of
 view. Square close-ups centre on the object bounds; they do not move the runtime
-camera. Every stop includes the cat's first numeric room marker and named pose.
+camera. Every stop includes its canonical cat marker and named pose. Human Error
+uses `cat_9` sitting on the empty plinth; the gift shop uses `cat_11` sleeping on
+the counter. Other stops use their first numeric room marker, matching the live
+tour's initial placement. Keep the authoritative room marker metadata current
+before rendering; changing a marker does not require rebaking the static atlas.
 
 The runtime room atlas already includes its illumination. For path-traced stills
 the renderer restores original shared surface materials, preserving UV1 and the

@@ -1,0 +1,60 @@
+{
+  "before": {
+    "rect": {
+      "x": 173.15625,
+      "y": 784.390625,
+      "width": 43.6875,
+      "height": 43.609375,
+      "top": 784.390625,
+      "right": 216.84375,
+      "bottom": 828,
+      "left": 173.15625
+    },
+    "padding": "0px",
+    "border": "0px none rgb(23, 23, 26)"
+  },
+  "after": {
+    "rect": {
+      "x": 162.5625,
+      "y": 769.609375,
+      "width": 64.875,
+      "height": 58.390625,
+      "top": 769.609375,
+      "right": 227.4375,
+      "bottom": 828,
+      "left": 162.5625
+    },
+    "padding": "6.4px 9.6px",
+    "border": "1px solid rgb(44, 44, 49)"
+  },
+  "shifts": [
+    {
+      "value": 0.00018706240039992653,
+      "sources": [
+        {
+          "node": "<a class=\"entrance-cue mono\" href=\"#tools\" data-scroll-cue=\"\" data-astro-cid-2wdi6ru3=\"\">Come in<span aria-hidden=\"true\" data-astro-cid-2wdi6ru3=\"\"></span></a>",
+          "before": {
+            "x": 173.15625,
+            "y": 783.609375,
+            "width": 43.6875,
+            "height": 43.609375,
+            "top": 783.609375,
+            "right": 216.84375,
+            "bottom": 827.21875,
+            "left": 173.15625
+          },
+          "after": {
+            "x": 162.5625,
+            "y": 769.609375,
+            "width": 64.875,
+            "height": 58.390625,
+            "top": 769.609375,
+            "right": 227.4375,
+            "bottom": 828,
+            "left": 162.5625
+          }
+        }
+      ]
+    }
+  ]
+}

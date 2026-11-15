@@ -1,0 +1,84 @@
+.back-matter-header,
+.back-matter-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  padding: 2rem max(1.5rem, 4vw);
+}
+.back-matter-header > a:last-child {
+  font-size: 1rem;
+}
+.back-matter {
+  max-width: 52rem;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 5rem;
+}
+.back-matter h1 {
+  font-size: clamp(3rem, 5.5vw, 5.5rem);
+  letter-spacing: -0.055em;
+  font-weight: 800;
+  line-height: 0.98;
+  margin: 2rem 0 2.5rem;
+}
+.back-matter h2 {
+  font-size: clamp(1.5rem, 2vw, 2rem);
+  letter-spacing: -0.025em;
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  line-height: 1.15;
+  margin: 0 0 1rem;
+}
+.back-matter p {
+  font-family: "Newsreader Variable", serif;
+  font-size: 1.35rem;
+  line-height: 1.5;
+}
+.back-matter section,
+.loan-label {
+  border-top: 1px solid var(--i-rule);
+  padding-top: 1.8rem;
+  margin-top: 2rem;
+}
+.back-matter .mono {
+  font-family: "Commit Mono", monospace;
+  font-size: 0.8rem;
+}
+.back-matter .back-matter__updated {
+  margin-top: 3rem;
+}
+.back-matter-footer {
+  border-top: 1px solid var(--i-rule);
+}
+.back-matter-footer nav {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+.stop-menu {
+  border-top: 1px solid var(--i-rule);
+  margin-top: 2rem;
+  padding-top: 2rem;
+}
+.stop-menu ul {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+.stop-menu a {
+  display: inline-flex;
+  gap: 1rem;
+  align-items: baseline;
+  min-height: 32px;
+}
+@media (max-width: 600px) {
+  .back-matter-header {
+    align-items: center;
+  }
+  .back-matter-header .immersive-wordmark {
+    font-size: 1.5rem;
+  }
+}

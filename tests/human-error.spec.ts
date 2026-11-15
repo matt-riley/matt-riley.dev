@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => localStorage.setItem("mr-view", "catalogue"));
-  await page.goto("/#human-error");
+  await page.goto("/archive-gallery/#human-error");
   await page
     .locator("#human-error > .exhibit__label > details > summary")
     .click();

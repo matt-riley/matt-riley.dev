@@ -1,0 +1,17 @@
+{
+  "width": 1200,
+  "height": 630,
+  "samples": 16,
+  "seed": 7,
+  "pose": "sit",
+  "camera": [
+    0.0,
+    -3.299999952316284,
+    1.7999999523162842
+  ],
+  "lens_mm": 45,
+  "view_transform": "AgX",
+  "exposure": -0.5,
+  "porcelain_roughness": 0.85,
+  "glaze": "#E8741A"
+}

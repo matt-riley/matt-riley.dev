@@ -2,7 +2,7 @@
 id: "human-error"
 order: 7
 title: "The Human Error"
-alt: "A porcelain microphone and pad instrument beside an empty plinth, broken bowl fragments on the floor and a framed cat portrait."
+alt: "Three porcelain plinths with a microphone, a drum machine and a seated orange cat looking away from bowl fragments on the floor, beneath a framed cat portrait."
 dates: "2026 to ongoing"
 medium: "A microphone, a drum machine, an absence, a photograph."
 accession: "MR.2026.008"

@@ -26,7 +26,7 @@ test("a closed hat chokes the open-hat tail in the real offline audio graph", as
     localStorage.setItem("mr-view", "catalogue");
     localStorage.setItem("mr-sound", "off");
   });
-  await page.goto("/");
+  await page.goto("/archive-gallery/");
   const result = await page.evaluate(
     async (code) => {
       const audio = await import(

@@ -1,5 +1,5 @@
 export const site = {
-  title: "Please Touch: The Museum of Small Useful Things",
+  title: "Please Touch — Matt Riley",
   description: "Matt Riley makes small useful things. Please touch.",
   entranceWallText: "Matt Riley makes small useful things. Please touch.",
   openingHours: {

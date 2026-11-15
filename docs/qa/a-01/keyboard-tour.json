@@ -1,0 +1,123 @@
+{
+  "driver": "native full Chromium, no capability override",
+  "evidence": [
+    {
+      "id": "entrance",
+      "uniforms": {
+        "museumTorchPosition": [-13.333333015441895, 1.5, 2.0999999046325684],
+        "museumTorchDirection": [
+          0.11303859640520436, -0.2505625468038055, -0.9614783855406902
+        ]
+      },
+      "stop": "0 of 8, Please Touch",
+      "focus": "Come in",
+      "quality": "medium",
+      "dotToStopTarget": 0.9889893279864055
+    },
+    {
+      "id": "tools",
+      "uniforms": {
+        "museumTorchPosition": [-10, 1.5, 2.0999999046325684],
+        "museumTorchDirection": [
+          -0.15557220101274408, -0.09250994093294213, -0.9834831981791219
+        ]
+      },
+      "stop": "1 of 8, mattriley.tools",
+      "focus": "Visit ↗",
+      "quality": "medium",
+      "dotToStopTarget": 0.9857469619002912
+    },
+    {
+      "id": "flagz",
+      "uniforms": {
+        "museumTorchPosition": [-6.666666507720947, 1.5, 2.0999999046325684],
+        "museumTorchDirection": [
+          0.18467028075904546, -0.10043945488347632, -0.9776547464760174
+        ]
+      },
+      "stop": "2 of 8, flagz",
+      "focus": "View source ↗",
+      "quality": "medium",
+      "dotToStopTarget": 0.9812444998477037
+    },
+    {
+      "id": "waffle-agent",
+      "uniforms": {
+        "museumTorchPosition": [-3.3333332538604736, 1.5, 2.0999999046325684],
+        "museumTorchDirection": [
+          -0.18968084042371833, -0.11286702377446278, -0.9753369744454717
+        ]
+      },
+      "stop": "3 of 8, waffle",
+      "focus": "View source ↗",
+      "quality": "medium",
+      "dotToStopTarget": 0.9809192755468642
+    },
+    {
+      "id": "agent-skills",
+      "uniforms": {
+        "museumTorchPosition": [0, 1.5, 2.0999999046325684],
+        "museumTorchDirection": [
+          0.15683663183307875, -0.09168991470100353, -0.983359156390674
+        ]
+      },
+      "stop": "4 of 8, agent-skills",
+      "focus": "View source ↗",
+      "quality": "medium",
+      "dotToStopTarget": 0.9854949216342008
+    },
+    {
+      "id": "waystone",
+      "uniforms": {
+        "museumTorchPosition": [3.3333332538604736, 1.5, 2.0999999046325684],
+        "museumTorchDirection": [
+          -0.19196350336848234, -0.08987269271672856, -0.9772783188418452
+        ]
+      },
+      "stop": "5 of 8, waystone.nvim",
+      "focus": "View source ↗",
+      "quality": "medium",
+      "dotToStopTarget": 0.9792033517411823
+    },
+    {
+      "id": "acquisitions",
+      "uniforms": {
+        "museumTorchPosition": [6.666666507720947, 1.5, 2.0999999046325684],
+        "museumTorchDirection": [
+          0.006137900243636029, -0.1522280178028076, -0.988326341233718
+        ]
+      },
+      "stop": "6 of 8, Recent Acquisitions",
+      "focus": "16 Jul — agent-skills: Tighten the catalogue and its checks16 Jul — agent-skills: Tighten the catalogue and its checks",
+      "quality": "medium",
+      "dotToStopTarget": 0.9999641676778347
+    },
+    {
+      "id": "human-error",
+      "uniforms": {
+        "museumTorchPosition": [10, 1.5, 2.0999999046325684],
+        "museumTorchDirection": [
+          -0.0004466383835189909, -0.05620701882504452, -0.9984190360509736
+        ]
+      },
+      "stop": "7 of 8, The Human Error",
+      "focus": "Inspect the human error +",
+      "quality": "medium",
+      "dotToStopTarget": 0.9947596978048876
+    },
+    {
+      "id": "gift-shop",
+      "uniforms": {
+        "museumTorchPosition": [13.333333015441893, 1.5, 2.0999999046325684],
+        "museumTorchDirection": [
+          0.14851031924558838, -0.15542611988159238, -0.9766204003276435
+        ]
+      },
+      "stop": "8 of 8, Exit through the gift shop",
+      "focus": "mattriley.work ↗Longer notes.Free",
+      "quality": "medium",
+      "dotToStopTarget": 0.9889105157982527
+    }
+  ],
+  "errors": []
+}

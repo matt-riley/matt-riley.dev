@@ -72,7 +72,7 @@ test.beforeEach(async ({ page }, info) => {
     localStorage.setItem("mr-view", "gallery");
     localStorage.setItem("mr-lights", "day");
   });
-  await page.goto("/#tools");
+  await page.goto("/archive-gallery/#tools");
   await expect(page.locator("html")).toHaveAttribute("data-gallery", "ready", {
     timeout: 15_000,
   });

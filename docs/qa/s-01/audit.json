@@ -1,0 +1,1484 @@
+{
+  "capturedAt": "2026-11-12T18:23:08.979Z",
+  "sourceHead": "4b553c89696c8816334afa880cddb793207133c7",
+  "builtHTMLSha256": "6aa4720ec9ff031e288dcc11209042aa7675bb3b61f1c84f532b70c0bae334ce",
+  "browser": "Full Chromium on Apple M5 Metal",
+  "passed": 19,
+  "failed": 0,
+  "axeStops": 9,
+  "axeDisclosureStates": 2,
+  "axeModes": 4,
+  "axeStateCount": 72,
+  "tests": [
+    "/ has no accessibility violations in day",
+    "/ has no accessibility violations in after-hours",
+    "/404.html has no accessibility violations in day",
+    "/404.html has no accessibility violations in after-hours",
+    "/privacy/ has no accessibility violations in day",
+    "/privacy/ has no accessibility violations in after-hours",
+    "/terms/ has no accessibility violations in day",
+    "/terms/ has no accessibility violations in after-hours",
+    "catalogue day: every stop and its open disclosures pass axe",
+    "catalogue after-hours: every stop and its open disclosures pass axe",
+    "gallery day: every stop and its open disclosures pass axe",
+    "gallery after-hours: every stop and its open disclosures pass axe",
+    "day: text and focus colours meet contrast targets",
+    "after-hours: text and focus colours meet contrast targets",
+    "320px and 200/400 percent equivalent viewports preserve every placard",
+    "forced colours retain control borders and a visible keyboard focus ring",
+    "standalone touch targets are at least 24px and primary controls are 44px",
+    "catalogue: a keyboard-only tour reaches and operates all nine stops",
+    "gallery: a keyboard-only tour reaches and operates all nine stops"
+  ],
+  "evidence": {
+    "day-contrast": [
+      {
+        "foreground": "--ink",
+        "background": "--wall",
+        "ratio": 15.858879935953402
+      },
+      {
+        "foreground": "--ink",
+        "background": "--plinth",
+        "ratio": 17.128156821317457
+      },
+      {
+        "foreground": "--ink-soft",
+        "background": "--wall",
+        "ratio": 5.99857031056488
+      },
+      {
+        "foreground": "--ink-soft",
+        "background": "--plinth",
+        "ratio": 6.478670208614418
+      },
+      {
+        "foreground": "--glaze-ink",
+        "background": "--wall",
+        "ratio": 4.535443680588512
+      },
+      {
+        "foreground": "--glaze-ink",
+        "background": "--plinth",
+        "ratio": 4.898441184314514
+      }
+    ],
+    "after-hours-contrast": [
+      {
+        "foreground": "--ink",
+        "background": "--wall",
+        "ratio": 15.771569206027491
+      },
+      {
+        "foreground": "--ink",
+        "background": "--plinth",
+        "ratio": 14.200802325710452
+      },
+      {
+        "foreground": "--ink-soft",
+        "background": "--wall",
+        "ratio": 7.218755066229406
+      },
+      {
+        "foreground": "--ink-soft",
+        "background": "--plinth",
+        "ratio": 6.499804324738159
+      },
+      {
+        "foreground": "--glaze-ink",
+        "background": "--wall",
+        "ratio": 8.193318058705623
+      },
+      {
+        "foreground": "--glaze-ink",
+        "background": "--plinth",
+        "ratio": 7.37730587384327
+      }
+    ],
+    "touch-targets": [
+      {
+        "name": "MR — Museum entrance",
+        "width": 32.375,
+        "height": 41,
+        "minimum": 24
+      },
+      {
+        "name": "Lights: Day",
+        "width": 90,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "Cat: On",
+        "width": 90,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "Sound: Off",
+        "width": 90,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "View: Catalogue",
+        "width": 90,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "Exhibits ↓",
+        "width": 76.8125,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "Please Touch",
+        "width": 86.40625,
+        "height": 24,
+        "minimum": 24
+      },
+      {
+        "name": "mattriley.tools",
+        "width": 108,
+        "height": 24,
+        "minimum": 24
+      },
+      {
+        "name": "flagz",
+        "width": 36,
+        "height": 24,
+        "minimum": 24
+      },
+      {
+        "name": "waffle",
+        "width": 43.203125,
+        "height": 24,
+        "minimum": 24
+      },
+      {
+        "name": "agent-skills",
+        "width": 86.40625,
+        "height": 24,
+        "minimum": 24
+      },
+      {
+        "name": "waystone.nvim",
+        "width": 93.609375,
+        "height": 24,
+        "minimum": 24
+      },
+      {
+        "name": "Recent Acquisitions",
+        "width": 136.8125,
+        "height": 24,
+        "minimum": 24
+      },
+      {
+        "name": "The Human Error",
+        "width": 108,
+        "height": 24,
+        "minimum": 24
+      },
+      {
+        "name": "Exit through the gift shop",
+        "width": 187.203125,
+        "height": 24,
+        "minimum": 24
+      },
+      {
+        "name": "Touch the rope ↗",
+        "width": 170.8125,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "Visit ↗",
+        "width": 54.5,
+        "height": 25.5,
+        "minimum": 24
+      },
+      {
+        "name": "Close the drawers −",
+        "width": 187.609375,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "agit ↗",
+        "width": 47.71875,
+        "height": 25.5,
+        "minimum": 24
+      },
+      {
+        "name": "crap ↗",
+        "width": 52.1875,
+        "height": 25.5,
+        "minimum": 24
+      },
+      {
+        "name": "deadwood ↗",
+        "width": 94.953125,
+        "height": 25.5,
+        "minimum": 24
+      },
+      {
+        "name": "hopt ↗",
+        "width": 54.78125,
+        "height": 25.5,
+        "minimum": 24
+      },
+      {
+        "name": "mediacreator ↗",
+        "width": 115.359375,
+        "height": 25.5,
+        "minimum": 24
+      },
+      {
+        "name": "newbrew ↗",
+        "width": 86.546875,
+        "height": 25.5,
+        "minimum": 24
+      },
+      {
+        "name": "skill-eval ↗",
+        "width": 84.828125,
+        "height": 25.5,
+        "minimum": 24
+      },
+      {
+        "name": "View source ↗",
+        "width": 107.4375,
+        "height": 25.5,
+        "minimum": 24
+      },
+      {
+        "name": "lights",
+        "width": 354,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "cat",
+        "width": 354,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "sound",
+        "width": 354,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "View source ↗",
+        "width": 107.4375,
+        "height": 25.5,
+        "minimum": 24
+      },
+      {
+        "name": "Wake the cursor ↗",
+        "width": 178,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "View source ↗",
+        "width": 107.4375,
+        "height": 25.5,
+        "minimum": 24
+      },
+      {
+        "name": "Close the drawers −",
+        "width": 187.609375,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "acquire-codebase-knowledge ↗",
+        "width": 171,
+        "height": 69,
+        "minimum": 24
+      },
+      {
+        "name": "agent-instructions ↗",
+        "width": 169.296875,
+        "height": 43.5,
+        "minimum": 24
+      },
+      {
+        "name": "astro-seo ↗",
+        "width": 103.734375,
+        "height": 43.5,
+        "minimum": 24
+      },
+      {
+        "name": "implementation-review ↗",
+        "width": 171,
+        "height": 69,
+        "minimum": 24
+      },
+      {
+        "name": "git-worktrees ↗",
+        "width": 133.96875,
+        "height": 43.5,
+        "minimum": 24
+      },
+      {
+        "name": "test-driven-development ↗",
+        "width": 171,
+        "height": 69,
+        "minimum": 24
+      },
+      {
+        "name": "schema-boundary-typing ↗",
+        "width": 171,
+        "height": 69,
+        "minimum": 24
+      },
+      {
+        "name": "verification-before-completion ↗",
+        "width": 171,
+        "height": 69,
+        "minimum": 24
+      },
+      {
+        "name": "View source ↗",
+        "width": 107.4375,
+        "height": 25.5,
+        "minimum": 24
+      },
+      {
+        "name": "Please Touchmattriley.toolsflagzwaffleagent-skillswaystone.nvimRecent Acquisitio",
+        "width": 358,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "Leave a marker ↗",
+        "width": 170.8125,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "View GitHub ↗",
+        "width": 116.234375,
+        "height": 25.5,
+        "minimum": 24
+      },
+      {
+        "name": "Show the next acquisition ↗",
+        "width": 250,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "Inspect the human error +",
+        "width": 230.8125,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "Open Mic",
+        "width": 57.609375,
+        "height": 24,
+        "minimum": 24
+      },
+      {
+        "name": "Untitled (Boom Bap)",
+        "width": 136.8125,
+        "height": 24,
+        "minimum": 24
+      },
+      {
+        "name": "Untitled (Absent Exhibit)",
+        "width": 180,
+        "height": 24,
+        "minimum": 24
+      },
+      {
+        "name": "Portrait of the Head of Security",
+        "width": 230.40625,
+        "height": 24,
+        "minimum": 24
+      },
+      {
+        "name": "Touch the microphone ↗",
+        "width": 214,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "Play",
+        "width": 62.8125,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "Clear",
+        "width": 70,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "Custom patternHead nodLate busSunday",
+        "width": 99,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "kicksnarehatopen hat",
+        "width": 64.734375,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "",
+        "width": 358,
+        "height": 44,
+        "minimum": 24
+      },
+      {
+        "name": "",
+        "width": 358,
+        "height": 44,
+        "minimum": 24
+      },
+      {
+        "name": "kick, step 1",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "kick, step 2",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "kick, step 3",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "kick, step 4",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "kick, step 5",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "kick, step 6",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "kick, step 7",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "kick, step 8",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "kick, step 9",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "kick, step 10",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "kick, step 11",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "kick, step 12",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "kick, step 13",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "kick, step 14",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "kick, step 15",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "kick, step 16",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "snare, step 1",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "snare, step 2",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "snare, step 3",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "snare, step 4",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "snare, step 5",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "snare, step 6",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "snare, step 7",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "snare, step 8",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "snare, step 9",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "snare, step 10",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "snare, step 11",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "snare, step 12",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "snare, step 13",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "snare, step 14",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "snare, step 15",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "snare, step 16",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "hat, step 1",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "hat, step 2",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "hat, step 3",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "hat, step 4",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "hat, step 5",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "hat, step 6",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "hat, step 7",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "hat, step 8",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "hat, step 9",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "hat, step 10",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "hat, step 11",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "hat, step 12",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "hat, step 13",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "hat, step 14",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "hat, step 15",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "hat, step 16",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "open hat, step 1",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "open hat, step 2",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "open hat, step 3",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "open hat, step 4",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "open hat, step 5",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "open hat, step 6",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "open hat, step 7",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "open hat, step 8",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "open hat, step 9",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "open hat, step 10",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "open hat, step 11",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "open hat, step 12",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "open hat, step 13",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "open hat, step 14",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "open hat, step 15",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "open hat, step 16",
+        "width": 44,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "Pattern link ↗",
+        "width": 91.53125,
+        "height": 36,
+        "minimum": 24
+      },
+      {
+        "name": "Touch the empty plinth ↗",
+        "width": 228.40625,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "mattriley.work ↗Longer notes.Free",
+        "width": 358,
+        "height": 96,
+        "minimum": 24
+      },
+      {
+        "name": "mattriley.tools ↗Small web tools.Free",
+        "width": 358,
+        "height": 96,
+        "minimum": 24
+      },
+      {
+        "name": "GitHub ↗The source.Free",
+        "width": 358,
+        "height": 96,
+        "minimum": 24
+      },
+      {
+        "name": "Find Matt on GitHub ↗",
+        "width": 175.875,
+        "height": 25.5,
+        "minimum": 24
+      },
+      {
+        "name": "Browse the shelf ↗",
+        "width": 185.203125,
+        "height": 44,
+        "minimum": 44
+      },
+      {
+        "name": "Back to the entrance ↑",
+        "width": 152.6875,
+        "height": 24,
+        "minimum": 24
+      },
+      {
+        "name": "Privacy",
+        "width": 51.140625,
+        "height": 24,
+        "minimum": 24
+      },
+      {
+        "name": "Terms",
+        "width": 42.171875,
+        "height": 24,
+        "minimum": 24
+      }
+    ],
+    "catalogue-keyboard-journey": [
+      {
+        "stop": "entrance",
+        "name": "Come in",
+        "tag": "A"
+      },
+      {
+        "stop": "entrance",
+        "name": "Touch the rope ↗",
+        "tag": "BUTTON"
+      },
+      {
+        "stop": "tools",
+        "name": "Visit ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "tools",
+        "name": "Open the drawers +",
+        "tag": "SUMMARY"
+      },
+      {
+        "stop": "tools",
+        "name": "agit ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "tools",
+        "name": "crap ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "tools",
+        "name": "deadwood ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "tools",
+        "name": "hopt ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "tools",
+        "name": "mediacreator ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "tools",
+        "name": "newbrew ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "tools",
+        "name": "skill-eval ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "flagz",
+        "name": "View source ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "flagz",
+        "name": "lights",
+        "tag": "BUTTON"
+      },
+      {
+        "stop": "flagz",
+        "name": "cat",
+        "tag": "BUTTON"
+      },
+      {
+        "stop": "flagz",
+        "name": "sound",
+        "tag": "BUTTON"
+      },
+      {
+        "stop": "waffle-agent",
+        "name": "View source ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "waffle-agent",
+        "name": "Wake the cursor ↗",
+        "tag": "BUTTON"
+      },
+      {
+        "stop": "agent-skills",
+        "name": "View source ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "agent-skills",
+        "name": "Open the card catalogue +",
+        "tag": "SUMMARY"
+      },
+      {
+        "stop": "agent-skills",
+        "name": "acquire-codebase-knowledge ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "agent-skills",
+        "name": "agent-instructions ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "agent-skills",
+        "name": "astro-seo ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "agent-skills",
+        "name": "implementation-review ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "agent-skills",
+        "name": "git-worktrees ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "agent-skills",
+        "name": "test-driven-development ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "agent-skills",
+        "name": "schema-boundary-typing ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "agent-skills",
+        "name": "verification-before-completion ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "waystone",
+        "name": "View source ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "waystone",
+        "name": "Please Touchmattriley.toolsflagzwaffleagent-skillswaystone.nvimRecent AcquisitionsThe Human ErrorExi",
+        "tag": "SELECT"
+      },
+      {
+        "stop": "waystone",
+        "name": "Leave a marker ↗",
+        "tag": "BUTTON"
+      },
+      {
+        "stop": "acquisitions",
+        "name": "16 Jul — agent-skills: Tighten the catalogue and its checks",
+        "tag": "A"
+      },
+      {
+        "stop": "acquisitions",
+        "name": "16 Jul — mattriley.tools: Polish the useful edges",
+        "tag": "A"
+      },
+      {
+        "stop": "acquisitions",
+        "name": "15 Jul — flagz: Cut a new release",
+        "tag": "A"
+      },
+      {
+        "stop": "acquisitions",
+        "name": "14 Jul — waystone.nvim: Refine navigation behaviour",
+        "tag": "A"
+      },
+      {
+        "stop": "acquisitions",
+        "name": "13 Jul — skill-evaluator: Created a fresh evaluation rig",
+        "tag": "A"
+      },
+      {
+        "stop": "acquisitions",
+        "name": "flagz: v1.13.3",
+        "tag": "A"
+      },
+      {
+        "stop": "acquisitions",
+        "name": "View GitHub ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "acquisitions",
+        "name": "Show the next acquisition ↗",
+        "tag": "BUTTON"
+      },
+      {
+        "stop": "human-error",
+        "name": "Inspect the human error +",
+        "tag": "SUMMARY"
+      },
+      {
+        "stop": "human-error",
+        "name": "Open Mic",
+        "tag": "A"
+      },
+      {
+        "stop": "human-error",
+        "name": "Untitled (Boom Bap)",
+        "tag": "A"
+      },
+      {
+        "stop": "human-error",
+        "name": "Untitled (Absent Exhibit)",
+        "tag": "A"
+      },
+      {
+        "stop": "human-error",
+        "name": "Portrait of the Head of Security",
+        "tag": "A"
+      },
+      {
+        "stop": "human-error",
+        "name": "Touch the microphone ↗",
+        "tag": "BUTTON"
+      },
+      {
+        "stop": "human-error",
+        "name": "Play",
+        "tag": "BUTTON"
+      },
+      {
+        "stop": "human-error",
+        "name": "Clear",
+        "tag": "BUTTON"
+      },
+      {
+        "stop": "human-error",
+        "name": "Custom patternHead nodLate busSunday",
+        "tag": "SELECT"
+      },
+      {
+        "stop": "human-error",
+        "name": "kicksnarehatopen hat",
+        "tag": "SELECT"
+      },
+      {
+        "stop": "human-error",
+        "name": "",
+        "tag": "INPUT"
+      },
+      {
+        "stop": "human-error",
+        "name": "",
+        "tag": "INPUT"
+      },
+      {
+        "stop": "human-error",
+        "name": "kick, step 1",
+        "tag": "BUTTON"
+      },
+      {
+        "stop": "human-error",
+        "name": "Pattern link ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "human-error",
+        "name": "Touch the empty plinth ↗",
+        "tag": "BUTTON"
+      },
+      {
+        "stop": "gift-shop",
+        "name": "mattriley.work ↗Longer notes.Free",
+        "tag": "A"
+      },
+      {
+        "stop": "gift-shop",
+        "name": "mattriley.tools ↗Small web tools.Free",
+        "tag": "A"
+      },
+      {
+        "stop": "gift-shop",
+        "name": "GitHub ↗The source.Free",
+        "tag": "A"
+      },
+      {
+        "stop": "gift-shop",
+        "name": "Find Matt on GitHub ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "gift-shop",
+        "name": "Browse the shelf ↗",
+        "tag": "BUTTON"
+      }
+    ],
+    "gallery-keyboard-journey": [
+      {
+        "stop": "entrance",
+        "name": "Come in",
+        "tag": "A"
+      },
+      {
+        "stop": "entrance",
+        "name": "Touch the rope ↗",
+        "tag": "BUTTON"
+      },
+      {
+        "stop": "tools",
+        "name": "Visit ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "tools",
+        "name": "Open the drawers +",
+        "tag": "SUMMARY"
+      },
+      {
+        "stop": "tools",
+        "name": "agit ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "tools",
+        "name": "crap ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "tools",
+        "name": "deadwood ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "tools",
+        "name": "hopt ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "tools",
+        "name": "mediacreator ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "tools",
+        "name": "newbrew ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "tools",
+        "name": "skill-eval ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "flagz",
+        "name": "View source ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "flagz",
+        "name": "lights",
+        "tag": "BUTTON"
+      },
+      {
+        "stop": "flagz",
+        "name": "cat",
+        "tag": "BUTTON"
+      },
+      {
+        "stop": "flagz",
+        "name": "sound",
+        "tag": "BUTTON"
+      },
+      {
+        "stop": "waffle-agent",
+        "name": "View source ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "waffle-agent",
+        "name": "Wake the cursor ↗",
+        "tag": "BUTTON"
+      },
+      {
+        "stop": "agent-skills",
+        "name": "View source ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "agent-skills",
+        "name": "Open the card catalogue +",
+        "tag": "SUMMARY"
+      },
+      {
+        "stop": "agent-skills",
+        "name": "acquire-codebase-knowledge ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "agent-skills",
+        "name": "agent-instructions ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "agent-skills",
+        "name": "astro-seo ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "agent-skills",
+        "name": "implementation-review ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "agent-skills",
+        "name": "git-worktrees ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "agent-skills",
+        "name": "test-driven-development ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "agent-skills",
+        "name": "schema-boundary-typing ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "agent-skills",
+        "name": "verification-before-completion ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "waystone",
+        "name": "View source ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "waystone",
+        "name": "Please Touchmattriley.toolsflagzwaffleagent-skillswaystone.nvimRecent AcquisitionsThe Human ErrorExi",
+        "tag": "SELECT"
+      },
+      {
+        "stop": "waystone",
+        "name": "Leave a marker ↗",
+        "tag": "BUTTON"
+      },
+      {
+        "stop": "acquisitions",
+        "name": "16 Jul — agent-skills: Tighten the catalogue and its checks",
+        "tag": "A"
+      },
+      {
+        "stop": "acquisitions",
+        "name": "16 Jul — mattriley.tools: Polish the useful edges",
+        "tag": "A"
+      },
+      {
+        "stop": "acquisitions",
+        "name": "15 Jul — flagz: Cut a new release",
+        "tag": "A"
+      },
+      {
+        "stop": "acquisitions",
+        "name": "14 Jul — waystone.nvim: Refine navigation behaviour",
+        "tag": "A"
+      },
+      {
+        "stop": "acquisitions",
+        "name": "13 Jul — skill-evaluator: Created a fresh evaluation rig",
+        "tag": "A"
+      },
+      {
+        "stop": "acquisitions",
+        "name": "flagz: v1.13.3",
+        "tag": "A"
+      },
+      {
+        "stop": "acquisitions",
+        "name": "View GitHub ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "acquisitions",
+        "name": "Show the next acquisition ↗",
+        "tag": "BUTTON"
+      },
+      {
+        "stop": "human-error",
+        "name": "Inspect the human error +",
+        "tag": "SUMMARY"
+      },
+      {
+        "stop": "human-error",
+        "name": "Open Mic",
+        "tag": "A"
+      },
+      {
+        "stop": "human-error",
+        "name": "Untitled (Boom Bap)",
+        "tag": "A"
+      },
+      {
+        "stop": "human-error",
+        "name": "Untitled (Absent Exhibit)",
+        "tag": "A"
+      },
+      {
+        "stop": "human-error",
+        "name": "Portrait of the Head of Security",
+        "tag": "A"
+      },
+      {
+        "stop": "human-error",
+        "name": "Touch the microphone ↗",
+        "tag": "BUTTON"
+      },
+      {
+        "stop": "human-error",
+        "name": "Play",
+        "tag": "BUTTON"
+      },
+      {
+        "stop": "human-error",
+        "name": "Clear",
+        "tag": "BUTTON"
+      },
+      {
+        "stop": "human-error",
+        "name": "Custom patternHead nodLate busSunday",
+        "tag": "SELECT"
+      },
+      {
+        "stop": "human-error",
+        "name": "kicksnarehatopen hat",
+        "tag": "SELECT"
+      },
+      {
+        "stop": "human-error",
+        "name": "",
+        "tag": "INPUT"
+      },
+      {
+        "stop": "human-error",
+        "name": "",
+        "tag": "INPUT"
+      },
+      {
+        "stop": "human-error",
+        "name": "kick, step 1",
+        "tag": "BUTTON"
+      },
+      {
+        "stop": "human-error",
+        "name": "Pattern link ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "human-error",
+        "name": "Touch the empty plinth ↗",
+        "tag": "BUTTON"
+      },
+      {
+        "stop": "gift-shop",
+        "name": "mattriley.work ↗Longer notes.Free",
+        "tag": "A"
+      },
+      {
+        "stop": "gift-shop",
+        "name": "mattriley.tools ↗Small web tools.Free",
+        "tag": "A"
+      },
+      {
+        "stop": "gift-shop",
+        "name": "GitHub ↗The source.Free",
+        "tag": "A"
+      },
+      {
+        "stop": "gift-shop",
+        "name": "Find Matt on GitHub ↗",
+        "tag": "A"
+      },
+      {
+        "stop": "gift-shop",
+        "name": "Browse the shelf ↗",
+        "tag": "BUTTON"
+      }
+    ]
+  },
+  "manualPending": [
+    "macOS Safari VoiceOver-only visit",
+    "iOS VoiceOver-only visit",
+    "real browser zoom at 200/400 percent",
+    "Android/iPhone hardware checks"
+  ],
+  "scope": "Integrated E01–E08, A02 and A03 UI before final A01/S03/S04 integration; no manual screen-reader completion claimed."
+}

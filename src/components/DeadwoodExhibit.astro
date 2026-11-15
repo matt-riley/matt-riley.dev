@@ -1,0 +1,26 @@
+---
+import { Picture } from "astro:assets";
+import scene from "../assets/immersive/deadwood-scene.png";
+import "../styles/immersive-deadwood.css";
+---
+<section id="deadwood-exhibit" class="deadwood-section" aria-labelledby="deadwood-heading">
+  <div class="deadwood-art"><Picture src={scene} formats={["avif", "webp"]} fallbackFormat="jpeg" widths={[480, 800, 1200]} sizes="(max-width: 760px) 100vw, 48vw" alt="Speckled ceramic pruning shears with glossy orange handles, a dry twig and green leaves on warm travertine." loading="lazy" /></div>
+  <div class="deadwood-copy" data-import-example>
+    <h2 id="deadwood-heading">deadwood<span class="deadwood-dot">.</span></h2>
+    <p class="deadwood-intro">Find what no longer connects.</p>
+    <p class="deadwood-instruction">Follow the imports from <code>main.ts</code>.</p>
+    <div class="import-tree" aria-label="Example file reachability">
+      <div class="import-entry"><code>main.ts</code><span>Entry point</span></div>
+      <div class="import-branch"><code>greet.ts</code><span>Imported</span></div>
+      <div class="import-optional" data-import-optional data-reachable="false"><code>legacy.ts</code><span data-import-state>Unreachable</span></div>
+    </div>
+    <label class="import-control"><input type="checkbox" data-import-toggle disabled />Import <code>legacy.ts</code></label>
+    <p class="import-result" data-import-result role="status" aria-atomic="true">1 unreachable file in this example.</p>
+    <p class="import-caption">Illustrative example. No repository is being scanned.</p>
+    <noscript><p class="import-noscript">In this example, main.ts imports greet.ts. No import reaches legacy.ts. Enable JavaScript to change that connection.</p></noscript>
+    <a class="text-action" href="https://github.com/matt-riley/deadwood">View source<svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M4 16 16 4M4 4h12v12" fill="none" stroke="currentColor" stroke-width="1.8" /></svg></a>
+    <details class="import-evidence"><summary>Look inside the example</summary><div class="import-source"><p><code>main.ts</code></p><pre><code>import &#123; greet &#125; from "./greet";
+<span data-import-line hidden>import "./legacy";
+</span>console.log(greet());</code></pre><p><code>greet.ts</code></p><pre><code>export const greet = () =&gt; "Hello";</code></pre><p><code>legacy.ts</code></p><pre><code>console.log("An earlier idea");</code></pre></div><p class="import-limit">An unreachable file is a reason to investigate. Real projects can have runtime entry points that need configuration.</p></details>
+  </div>
+</section>

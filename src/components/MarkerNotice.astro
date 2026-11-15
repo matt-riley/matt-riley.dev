@@ -1,0 +1,9 @@
+<aside class="marker-notice" data-marker-notice hidden aria-label="Your waystone marker">
+  <p data-marker-notice-copy aria-live="polite"></p>
+  <div><button type="button" data-marker-return>Take me there</button><button type="button" data-marker-clear>Clear it</button><button type="button" data-marker-dismiss>Dismiss</button></div>
+</aside>
+<style>
+  .marker-notice { padding: var(--space-4); border: 1px solid var(--rule); background: var(--plinth); margin-block: var(--space-4); }
+  button { min-height: 44px; padding: var(--space-2); }
+  div { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+</style>

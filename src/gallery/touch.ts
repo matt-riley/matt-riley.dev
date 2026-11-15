@@ -281,25 +281,28 @@ export function mountTouch(registry: ExhibitRegistry) {
     hover();
   }
 
+  function focusedStop(target: EventTarget | null): string | undefined {
+    if (!(target instanceof Element)) return;
+    const touch = target.closest("[data-touch]");
+    if (touch)
+      return touch.closest<HTMLElement>("[data-exhibit]")?.dataset.exhibit;
+    for (const [key, control] of registry.controls) {
+      if (control !== target && !control.contains(target)) continue;
+      return (
+        control.closest<HTMLElement>("[data-exhibit]")?.dataset.exhibit ??
+        registry.records.get(key.split(":")[0])?.stop
+      );
+    }
+  }
+
   function focusIn(event: FocusEvent) {
-    const target =
-      event.target instanceof Element
-        ? event.target.closest("[data-touch]")
-        : null;
-    const section = target?.closest<HTMLElement>("[data-exhibit]");
-    focused = section?.dataset.exhibit;
+    focused = focusedStop(event.target);
     for (const record of registry.records.values())
       highlight(record, record === hovered || record.stop === focused);
   }
 
   function focusOut(event: FocusEvent) {
-    if (
-      event.relatedTarget instanceof Element &&
-      event.relatedTarget
-        .closest("[data-touch]")
-        ?.closest<HTMLElement>("[data-exhibit]")?.dataset.exhibit === focused
-    )
-      return;
+    if (focusedStop(event.relatedTarget) === focused) return;
     focused = undefined;
     for (const record of registry.records.values())
       highlight(record, record === hovered);
@@ -335,7 +338,41 @@ export function mountTouch(registry: ExhibitRegistry) {
     }
   }
 
+  const freshRecords = new Set<ExhibitRecord>();
+  const stopRecords = registry.onRecord((record) => {
+    freshRecords.add(record);
+    return () => {
+      freshRecords.delete(record);
+      if (hovered === record) {
+        hovered = undefined;
+        document.body.style.cursor = oldCursor;
+      }
+      if (drag?.pick.record === record) drag = undefined;
+      restoreTimers.get(record)?.kill();
+      restoreTimers.delete(record);
+      gsap.killTweensOf(record.root.position);
+      gsap.killTweensOf(record.root.rotation);
+      for (const material of record.glaze) {
+        gsap.killTweensOf(material.color);
+        const base = colours.get(material);
+        if (base) material.color.copy(base);
+        colours.delete(material);
+      }
+    };
+  });
+
   const stopFrame = app.onFrame(() => {
+    if (freshRecords.size) {
+      // Feature adapters register native controls after the record is created.
+      // Resolve focus on the next frame so an already-focused link or switch
+      // also highlights a model that has just streamed into the room.
+      const nextFocus = focusedStop(document.activeElement);
+      const changed = nextFocus !== focused;
+      focused = nextFocus;
+      for (const record of changed ? registry.records.values() : freshRecords)
+        highlight(record, record === hovered || record.stop === focused);
+      freshRecords.clear();
+    }
     if (app.activeStop !== lastStop) {
       lastStop = app.activeStop;
       hideHint();
@@ -383,6 +420,7 @@ export function mountTouch(registry: ExhibitRegistry) {
     disposed = true;
     hideHint();
     stopFrame();
+    stopRecords();
     restoreTimers.forEach((timer) => {
       timer.kill();
     });
