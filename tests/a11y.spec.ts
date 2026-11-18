@@ -1,6 +1,11 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 import { allowSoftwareWebGL } from "./gallery-capability";
+import {
+  installMotionClock,
+  settleLocatorMotion,
+  settlePageMotion,
+} from "./motion-settle";
 import { siteRoutes } from "./routes";
 
 for (const route of siteRoutes()) {
@@ -8,24 +13,14 @@ for (const route of siteRoutes()) {
     test(`${route} has no accessibility violations in ${lights}`, async ({
       page,
     }) => {
+      await installMotionClock(page);
       await page.goto(route);
       await page.evaluate((value) => {
         document.documentElement.dataset.lights = value;
       }, lights);
       // Entrance typography fades in; audit its final text colour, as in the
       // disclosure matrix below, without disabling the actual animation.
-      await page.evaluate(async () => {
-        await document.fonts.ready;
-        await Promise.all(
-          document
-            .getAnimations()
-            .filter(
-              (animation) =>
-                animation.effect?.getComputedTiming().iterations !== Infinity,
-            )
-            .map((animation) => animation.finished.catch(() => {})),
-        );
-      });
+      await settlePageMotion(page);
       const results = await new AxeBuilder({ page }).analyze();
       expect(results.violations).toEqual([]);
     });
@@ -53,8 +48,9 @@ for (const view of ["catalogue", "gallery"] as const) {
         info.project.name !== "desktop-chromium",
         "Full interactive state audit; the route matrix covers other browsers.",
       );
-      test.setTimeout(240_000);
+      test.setTimeout(120_000);
       if (view === "gallery") await allowSoftwareWebGL(page);
+      await installMotionClock(page);
       await page.addInitScript(
         ({ view, lights }) => {
           localStorage.setItem("mr-view", view);
@@ -79,26 +75,16 @@ for (const view of ["catalogue", "gallery"] as const) {
             for (const element of details)
               (element as HTMLDetailsElement).open = open;
           }, open);
-          // Audit the resting text colours after disclosure fades finish.
-          // Perpetual cursor effects keep running normally.
-          await section.evaluate(async (element) => {
-            await Promise.all(
-              element
-                .getAnimations({ subtree: true })
-                .filter(
-                  (animation) =>
-                    animation.effect?.getComputedTiming().iterations !==
-                    Infinity,
-                )
-                .map((animation) => animation.finished.catch(() => {})),
-            );
-          });
+          // Audit resting text colours after authored disclosure fades finish.
+          await settleLocatorMotion(page, `#${id}`);
           if (view === "gallery")
             await expect(page.locator("html")).toHaveAttribute(
               "data-gallery",
               "ready",
             );
-          const results = await new AxeBuilder({ page }).analyze();
+          const results = await new AxeBuilder({ page })
+            .include(`#${id}`)
+            .analyze();
           expect(
             results.violations,
             `${view}/${lights}/${id}/${open ? "open" : "closed"}`,

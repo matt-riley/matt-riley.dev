@@ -204,7 +204,7 @@ for (const view of ["catalogue", "gallery"] as const) {
     const journey: Array<{ stop: string; name: string; tag: string }> = [];
     let footer = false;
     for (let step = 0; step < 350; step++) {
-      await page.keyboard.press("Tab");
+      await page.keyboard.press("Tab", { delay: 0 });
       const focus = await page.evaluate(() => {
         const element = document.activeElement as HTMLElement | null;
         const section = element?.closest<HTMLElement>("section[data-exhibit]");
@@ -235,7 +235,7 @@ for (const view of ["catalogue", "gallery"] as const) {
           await expect(page.locator("[data-scroll-cue]")).toBeHidden();
         journey.push({ stop: focus.stop, name: focus.name, tag: focus.tag });
         if (focus.tag === "SUMMARY" || focus.tag === "BUTTON")
-          await page.keyboard.press("Enter");
+          await page.keyboard.press("Enter", { delay: 0 });
       }
       // Read invariants together with focused-element geometry. Separate
       // protocol round trips per assertion exhausted the tour on SwiftShader.
