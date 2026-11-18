@@ -12,6 +12,13 @@
         "typescript"
       ],
       "allowedVersions": "<7"
+    },
+    {
+      "description": "fast-uri override is a security pin; ajv declares ^3.0.1, so stay on 3.x.",
+      "matchPackageNames": [
+        "fast-uri"
+      ],
+      "allowedVersions": "<4"
     }
   ]
 }
