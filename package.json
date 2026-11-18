@@ -1,6 +1,6 @@
 {
   "name": "matt-riley.dev",
-  "packageManager": "pnpm@10.34.9",
+  "packageManager": "pnpm@12.19.0",
   "type": "module",
   "version": "1.0.0",
   "private": true,
