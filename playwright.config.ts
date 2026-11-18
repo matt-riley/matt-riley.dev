@@ -1,6 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 
 const port = Number(process.env.TEST_PORT ?? 4333);
+const preview = `pnpm preview --host 127.0.0.1 --port ${port} --ignore-lock`;
 // Full Chromium can use the local GPU; CI keeps the default headless shell.
 const chromiumChannel = process.env.TEST_CHROMIUM_CHANNEL
   ? { channel: process.env.TEST_CHROMIUM_CHANNEL }
@@ -49,9 +50,11 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: `GITHUB_DATA=fallback pnpm build && pnpm preview --host 127.0.0.1 --port ${port} --ignore-lock`,
+    command: process.env.PLAYWRIGHT_SKIP_BUILD
+      ? `GITHUB_DATA=fallback ${preview}`
+      : `GITHUB_DATA=fallback pnpm build && ${preview}`,
     url: `http://127.0.0.1:${port}`,
-    reuseExistingServer: false,
+    reuseExistingServer: !process.env.CI,
     timeout: 120_000,
   },
 });
