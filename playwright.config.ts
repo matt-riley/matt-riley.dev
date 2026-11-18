@@ -15,7 +15,13 @@ export default defineConfig({
   // CI opts into real SwiftShader rendering for functional gallery checks.
   // Concurrent renderers can trigger the production slow-GPU retreat policy.
   workers: process.env.CI ? 1 : undefined,
-  reporter: process.env.CI ? [["line"], ["html", { open: "never" }]] : "list",
+  reporter: process.env.CI
+    ? [
+        ["line"],
+        ["json", { outputFile: "test-results/playwright-timings.json" }],
+        ["html", { open: "never" }],
+      ]
+    : "list",
   use: {
     baseURL: `http://127.0.0.1:${port}`,
     trace: "retain-on-failure",

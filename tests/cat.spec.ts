@@ -1,7 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { type CatVisit, chooseCatSpot } from "../src/gallery/cat-state";
 import { allowSoftwareWebGL } from "./gallery-capability";
-import { installMotionClock, settleLocatorMotion } from "./motion-settle";
 
 test.use({
   video: "on",
@@ -36,7 +35,6 @@ test.describe("the real gallery figurine", () => {
       "Recorded real-renderer gallery tour.",
     );
     await allowSoftwareWebGL(page);
-    await installMotionClock(page);
     await page.addInitScript(() => {
       localStorage.setItem("mr-view", "gallery");
       localStorage.setItem("mr-cat", "on");
@@ -104,8 +102,7 @@ test.describe("the real gallery figurine", () => {
           "sleep",
         );
       }
-      await settleLocatorMotion(page, `#${id}`);
-      await page.clock.fastForward(750);
+      await page.waitForTimeout(1200);
       const screenshot = test
         .info()
         .outputPath(`${id}-${index}-${Date.now()}.png`);
@@ -130,11 +127,11 @@ test.describe("the real gallery figurine", () => {
     await page.getByRole("button", { name: "Cat: On", exact: true }).focus();
     await page.keyboard.press("Enter");
     await expect(page.locator("html")).toHaveAttribute("data-cat", "off");
-    await page.clock.fastForward(400);
+    await page.waitForTimeout(400);
     expect(await canvas.screenshot()).not.toEqual(before);
     await page.keyboard.press("Enter");
     await expect(page.locator("html")).toHaveAttribute("data-cat", "on");
-    await page.clock.fastForward(400);
+    await page.waitForTimeout(400);
     await page.locator("[data-cat-touch]").focus();
     await page.keyboard.press("Enter");
     await expect(page.locator("[data-cat-result]")).toHaveText(
