@@ -4,5 +4,21 @@
     "local>matt-riley/renovate-config",
     "local>matt-riley/renovate-config:schedule-wednesday",
     "github>matt-riley/renovate-config:no-automerge"
+  ],
+  "packageRules": [
+    {
+      "description": "Held below 7 because astro check does not support TypeScript 7 yet. Remove once Astro supports TypeScript 7.",
+      "matchPackageNames": [
+        "typescript"
+      ],
+      "allowedVersions": "<7"
+    },
+    {
+      "description": "fast-uri override is a security pin; ajv declares ^3.0.1, so stay on 3.x.",
+      "matchPackageNames": [
+        "fast-uri"
+      ],
+      "allowedVersions": "<4"
+    }
   ]
 }
