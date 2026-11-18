@@ -4,5 +4,14 @@
     "local>matt-riley/renovate-config",
     "local>matt-riley/renovate-config:schedule-wednesday",
     "github>matt-riley/renovate-config:no-automerge"
+  ],
+  "packageRules": [
+    {
+      "description": "Held below 7 because astro check does not support TypeScript 7 yet. Remove once Astro supports TypeScript 7.",
+      "matchPackageNames": [
+        "typescript"
+      ],
+      "allowedVersions": "<7"
+    }
   ]
 }
