@@ -203,9 +203,8 @@ for (const view of ["catalogue", "gallery"] as const) {
     const reached = new Set<string>();
     const journey: Array<{ stop: string; name: string; tag: string }> = [];
     let footer = false;
-    let lastStop = "";
     for (let step = 0; step < 350; step++) {
-      await page.keyboard.press("Tab", { delay: 0 });
+      await page.keyboard.press("Tab");
       const focus = await page.evaluate(() => {
         const element = document.activeElement as HTMLElement | null;
         const section = element?.closest<HTMLElement>("section[data-exhibit]");
@@ -231,14 +230,12 @@ for (const view of ["catalogue", "gallery"] as const) {
       expect(focus.outline, `Tab ${step}: ${focus.name}`).not.toBe("none");
       if (focus.stop) {
         reached.add(focus.stop);
-        const enteredNewStop = focus.stop !== lastStop;
-        if (enteredNewStop && focus.stop !== "entrance" && !focus.cueHidden)
+        if (focus.stop !== "entrance" && !focus.cueHidden)
           // Native focus scrolling can finish on the following frame.
           await expect(page.locator("[data-scroll-cue]")).toBeHidden();
         journey.push({ stop: focus.stop, name: focus.name, tag: focus.tag });
         if (focus.tag === "SUMMARY" || focus.tag === "BUTTON")
-          await page.keyboard.press("Enter", { delay: 0 });
-        lastStop = focus.stop;
+          await page.keyboard.press("Enter");
       }
       // Read invariants together with focused-element geometry. Separate
       // protocol round trips per assertion exhausted the tour on SwiftShader.

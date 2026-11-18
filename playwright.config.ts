@@ -1,7 +1,6 @@
 import { defineConfig, devices } from "@playwright/test";
 
 const port = Number(process.env.TEST_PORT ?? 4333);
-const preview = `pnpm preview --host 127.0.0.1 --port ${port} --ignore-lock`;
 // Full Chromium can use the local GPU; CI keeps the default headless shell.
 const chromiumChannel = process.env.TEST_CHROMIUM_CHANNEL
   ? { channel: process.env.TEST_CHROMIUM_CHANNEL }
@@ -15,13 +14,7 @@ export default defineConfig({
   // CI opts into real SwiftShader rendering for functional gallery checks.
   // Concurrent renderers can trigger the production slow-GPU retreat policy.
   workers: process.env.CI ? 1 : undefined,
-  reporter: process.env.CI
-    ? [
-        ["line"],
-        ["json", { outputFile: "test-results/playwright-timings.json" }],
-        ["html", { open: "never" }],
-      ]
-    : "list",
+  reporter: process.env.CI ? [["line"], ["html", { open: "never" }]] : "list",
   use: {
     baseURL: `http://127.0.0.1:${port}`,
     trace: "retain-on-failure",
@@ -56,11 +49,9 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: process.env.PLAYWRIGHT_SKIP_BUILD
-      ? `GITHUB_DATA=fallback ${preview}`
-      : `GITHUB_DATA=fallback pnpm build && ${preview}`,
+    command: `GITHUB_DATA=fallback pnpm build && pnpm preview --host 127.0.0.1 --port ${port} --ignore-lock`,
     url: `http://127.0.0.1:${port}`,
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: false,
     timeout: 120_000,
   },
 });

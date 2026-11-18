@@ -26,10 +26,7 @@ for (const route of siteRoutes()) {
             .map((animation) => animation.finished.catch(() => {})),
         );
       });
-      const builder = new AxeBuilder({ page });
-      if (route === "/archive-gallery/")
-        builder.exclude("canvas.gallery-canvas");
-      const results = await builder.analyze();
+      const results = await new AxeBuilder({ page }).analyze();
       expect(results.violations).toEqual([]);
     });
   }
@@ -96,16 +93,11 @@ for (const view of ["catalogue", "gallery"] as const) {
                 .map((animation) => animation.finished.catch(() => {})),
             );
           });
-          if (view === "gallery") {
-            const ready = await page
-              .locator("html")
-              .getAttribute("data-gallery");
-            if (ready !== "ready")
-              await expect(page.locator("html")).toHaveAttribute(
-                "data-gallery",
-                "ready",
-              );
-          }
+          if (view === "gallery")
+            await expect(page.locator("html")).toHaveAttribute(
+              "data-gallery",
+              "ready",
+            );
           const results = await new AxeBuilder({ page })
             .include(`#${id}`)
             .analyze();
