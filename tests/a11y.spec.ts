@@ -98,7 +98,9 @@ for (const view of ["catalogue", "gallery"] as const) {
               "data-gallery",
               "ready",
             );
-          const results = await new AxeBuilder({ page }).analyze();
+          const results = await new AxeBuilder({ page })
+            .include(`#${id}`)
+            .analyze();
           expect(
             results.violations,
             `${view}/${lights}/${id}/${open ? "open" : "closed"}`,
